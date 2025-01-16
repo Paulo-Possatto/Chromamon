@@ -1,0 +1,23 @@
+name: Duplicate
+description: Report a possible duplicate problem.
+title: “[Duplicate] Reference to original problem”
+labels: [“duplicate”]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for identifying a possible duplicate problem. Please provide the details below.
+  - type: input
+    id: reference
+    attributes:
+      label: Original issue
+      description: Add the link or ID of the original issue.
+      placeholder: "Example: #123"
+    validations:
+      required: true
+  - type: textarea
+    id: justification
+    attributes:
+      label: justification
+      description: Why do you think this issue is a duplicate?
+      placeholder: Explain why this issue is similar or identical to another.

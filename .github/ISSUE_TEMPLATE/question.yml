@@ -1,0 +1,27 @@
+name: Question
+description: Ask a question or request clarification about the project.
+title: “[Question] Brief description”
+labels: [“question”]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your question! Please provide the details below so we can help.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What is your question?
+      placeholder: Write your question here.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Any additional context to help understand your question?
+      placeholder: Explain the context or situation.
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or references
+      description: Include examples or links to help illustrate your question (if applicable).
+      placeholder: Add examples or references.

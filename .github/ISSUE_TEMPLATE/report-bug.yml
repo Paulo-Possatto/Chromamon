@@ -1,0 +1,45 @@
+name: Bug
+description: Report a problem or unexpected behavior in the project.
+title: “[Bug] Brief description of the problem”
+labels: [“bug”]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please provide the information below to help with the resolution.
+  - type: input
+    id: environment
+    attributes:
+      label: environment
+      description: Details of where the problem occurred.
+      placeholder: "Example: Windows 10, Java 17, Angular 15"
+    validations:
+      required: true
+  - type: textarea
+    id: steps-reproduction
+    attributes:
+      label: Steps to reproduce
+      description: List the steps needed to reproduce the problem.
+      placeholder: 1. Go to X, 2. Click on Y...
+    validations:
+      required: true
+  - type: textarea
+    id: result-expected
+    attributes:
+      label: expected-result
+      description: What should happen?
+      placeholder: Describe the expected result.
+    validations:
+      required: true
+  - type: textarea
+    id: result-current
+    attributes:
+      label: current-result
+      description: What is currently happening?
+      placeholder: Describe what is wrong or unexpected.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or error messages
+      description: Include relevant logs or error messages.
+      placeholder: Paste the logs here.

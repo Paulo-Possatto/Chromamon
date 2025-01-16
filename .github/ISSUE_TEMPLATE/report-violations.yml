@@ -1,6 +1,7 @@
 name: Report Violation
 description: Use this form to report violations of the Code of Conduct.
 title: “[Violation Report]”
+labels: ["report"]
 body:
   - type: markdown
     attributes:

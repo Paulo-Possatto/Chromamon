@@ -1,0 +1,27 @@
+name: Help Wanted
+description: Ask for help to solve a problem or task.
+title: “[Help Wanted] Brief description”
+labels: [“help wanted”]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for asking for help! Please provide clear details to facilitate support.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What is the context or problem you need help with?
+      placeholder: Explain the situation or task.
+  - type: textarea
+    id: progress
+    attributes:
+      label: Current progress
+      description: What have you done or tried to solve the problem?
+      placeholder: Describe the steps you have already taken.
+  - type: textarea
+    id: help-specifies
+    attributes:
+      label: Type of help needed
+      description: What kind of support or expertise are you looking for?
+      placeholder: Explain how the community can help.

@@ -1,0 +1,27 @@
+name: Enhancement
+description: Request improvements or new features in the project.
+title: “[Enhancement] Brief description of request”
+labels: [“enhancement”]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an enhancement! Please provide details below.
+  - type: textarea
+    id: description
+    attributes:
+      label: Improvement description
+      description: What should this improvement do?
+      placeholder: Explain your idea in detail.
+  - type: textarea
+    id: problem-solved
+    attributes:
+      label: problem-solved
+      description: What problem or limitation does this improvement solve?
+      placeholder: Explain the problem that will be solved.
+  - type: textarea
+    id: impact
+    attributes:
+      label: Project impact
+      description: What benefits or changes will this improvement bring?
+      placeholder: Explain the positive impacts.

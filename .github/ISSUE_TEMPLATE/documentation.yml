@@ -1,0 +1,27 @@
+name: Documentation
+description: Request changes or improvements to the documentation.
+title: “[Documentation] Brief description”
+labels: [“documentation”]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping to improve our documentation! Please provide details.
+  - type: textarea
+    id: section
+    attributes:
+      label: Section or file
+      description: Which part of the documentation needs adjusting?
+      placeholder: Specify the document, page or section.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or adjustment needed
+      description: What is the problem or suggested improvement?
+      placeholder: Explain what needs to be changed or added.
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: How can we solve or improve this part of the documentation?
+      placeholder: Describe your proposed change.
