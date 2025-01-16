@@ -1,0 +1,121 @@
+name: Monorepo CI/CD Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+      - pre-production
+      - development
+
+jobs:
+  # Job for the Frontend
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run Tests
+        run: |
+          cd frontend
+          npm test
+
+  # Job for the analysis service
+  analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Build and Test
+        run: |
+          cd analysis-service
+          mvn clean install
+          mvn test
+
+  # Job for the API Gateway
+  gateway:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Build and Test
+        run: |
+          cd api-gateway
+          mvn clean install
+          mvn test
+
+  # Job for the diagnostic service
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Build and Test
+        run: |
+          cd diagnostic-service
+          mvn clean install
+          mvn test
+
+  # Job for the result service
+  result:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Build and Test
+        run: |
+          cd result-service
+          mvn clean install
+          mvn test
+
+  # Job for the transformer service
+  transformer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Build and Test
+        run: |
+          cd transformer-service
+          mvn clean install
+          mvn test
