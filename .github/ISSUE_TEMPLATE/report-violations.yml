@@ -1,0 +1,20 @@
+name: Report Violation
+description: Use this form to report violations of the Code of Conduct.
+title: “[Violation Report]”
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a violation. Please provide details below.
+  - type: textarea
+    id: details
+    attributes:
+      label: Details of the violation
+      description: Explain what happened and provide relevant information.
+      placeholder: Describe the violation here.
+  - type: textarea
+    id: how-to-contact
+    attributes:
+      label: How can we get in touch?
+      description: Optional. Please provide contact information if you wish.
+      placeholder: Your email, github, LinkedIn, etc...

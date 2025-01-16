@@ -99,11 +99,13 @@ docker-compose up --build
 Contributions are welcome! Follow these steps to contribute:
 1. Fork the repository.
 2. Create a new branch for your feature or correction:
-```bash
-git checkout -b feature/{feature-name}
-```
+    ```bash
+    git checkout -b feature/{feature-name}
+    ```
 3. Do your changes and create clear commits.
 4. Send a pull request explaining your changes.
+
+Or you can check the [Contribution Guide](./CONTRIBUTING.md) to get more details.
 
 ## License
 
