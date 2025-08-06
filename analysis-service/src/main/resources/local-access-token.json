@@ -1,0 +1,19 @@
+{
+  "sub": "AA00AA",
+  "iss": "chroma-app",
+  "department": "Chromatography",
+  "nbf": 0,
+  "iat": 0,
+  "exp": 0,
+  "requester": {
+    "uuid": "401f516d-bf46-472d-9d8d-6b624b0ea4d1",
+    "name": "Testing",
+    "surname": "Testing Surname",
+    "email": "test123@testing.com",
+    "admin": true,
+    "roles": [
+      "ADMIN",
+      "ENGINEER"
+    ]
+  }
+}

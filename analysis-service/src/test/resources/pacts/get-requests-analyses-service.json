@@ -1,0 +1,631 @@
+{
+  "consumer": {
+    "name": "analysis-consumer"
+  },
+  "provider": {
+    "name": "analysisService"
+  },
+  "interactions": [
+    {
+      "description": "a request for all analyses",
+      "providerState": "analyses response is not empty",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "analyses": [
+            {
+              "analysisId": "AN_0000000001",
+              "transformerSerialNumber": "TRF-132kV-2023-ABC123",
+              "analysisDateTime": "25-06-2025 17:19:38",
+              "labAnalysisDateTime": "26-06-2025 09:15:11",
+              "chromatography": {
+                "hydrogen": "0.15",
+                "methane": "0.21",
+                "ethane": "0.09",
+                "acetylene": "0.11",
+                "carbonMonoxide": "4.45",
+                "carbonDioxide": "915.41",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "oilType": "Mineral Oil",
+              "observations": {
+                "sampleCondition": "Presence of particles",
+                "gasExtractionMethod": "Vacuum",
+                "modelUsed": "GC Agilent 7890B",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "furfuralAnalysis": "0.5",
+              "oilHumidity": "15",
+              "createdDateTime": "18-07-2025 19:22:48",
+              "updatedDateTime": "18-07-2025 19:22:48"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "description": "a request for an list of all analyses",
+      "providerState": "analyses response is an list",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "analyses": [
+            {
+              "analysisId": "AN_0000000001",
+              "transformerSerialNumber": "TRF-132kV-2023-ABC123",
+              "analysisDateTime": "25-06-2025 17:19:38",
+              "labAnalysisDateTime": "26-06-2025 09:15:11",
+              "chromatography": {
+                "hydrogen": "0.15",
+                "methane": "0.21",
+                "ethane": "0.09",
+                "acetylene": "0.11",
+                "carbonMonoxide": "4.45",
+                "carbonDioxide": "915.41",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "oilType": "Mineral Oil",
+              "observations": {
+                "sampleCondition": "Presence of particles",
+                "gasExtractionMethod": "Vacuum",
+                "modelUsed": "GC Agilent 7890B",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "furfuralAnalysis": "0.5",
+              "oilHumidity": "15",
+              "createdDateTime": "18-07-2025 19:22:48",
+              "updatedDateTime": "18-07-2025 19:22:48"
+            },
+            {
+              "analysisId": "AN_0000000002",
+              "transformerSerialNumber": "TRF-220kV-2023-XYZ789",
+              "analysisDateTime": "26-06-2025 08:45:22",
+              "labAnalysisDateTime": "27-06-2025 10:30:05",
+              "chromatography": {
+                "hydrogen": "0.22",
+                "methane": "0.35",
+                "ethane": "0.12",
+                "acetylene": "0.08",
+                "carbonMonoxide": "3.75",
+                "carbonDioxide": "1020.1",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "oilType": "Synthetic Ester",
+              "observations": {
+                "sampleCondition": "Clear with slight discoloration",
+                "gasExtractionMethod": "Headspace",
+                "modelUsed": "GC Shimadzu 2030",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "furfuralAnalysis": "0.3",
+              "oilHumidity": "12.3",
+              "createdDateTime": "18-07-2025 19:22:48",
+              "updatedDateTime": "18-07-2025 19:22:48"
+            },
+            {
+              "analysisId": "AN_0000000003",
+              "transformerSerialNumber": "TRF-66kV-2024-DEF456",
+              "analysisDateTime": "27-06-2025 14:30:10",
+              "labAnalysisDateTime": "28-06-2025 08:45:33",
+              "chromatography": {
+                "hydrogen": "0.18",
+                "methane": "0.28",
+                "ethane": "0.11",
+                "acetylene": "0.15",
+                "carbonMonoxide": "5.2",
+                "carbonDioxide": "980.75",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "oilType": "Silicone Oil",
+              "observations": {
+                "sampleCondition": "Normal appearance",
+                "gasExtractionMethod": "Stripping",
+                "modelUsed": "GC PerkinElmer Clarus 680",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "furfuralAnalysis": "0.7",
+              "oilHumidity": "18.72",
+              "createdDateTime": "18-07-2025 19:22:48",
+              "updatedDateTime": "18-07-2025 19:22:48"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "description": "request for a list of paginated analyses",
+      "providerState": "analyses response has a list os analyses",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "query": {
+          "size": [
+            "1"
+          ],
+          "page": [
+            "0"
+          ],
+          "sort": [
+            "analysisDate,asc"
+          ]
+        },
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "analyses": [
+            {
+              "analysisId": "AN_0000000001",
+              "transformerSerialNumber": "TRF-132kV-2023-ABC123",
+              "analysisDateTime": "25-06-2025 17:19:38",
+              "labAnalysisDateTime": "26-06-2025 09:15:11",
+              "chromatography": {
+                "hydrogen": "0.15",
+                "methane": "0.21",
+                "ethane": "0.09",
+                "acetylene": "0.11",
+                "carbonMonoxide": "4.45",
+                "carbonDioxide": "915.41",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "oilType": "Mineral Oil",
+              "observations": {
+                "sampleCondition": "Presence of particles",
+                "gasExtractionMethod": "Vacuum",
+                "modelUsed": "GC Agilent 7890B",
+                "createdDateTime": "18-07-2025 19:22:48"
+              },
+              "furfuralAnalysis": "0.5",
+              "oilHumidity": "15",
+              "createdDateTime": "18-07-2025 19:22:48",
+              "updatedDateTime": "18-07-2025 19:22:48"
+            }
+          ],
+          "currentPage": 0,
+          "totalItems": 3,
+          "totalPages": 3
+        }
+      }
+    },
+    {
+      "description": "no analyses returned from the database",
+      "providerState": "analyses response is empty",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 204
+      }
+    },
+    {
+      "description": "invalid access token request",
+      "providerState": "analyses request with bad token",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 400,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 400,
+          "message": "Bad Request",
+          "details": "Header parameter 'X-Chroma-Token' has a invalid value",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "empty access token request",
+      "providerState": "analyses request with empty token",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 400,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 400,
+          "message": "Bad Request",
+          "details": "Header parameter 'X-Chroma-Token' must not be empty",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "empty api token request",
+      "providerState": "analyses request with empty api version",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 400,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 400,
+          "message": "Bad Request",
+          "details": "Header parameter 'X-API-Version' must not be empty",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "invalid api token request",
+      "providerState": "analyses request with invalid api version",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 400,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 400,
+          "message": "Bad Request",
+          "details": "'X-API-Version' must begin with 'V', followed by the version number",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "no token claims request",
+      "providerState": "analyses request without token claim",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 401,
+          "message": "Unauthorized",
+          "details": "Header parameter 'X-Chroma-Token' has no claims",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "expired token request",
+      "providerState": "analyses request with expired token",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 401,
+          "message": "Unauthorized",
+          "details": "Header parameter 'X-Chroma-Token' is expired, please refresh it",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "wrong issuer token request",
+      "providerState": "analyses request with token not issued by the application",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 401,
+          "message": "Unauthorized",
+          "details": "Header parameter 'X-Chroma-Token' was not issued by the application",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "no roles set in token",
+      "providerState": "analyses request without token roles",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 401,
+          "message": "Unauthorized",
+          "details": "Header parameter 'X-Chroma-Token' does not contain roles for the user",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "no permission to access resource",
+      "providerState": "analyses request without permission",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 403,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 403,
+          "message": "Forbidden",
+          "details": "The user has no permission to access this resource",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "no api version defined",
+      "providerState": "analyses resource api version not exists",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v999999"
+        }
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 404,
+          "message": "Not Found",
+          "details": "API Version not supported",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "generic exception thrown",
+      "providerState": "analyses request with exception",
+      "request": {
+        "method": "GET",
+        "path": "/api/analyses",
+        "headers": {
+          "X-Chroma-token": "token",
+          "X-API-Version": "v1"
+        }
+      },
+      "response": {
+        "status": 500,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "statusCode": 500,
+          "message": "Internal Server Error",
+          "details": "Something happened. Please contact the user admin to check logs",
+          "timestamp": "22-07-2025 10:23:30"
+        },
+        "matchingRules": {
+          "body": {
+            "$.timestamp": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

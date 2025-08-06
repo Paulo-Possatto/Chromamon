@@ -1,0 +1,434 @@
+openapi: 3.0.1
+info:
+  title: Chromamon Analysis Service API
+  description: API Documentation for Analysis Service for the Chromamon project
+  contact:
+    name: Paulo Possatto
+    url: https://github.com/Paulo-Possatto
+  license:
+    name: MIT License
+    url: https://github.com/Paulo-Possatto/Chromamon/blob/main/LICENSE
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local environment for testing
+tags:
+  - name: Get Analysis
+    description: All resources related to retrieve analysis data from the database
+  - name: Post Analysis
+    description: All resources related to save analysis data into the database
+  - name: Put Analysis
+    description: All resources related to modify analysis data saved into the database
+  - name: Delete Analysis
+    description: All resources related to erase analysis data into the database
+paths:
+  /keepalive:
+    get:
+      tags:
+        - keep-alive-resource
+      operationId: keepAlive
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+  /api/analyses:
+    get:
+      tags:
+        - Get Analysis
+      summary: Get a list of all analyses
+      description: |
+        Returns a list of all the analyses stored in the database.
+
+        Roles allowed to access this resource:
+        - **ADMIN**
+        - **USER**
+        - **ENGINEER**
+        - **CHEMIST**
+        - **LAB_ANALYST**
+      operationId: getAnalyses
+      parameters:
+        - name: page
+          in: query
+          description: The page number
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: Sorting criteria
+          schema:
+            type: string
+        - name: X-API-Version
+          in: header
+          description: The version of the analyses API
+          required: true
+          schema:
+            type: string
+        - name: X-Chroma-Token
+          in: header
+          description: The JWT token used to access this resource
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Give a page of analyses, the amount can be modified in the\
+            \ URI params"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Analyses-Responses"
+              examples:
+                Analyses Response:
+                  description: The response object that lists all the analyses
+                  value:
+                    analyses:
+                      - analysisId: AN_0000000001
+                        transformerSerialNumber: TRF-132kV-2023-ABC123
+                        analysisDateTime: 25-06-2025 19:17:38
+                        labAnalysisDateTime: 26-06-2025 09:15:11
+                        chromatography:
+                          hydrogen: "0.15"
+                          methane: "0.21"
+                          ethane: "0.09"
+                          acetylene: "0.11"
+                          carbonMonoxide: "4.45"
+                          carbonDioxide: "995.41"
+                          createdDateTime: 18-07-2025 19:22:48
+                        oilType: Mineral Oil
+                        observations:
+                          sampleCondition: Presence of particles
+                          gasExtractionMethod: Vacuum
+                          modelUsed: GC Agilent 7890B
+                          createdDateTime: 18-07-2025 19:22:48
+                        furfuralAnalysis: "0.50"
+                        oilHumidity: "15.00"
+                        createdDateTime: 18-07-2025 19:22:48
+                        updatedDateTime: 18-07-2025 19:22:48
+                      - analysisId: AN_0000000002
+                        transformerSerialNumber: TRF-220kV-2023-XYZ789
+                        analysisDateTime: 26-06-2025 08:45:22
+                        labAnalysisDateTime: 27-06-2025 10:30:05
+                        chromatography:
+                          hydrogen: "0.22"
+                          methane: "0.35"
+                          ethane: "0.12"
+                          acetylene: "0.08"
+                          carbonMonoxide: "3.75"
+                          carbonDioxide: "1020.10"
+                          createdDateTime: 18-07-2025 19:22:48
+                        oilType: Synthetic Ester
+                        observations:
+                          sampleCondition: Clear with slight discoloration
+                          gasExtractionMethod: Headspace
+                          modelUsed: GC Shimadzu 2030
+                          createdDateTime: 18-07-2025 19:22:48
+                        furfuralAnalysis: "0.30"
+                        oilHumidity: "12.30"
+                        createdDateTime: 18-07-2025 19:22:48
+                        updatedDateTime: 18-07-2025 19:22:48
+                      - analysisId: AN_0000000003
+                        transformerSerialNumber: TRF-66kV-2024-DEF456
+                        analysisDateTime: 27-06-2025 14:30:10
+                        labAnalysisDateTime: 28-06-2025 08:45:33
+                        chromatography:
+                          hydrogen: "0.18"
+                          methane: "0.28"
+                          ethane: "0.11"
+                          acetylene: "0.15"
+                          carbonMonoxide: "5.20"
+                          carbonDioxide: "980.75"
+                          createdDateTime: 18-07-2025 19:22:48
+                        oilType: Silicone Oil
+                        observations:
+                          sampleCondition: Normal appearance
+                          gasExtractionMethod: Stripping
+                          modelUsed: GC PerkinElmer Clarus 680
+                          createdDateTime: 18-07-2025 19:22:48
+                        furfuralAnalysis: "0.70"
+                        oilHumidity: "18.72"
+                        createdDateTime: 18-07-2025 19:22:48
+                        updatedDateTime: 18-07-2025 19:22:48
+                    currentPage: 0
+                    totalItems: 3
+                    totalPages: 1
+        "204":
+          description: "No analyses are stored in the database, so nothing returned"
+        "400":
+          description: Some user input that's not been validated by the system
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Response"
+              examples:
+                Invalid Token Response:
+                  description: The header parameter 'X-Chroma-Token' is invalid
+                  value:
+                    statusCode: 400
+                    message: Bad Request
+                    details: Header parameter 'X-Chroma-Token' has a invalid value
+                    timestamp: 22-07-2025 10:23:30
+                Empty Token Response:
+                  description: Header parameter 'X-Chroma-Token' is not present in
+                    the request
+                  value:
+                    statusCode: 400
+                    message: Bad Request
+                    details: Header parameter 'X-Chroma-Token' must not be empty
+                    timestamp: 22-07-2025 10:23:30
+                Empty API Version Response:
+                  description: The header parameter 'X-API-Version' is not present
+                    in the request
+                  value:
+                    statusCode: 400
+                    message: Bad Request
+                    details: Header parameter 'X-API-Version' must not be empty
+                    timestamp: 22-07-2025 10:23:30
+                Invalid API Version Format Response:
+                  description: The header parameter 'X-API-Version' is with a wrong
+                    format
+                  value:
+                    statusCode: 400
+                    message: Bad Request
+                    details: "'X-API-Version' must begin with 'V', followed by the\
+                      \ version number"
+                    timestamp: 22-07-2025 10:23:30
+        "401":
+          description: The Header param 'X-Chroma-Token' is not being validated correctly
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Response"
+              examples:
+                No Claims Response:
+                  description: "'X-Chroma-Token' is provided, but without payload"
+                  value:
+                    statusCode: 401
+                    message: Unauthorized
+                    details: Header parameter 'X-Chroma-Token' has no claims
+                    timestamp: 22-07-2025 10:23:30
+                Expired Token Response:
+                  description: "Header parameter 'X-Chroma-Token' is provided, but\
+                    \ it's expired"
+                  value:
+                    statusCode: 401
+                    message: Unauthorized
+                    details: "Header parameter 'X-Chroma-Token' is expired, please\
+                      \ refresh it"
+                    timestamp: 22-07-2025 10:23:30
+                Wrong Issuer Response:
+                  description: The parameter 'X-Chroma-Token' was not issued by the
+                    application
+                  value:
+                    statusCode: 401
+                    message: Unauthorized
+                    details: Header parameter 'X-Chroma-Token' was not issued by the
+                      application
+                    timestamp: 22-07-2025 10:23:30
+                No Roles Response:
+                  description: The header parameter 'X-Chroma-Token' has no roles
+                    in its claim set
+                  value:
+                    statusCode: 401
+                    message: Unauthorized
+                    details: Header parameter 'X-Chroma-Token' does not contain roles
+                      for the user
+                    timestamp: 22-07-2025 10:23:30
+        "403":
+          description: The user has no permission to this request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Response"
+              examples:
+                No Permission Response:
+                  description: The user has no role allowed to access the endpoint
+                  value:
+                    statusCode: 403
+                    message: Forbidden
+                    details: The user has no permission to access this resource
+                    timestamp: 22-07-2025 10:23:30
+        "404":
+          description: The user sent information that was not found in the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Response"
+              examples:
+                No API Version Found Response:
+                  description: The requested API version was not found nor implemented
+                  value:
+                    statusCode: 404
+                    message: Not Found
+                    details: API Version not supported
+                    timestamp: 22-07-2025 10:23:30
+        "500":
+          description: Something unhandled happened in the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Response"
+              examples:
+                Internal Server Error Response:
+                  description: "Some generic Exception occurred, it's necessary to\
+                    \ check the logs to find out where and why this error happened"
+                  value:
+                    statusCode: 500
+                    message: Internal Server Error
+                    details: Something happened. Please contact the user admin to
+                      check logs
+                    timestamp: 22-07-2025 10:23:30
+components:
+  schemas:
+    Analyses-Responses:
+      type: object
+      properties:
+        analyses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Analysis-Response"
+        currentPage:
+          type: integer
+          description: The selected page of contents
+          format: int32
+          example: 1
+        totalItems:
+          type: number
+          description: The amount of items in the page
+          example: 3
+        totalPages:
+          type: integer
+          description: The total number of pages for all the elements
+          format: int32
+          example: 5
+      description: The response object that contains a list of all analyses
+    Analysis-Response:
+      type: object
+      properties:
+        analysisId:
+          type: string
+          description: The analysis identification generated in the database
+          example: AN_0000000001
+        transformerSerialNumber:
+          type: string
+          description: The serial number of the transformer that was analysed
+          example: TRF-132kV-2023-ABC123
+        analysisDateTime:
+          type: string
+          description: "The date and time in which the transformer was analysed, following\
+            \ the dd-MM-yyyy HH:mm:ss format"
+          example: 25-06-2025 19:17:38
+        labAnalysisDateTime:
+          type: string
+          description: "The date and time in which the sample arrived at the laboratory,\
+            \ following the dd-MM-yyyy HH:mm:ss format"
+          example: 26-06-2025 09:15:11
+        chromatography:
+          $ref: "#/components/schemas/Chromatography-Response"
+        oilType:
+          type: string
+          description: The type of isolating oil used in the transformer
+          example: Mineral Oil
+        observations:
+          $ref: "#/components/schemas/Observation-Response"
+        furfuralAnalysis:
+          type: string
+          description: The value (in ppm or mg/kg) of the degradation of the isolating
+            paper inside the transformer
+          example: "0.5"
+        oilHumidity:
+          type: string
+          description: The percentage of humidity inside the isolating oil
+          example: "15"
+        createdDateTime:
+          type: string
+          description: The date-time in which the data was stored in the database
+          example: 22-07-2025 15:50:20
+        updatedDateTime:
+          type: string
+          description: The date-time in which the data was updated
+          example: 22-07-2025 16:15:21
+      description: The object that contains the information about a single analysis
+    Chromatography-Response:
+      type: object
+      properties:
+        hydrogen:
+          type: string
+          description: The concentration (in ppm) of hydrogen gas
+          example: "0.18"
+        methane:
+          type: string
+          description: The concentration (in ppm) of methane gas
+          example: "0.28"
+        ethane:
+          type: string
+          description: The concentration (in ppm) of ethane gas
+          example: "0.11"
+        acetylene:
+          type: string
+          description: The concentration (in ppm) of acetylene gas
+          example: "0.15"
+        carbonMonoxide:
+          type: string
+          description: The concentration (in ppm) of carbon monoxide gas
+          example: "5.2"
+        carbonDioxide:
+          type: string
+          description: The concentration (in ppm) of carbon dioxide gas
+          example: "980.75"
+        createdDateTime:
+          type: string
+          description: The date-time when the data was inserted in the database
+          example: 22-07-2025 15:43:25
+      description: The object that contains the chromatographic information
+    Observation-Response:
+      type: object
+      properties:
+        sampleCondition:
+          type: string
+          description: The description of the sample condition
+          example: Presence of particles
+        gasExtractionMethod:
+          type: string
+          description: The method in which the gas was extracted
+          example: Vacuum
+        modelUsed:
+          type: string
+          description: The model of the tool used to extract the oil for the analysis
+          example: GC Agilent 7890B
+        createdDateTime:
+          type: string
+          description: The date-time when the data was inserted in the database
+          example: 22-07-2025 15:43:25
+      description: The object that contains information about the observations while
+        analysing
+    Error-Response:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP Status Code of the error
+          format: int32
+          example: 404
+        message:
+          type: string
+          description: "The HTTP Status message, saying what the code means"
+          example: Not Found
+        details:
+          type: string
+          description: The details of what caused the error
+          example: API Version not supported
+        timestamp:
+          type: string
+          description: The date and time of when the error occurred
+          example: 22-07-2025 10:23:30
+      description: The object that contains the information about the error
