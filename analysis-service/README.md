@@ -1,8 +1,14 @@
 # Analysis Service
 
+## Before Beginning:
+// TODO: Add information about .env file and how to set it in environmental variables.
+
+// TODO: Show how to enable containers necessary for the application.
+
 ## What does it do?
 
 ## Structure
+// TODO: Fix architecture
 
 ```text
 src/main/java/es/paulopossatto/chromamon/analysisservice
@@ -85,6 +91,12 @@ the [Swagger](http://localhost:8080/swagger-ui/index.html) file at
 you keep the application port as 8080. If not, change the URL
 to the port you're using
 
+// TODO: Update swagger file with the clean install (target/test-classes/swagger/swagger.yaml)
+
 ## Testing methods:
 
-### Acceptance:
+### Contract:
+
+### Unit:
+
+### Integration:
