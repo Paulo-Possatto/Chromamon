@@ -1,19 +1,20 @@
 package es.paulopossatto.chromamon.analysisservice;
 
-import org.junit.jupiter.api.DisplayName;
+import es.paulopossatto.chromamon.analysisservice.infrastructure.config.PostgresqlTestContainer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,46 +22,43 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+/**
+ * Tests to check the application status and generate the swagger.
+ */
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(PostgresqlTestContainer.class)
 @DirtiesContext
-@Testcontainers
-public class ApplicationIT {
+@ActiveProfiles("integration-test")
+class ApplicationIT {
 
-  @Value("${local.server.port}")
-  private Integer port;
+  @LocalServerPort
+  private int port;
+
+  @Autowired
+  PostgreSQLContainer<?> container;
 
   @Autowired
   private TestRestTemplate testRestTemplate;
 
   @Test
-  @DisplayName("Checks if the service starts up correctly")
-  void checkKeepAlive() throws URISyntaxException {
-    ResponseEntity<String> entity =
-        testRestTemplate.getForEntity(
-            new URI(
-                String.format("http://localhost:%d/keepalive", port)
-            ), String.class
-        );
+  void checkKeepAlive() throws Exception {
+    ResponseEntity<String> entity = testRestTemplate.getForEntity(
+        new URI("http://localhost:" + port + "/keepalive"), String.class);
     assertEquals(HttpStatus.OK, entity.getStatusCode());
   }
 
   @Test
-  @DisplayName("Generate Swagger")
-  void generateSwagger() throws IOException, URISyntaxException {
-    ResponseEntity<String> response =
-        testRestTemplate.getForEntity(
-            new URI(
-                String.format("http://localhost:%d/api-docs.yaml", port)
-            ), String.class
-        );
+  void generateSwagger() throws Exception {
+    ResponseEntity<String> response = testRestTemplate.getForEntity(
+        new URI("http://localhost:" + port + "/api-docs.yaml"), String.class);
     assertEquals(HttpStatus.OK, response.getStatusCode());
+
     String yamlContent = response.getBody();
+    assertNotNull(yamlContent);
 
     Path outputPath = Paths.get("src/test/resources/swagger");
     Files.createDirectories(outputPath);
-
     Path filePath = outputPath.resolve("swagger.yaml");
-    assertNotNull(yamlContent);
     Files.write(filePath, yamlContent.getBytes());
   }
 }

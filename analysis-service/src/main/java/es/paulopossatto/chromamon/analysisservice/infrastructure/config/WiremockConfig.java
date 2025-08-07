@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-/**
- * Configuration for the defined wiremocks.
- */
+/** Configuration for the defined wiremocks. */
 @Configuration
 @Profile("local")
 @Slf4j
@@ -24,9 +22,7 @@ public class WiremockConfig {
 
   private static final String METEO_PATH = "https://archive-api.open-meteo.com/v1/archive";
 
-  /**
-   * Bean that create the mocks for the external APIs.
-   */
+  /** Bean that create the mocks for the external APIs. */
   @Bean
   public WireMockServer wireMockServer() throws IOException {
     int wiremockPort = 8089;

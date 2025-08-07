@@ -3,13 +3,10 @@ package es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.con
 import es.paulopossatto.chromamon.analysisservice.application.dto.response.AnalysesResponses;
 import es.paulopossatto.chromamon.analysisservice.application.dto.response.ErrorResponse;
 import es.paulopossatto.chromamon.analysisservice.application.usecases.GetAnalysesUseCase;
-import es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.annotations.api.token.AuthToken;
 import es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.annotations.api.version.ApiVersion;
 import es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.controllers.constants.ApiConstants;
 import es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.controllers.constants.ApiResponseExamples;
 import es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.controllers.constants.SwaggerType;
-import es.paulopossatto.chromamon.analysisservice.infrastructure.security.JwtUtils;
-import es.paulopossatto.chromamon.analysisservice.infrastructure.security.token.AccessTokenData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -33,13 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Get Analysis")
 public class GetAnalysisController {
 
-  private final JwtUtils jwtUtils;
   private final GetAnalysesUseCase useCase;
 
   /**
    * Endpoint method to get all analyses.
    *
-   * @param token the JWT token.
    * @param pageable the pageable interface.
    * @return a ResponseEntity for the AnalysesResponses record.
    */
@@ -209,7 +204,7 @@ public class GetAnalysisController {
                     }))
       })
   public ResponseEntity<AnalysesResponses> getAnalyses(
-      @AuthToken AccessTokenData token, @Parameter(hidden = true) Pageable pageable) {
+      @Parameter(hidden = true) Pageable pageable) {
 
     AnalysesResponses response = useCase.getAnalysesResponses(pageable);
     if (response.analyses().isEmpty()) {

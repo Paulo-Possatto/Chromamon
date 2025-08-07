@@ -46,6 +46,8 @@
         <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
         <enforcer-api.version>3.6.1</enforcer-api.version>
         <maven-core.version>3.9.10</maven-core.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <mapstruct-lombok-binding.version>0.2.0</mapstruct-lombok-binding.version>
 
         <!-- Jacoco Coverage Thresholds -->
         <jacoco-coverage.bundle.min-line>0.85</jacoco-coverage.bundle.min-line>
@@ -158,6 +160,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
@@ -236,15 +243,28 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mocking -->
+        <!-- WireMock -->
         <dependency>
             <groupId>org.wiremock</groupId>
             <artifactId>wiremock</artifactId>
             <version>${wiremock.version}</version>
-            <scope>test</scope>
         </dependency>
 
-        <!-- Enforcer API -->
+        <!-- MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Enforcer -->
         <dependency>
             <groupId>org.apache.maven.enforcer</groupId>
             <artifactId>enforcer-api</artifactId>
@@ -325,6 +345,7 @@
                     <excludes>
                         <exclude>es/paulopossatto/chromamon/analysisservice/Application.class
                         </exclude>
+                        <exclude>es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/annotations/**</exclude>
                         <exclude>**/*config.*</exclude>
                         <exclude>
                             es/paulopossatto/chromamon/analysisservice/infrastructure/config/**
@@ -346,8 +367,6 @@
                         </exclude>
                         <exclude>es/paulopossatto/chromamon/analysisservice/domain/model/**
                         </exclude>
-                        <exclude>es/paulopossatto/chromamon/analysisservice/domain/enums/**
-                        </exclude>
                         <exclude>
                             es/paulopossatto/chromamon/analysisservice/infrastructure/security/**
                         </exclude>
@@ -355,7 +374,7 @@
                             es/paulopossatto/chromamon/analysisservice/application/exception/**
                         </exclude>
                         <exclude>
-                            es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/**
+                            es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/constants/**
                         </exclude>
                         <exclude>
                             es/paulopossatto/chromamon/analysisservice/infrastructure/input//rest/annotation/**
@@ -510,23 +529,27 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <configuration>
-                            <createMissingPackageInfoClass>false</createMissingPackageInfoClass>
-                            <source>21</source>
-                            <target>21</target>
-                            <annotationProcessorPaths>
-                                <path>
-                                    <groupId>org.projectlombok</groupId>
-                                    <artifactId>lombok</artifactId>
-                                    <version>${lombok.version}</version>
-                                </path>
-                            </annotationProcessorPaths>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${mapstruct-lombok-binding.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

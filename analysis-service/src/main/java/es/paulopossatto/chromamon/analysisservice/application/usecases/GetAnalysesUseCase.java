@@ -17,7 +17,13 @@ public class GetAnalysesUseCase {
   private final AnalysisRepositoryPort analysisRepositoryPort;
   private final AnalysisConverter converter;
 
-  public AnalysesResponses getAnalysesResponses(Pageable pageable) {
+  /**
+   * Business logic for getting all analyses.
+   *
+   * @param pageable the pageable object.
+   * @return the API response for the pageable analyses response.
+   */
+  public final AnalysesResponses getAnalysesResponses(final Pageable pageable) {
     Page<Analysis> analysesPage = analysisRepositoryPort.getAllAnalyses(pageable);
     return converter.toAnalysesResponse(analysesPage);
   }

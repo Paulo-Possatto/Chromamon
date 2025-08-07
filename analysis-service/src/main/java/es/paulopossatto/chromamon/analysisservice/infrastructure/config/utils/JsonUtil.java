@@ -5,9 +5,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import org.springframework.core.io.ClassPathResource;
 
-/**
- * Class to convert the JSON string into an object.
- */
+/** Class to convert the JSON string into an object. */
 public final class JsonUtil {
 
   private JsonUtil() {

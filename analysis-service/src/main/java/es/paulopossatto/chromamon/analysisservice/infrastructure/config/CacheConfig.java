@@ -8,15 +8,14 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Configuration for the cache.
- */
+/** Configuration for the cache. */
 @Configuration
 @EnableCaching
 public class CacheConfig {
 
   /**
    * Bean configuration for the cache.
+   *
    * @return the cache bean.
    */
   @Bean

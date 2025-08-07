@@ -4,6 +4,23 @@ import es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.cont
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+/**
+ * The response object for the analysis.
+ *
+ * @param identifier the analysis identifier ([AN_][0-9]{10}).
+ * @param transformerSerialNumber the transformer serial number.
+ * @param analysisDateTime the date-time of the analysis sample extraction.
+ * @param labAnalysisDateTime the date-time of when the sample arrived at the laboratory.
+ * @param chromatography the chromatography object.
+ * @param oilType the Oil type object.
+ * @param observation the observation object.
+ * @param furfuralAnalysis the furfural analysis value.
+ * @param oilHumidity the percentage of moisture found in the sample.
+ * @param createdDateTime the date-time in which the data was stored.
+ * @param lastUpdateDateTime the date-time in which the data was modified.
+ * @param userCreated the user who added the data.
+ * @param userLastUpdated the user who last modified the data.
+ */
 @Builder
 @Schema(
     name = "Analysis-Response",

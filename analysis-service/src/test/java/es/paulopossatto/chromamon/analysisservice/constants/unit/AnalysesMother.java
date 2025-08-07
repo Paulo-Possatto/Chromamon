@@ -3,7 +3,9 @@ package es.paulopossatto.chromamon.analysisservice.constants.unit;
 import es.paulopossatto.chromamon.analysisservice.application.dto.response.AnalysesResponses;
 import es.paulopossatto.chromamon.analysisservice.domain.model.Analysis;
 import es.paulopossatto.chromamon.analysisservice.domain.model.Chromatography;
+import es.paulopossatto.chromamon.analysisservice.domain.model.GasExtractionMethod;
 import es.paulopossatto.chromamon.analysisservice.domain.model.Observation;
+import es.paulopossatto.chromamon.analysisservice.domain.model.OilType;
 import java.util.Collections;
 
 /** Stores all the responses to mock for the unit tests. */
@@ -26,8 +28,8 @@ public class AnalysesMother {
   public static Analysis analysisDomainObjectFilled() {
     return Analysis.builder()
         .transformerSerialNumber("TRF-132kV-2023-ABC123")
-        .analysisDate("25-06-2025 19:17:38")
-        .labAnalysisDate("26-06-2025 09:15:11")
+        .analysisDatetime("25-06-2025 19:17:38")
+        .labAnalysisDateTime("26-06-2025 09:15:11")
         .chromatography(
             Chromatography.builder()
                 .hydrogen("0.15")
@@ -37,11 +39,12 @@ public class AnalysesMother {
                 .carbonMonoxide("4.45")
                 .carbonDioxide("995.41")
                 .build())
-        .oilType("Mineral Oil")
+        .oilType(OilType.builder().oilTypeLiteral("Mineral Oil").build())
         .observation(
             Observation.builder()
                 .sampleCondition("Presence of particles")
-                .extractionMethod("Vacuum")
+                .gasExtractionMethod(
+                    GasExtractionMethod.builder().gasExtractionLiteral("Vacuum").build())
                 .modelUsed("GC Agilent 7890B")
                 .build())
         .furfuralAnalysis("0.50")

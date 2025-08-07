@@ -1,52 +1,50 @@
 package es.paulopossatto.chromamon.analysisservice.infrastructure.config;
 
-import lombok.extern.slf4j.Slf4j;
-import org.flywaydb.core.Flyway;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-/** The containers for integrated tests. */
-@Testcontainers
-@Slf4j
+/** The test container for the PostgreSQL database. */
+@TestConfiguration
 public class PostgresqlTestContainer {
 
-  /** Generates the database container and run flyway for testing. */
   private static final PostgreSQLContainer<?> postgreSqlContainer =
       new PostgreSQLContainer<>("postgres:15-alpine")
           .withDatabaseName("chromamon_test")
           .withUsername("test")
-          .withPassword("test")
-          .withReuse(false);
+          .withPassword("test");
 
   static {
     postgreSqlContainer.start();
-    Flyway flyway =
-        Flyway.configure()
-            .dataSource(
-                postgreSqlContainer.getJdbcUrl(),
-                postgreSqlContainer.getUsername(),
-                postgreSqlContainer.getPassword())
-            .load();
-    flyway.migrate();
   }
 
-  /** Sets the properties for the test container. */
+  /**
+   * Overrides the properties to use the test container database.
+   *
+   * @param registry the dynamic properties' registry.
+   */
   @DynamicPropertySource
-  public static void configureProperties(DynamicPropertyRegistry registry) {
+  public static void overrideProps(DynamicPropertyRegistry registry) {
     registry.add("spring.datasource.url", postgreSqlContainer::getJdbcUrl);
     registry.add("spring.datasource.username", postgreSqlContainer::getUsername);
     registry.add("spring.datasource.password", postgreSqlContainer::getPassword);
-    registry.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
-    registry.add("spring.flyway.locations", () -> "classpath:db/migration");
-    registry.add("spring.flyway.enabled", () -> "false");
+    registry.add("spring.flyway.url", postgreSqlContainer::getJdbcUrl);
+    registry.add("spring.flyway.user", postgreSqlContainer::getUsername);
+    registry.add("spring.flyway.password", postgreSqlContainer::getPassword);
+    registry.add("spring.flyway.enabled", () -> "true");
   }
 
-  /** Stops the container whenever the tests finish. */
-  public static void stopContainer() {
-    if (postgreSqlContainer != null && postgreSqlContainer.isRunning()) {
-      postgreSqlContainer.stop();
-    }
+  /**
+   * The bean to enable the test container.
+   *
+   * @return the test container bean.
+   */
+  @Bean
+  @ServiceConnection
+  public PostgreSQLContainer<?> postgreSqlContainer() {
+    return postgreSqlContainer;
   }
 }

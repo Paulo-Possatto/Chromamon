@@ -49,6 +49,12 @@ public class ApplicationExceptionHandler {
     throw e;
   }
 
+  /**
+   * Handles the error if the property is not found in the request.
+   *
+   * @param e PropertyReferenceException class.
+   * @return a Response Entity of Bad Request.
+   */
   @ExceptionHandler(PropertyReferenceException.class)
   public ResponseEntity<ErrorResponse> handlePropertyReferenceException(
       PropertyReferenceException e) {
