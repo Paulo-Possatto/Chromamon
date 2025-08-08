@@ -1,6 +1,7 @@
 package es.paulopossatto.chromamon.analysisservice;
 
 import es.paulopossatto.chromamon.analysisservice.infrastructure.config.PostgresqlTestContainer;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Import(PostgresqlTestContainer.class)
 @DirtiesContext
 @ActiveProfiles("integration-test")
+@Tag("integration")
 class ApplicationIT {
 
   @LocalServerPort

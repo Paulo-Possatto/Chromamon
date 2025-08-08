@@ -1,33 +1,41 @@
 package es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.controllers;
 
+import es.paulopossatto.chromamon.analysisservice.application.dto.response.AnalysesResponses;
 import es.paulopossatto.chromamon.analysisservice.infrastructure.config.PostgresqlTestContainer;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static es.paulopossatto.chromamon.analysisservice.constants.PathsContants.GET_ANALYSES_PATH;
+import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.API_VERSION_HEADER_NAME;
+import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.API_VERSION_HEADER_VALUE_V1;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(PostgresqlTestContainer.class)
 @DirtiesContext
 @ActiveProfiles("integration-test")
+@Tag("integration")
+@Slf4j
 class GetAnalysisControllerIT {
 
   @LocalServerPort
   private int port;
-
-  @Autowired
-  PostgreSQLContainer<?> container;
 
   @Autowired
   private TestRestTemplate testRestTemplate;
@@ -38,12 +46,25 @@ class GetAnalysisControllerIT {
       AND the database has valid data
       WHEN the request is made
       AND the requested the first version of the API
-      AND the token is valid
+      AND no pageable parameter is added
       THEN response is 200 ok
+      AND should have a size of 3
       """)
-//  @Sql(scripts = "/mocked-db/sample-valid-analyses.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//  @Sql(scripts = "/mocked-db/clean-sample.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @Sql(scripts = "/mocked-db/clean-sample.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void whenRequestIsDoneSuccessfullyAndThereIsValidDataInDatabase_thenReturn200Ok() {
-    assertTrue(true);
+    String url = String.format(GET_ANALYSES_PATH, port);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(API_VERSION_HEADER_NAME, API_VERSION_HEADER_VALUE_V1);
+
+    ResponseEntity<AnalysesResponses> response = testRestTemplate.exchange(
+        url, HttpMethod.GET, new HttpEntity<>(headers), AnalysesResponses.class
+    );
+
+    log.info("Response: {}", response);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(3, response.getBody().totalItems());
   }
 }

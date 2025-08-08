@@ -13,9 +13,9 @@
 
     <groupId>es.paulopossatto.chromamon</groupId>
     <artifactId>analysis-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>chromamon-analysis-service</name>
-    <description>Analysis service for chromamon project</description>
+    <version>1.0.0-alpha</version>
+    <name>Chromamon Analysis Service</name>
+    <description>Analysis Service for chromamon project</description>
 
     <properties>
         <java.version>21</java.version>
@@ -24,31 +24,16 @@
 
         <!-- Version Properties -->
         <junit5-spring.version>4.6.7</junit5-spring.version>
-        <cucumber-java.version>7.20.1</cucumber-java.version>
-        <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
-        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
         <wiremock.version>3.13.1</wiremock.version>
-        <jmeter-maven-plugin.version>3.8.0</jmeter-maven-plugin.version>
         <spring-openapi.version>2.8.9</spring-openapi.version>
-        <spring-dotenv.version>2.5.4</spring-dotenv.version>
-        <spring-jwt.version>0.11.5</spring-jwt.version>
-        <lombok.version>1.18.30</lombok.version>
-        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <fmt-maven-plugin.version>2.27</fmt-maven-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <checkstyle.version>10.13.0</checkstyle.version>
-        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
-        <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
-        <gson.version>2.13.1</gson.version>
-        <java-jwt-auth0.version>4.5.0</java-jwt-auth0.version>
-        <maven-enforcer-plugin.version>3.6.1</maven-enforcer-plugin.version>
         <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
-        <enforcer-api.version>3.6.1</enforcer-api.version>
         <maven-core.version>3.9.10</maven-core.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <mapstruct-lombok-binding.version>0.2.0</mapstruct-lombok-binding.version>
-        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
 
         <!-- Jacoco Coverage Thresholds -->
         <jacoco-coverage.bundle.min-line>0.85</jacoco-coverage.bundle.min-line>
@@ -126,13 +111,6 @@
             <version>${spring-openapi.version}</version>
         </dependency>
 
-        <!-- .env Configuration -->
-        <dependency>
-            <groupId>me.paulschwarz</groupId>
-            <artifactId>spring-dotenv</artifactId>
-            <version>${spring-dotenv.version}</version>
-        </dependency>
-
         <!-- GSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -200,47 +178,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- BDD Testing -->
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <version>${cucumber-java.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <version>${cucumber-java.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-spring</artifactId>
-            <version>${cucumber-java.version}</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test-autoconfigure</artifactId>
             <version>2.7.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- API Testing -->
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>json-path</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>spring-mock-mvc</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -265,22 +206,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Enforcer -->
-        <dependency>
-            <groupId>org.apache.maven.enforcer</groupId>
-            <artifactId>enforcer-api</artifactId>
-            <version>${enforcer-api.version}</version>
-        </dependency>
+        <!-- Maven Core -->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
             <version>${maven-core.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -296,30 +226,6 @@
             <artifactId>org.jacoco.report</artifactId>
             <version>${jacoco-maven-plugin.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- JWT -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>${spring-jwt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>${spring-jwt.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>${spring-jwt.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>${java-jwt-auth0.version}</version>
         </dependency>
     </dependencies>
 
@@ -347,38 +253,17 @@
                         <exclude>es/paulopossatto/chromamon/analysisservice/Application.class
                         </exclude>
                         <exclude>es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/annotations/**</exclude>
-                        <exclude>**/*config.*</exclude>
                         <exclude>
                             es/paulopossatto/chromamon/analysisservice/infrastructure/config/**
                         </exclude>
                         <exclude>
-                            es/paulopossatto/chromamon/analysisservice/application/dto/response
-                        </exclude>
-                        <exclude>
-                            es/paulopossatto/chromamon/analysisservice/application/dto/request
-                        </exclude>
-                        <exclude>
-                            es/paulopossatto/chromamon/analysisservice/application/dto/response/**
-                        </exclude>
-                        <exclude>
-                            es/paulopossatto/chromamon/analysisservice/application/dto/request/**
-                        </exclude>
-                        <exclude>
                             es/paulopossatto/chromamon/analysisservice/infrastructure/entity/**
-                        </exclude>
-                        <exclude>es/paulopossatto/chromamon/analysisservice/domain/model/**
-                        </exclude>
-                        <exclude>
-                            es/paulopossatto/chromamon/analysisservice/infrastructure/security/**
                         </exclude>
                         <exclude>
                             es/paulopossatto/chromamon/analysisservice/application/exception/**
                         </exclude>
                         <exclude>
                             es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/constants/**
-                        </exclude>
-                        <exclude>
-                            es/paulopossatto/chromamon/analysisservice/infrastructure/input//rest/annotation/**
                         </exclude>
                     </excludes>
                 </configuration>
@@ -479,6 +364,11 @@
                         <include>**/*IT.java</include>
                         <include>**/*Test.java</include>
                     </includes>
+                    <argLine>
+                        -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+                        -XX:+EnableDynamicAgentLoading
+                        -Xshare:off
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -494,7 +384,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>

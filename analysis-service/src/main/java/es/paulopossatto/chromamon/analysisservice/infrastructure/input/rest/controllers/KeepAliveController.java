@@ -1,7 +1,6 @@
 package es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.sisu.PostConstruct;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +15,8 @@ public class KeepAliveController {
 
   @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
   public ResponseEntity<String> keepAlive() {
+    log.info("In KeepAliveController");
     return ResponseEntity.ok(KeepAliveStatus.KEEPALIVE_OK.name());
-  }
-
-  @PostConstruct
-  public void init() {
-    log.info("Init keepalive controller");
   }
 
   enum KeepAliveStatus {

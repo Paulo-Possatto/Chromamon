@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(ApiConstants.ANALYSES_URI)
 @Tag(name = "Get Analysis")
+@Slf4j
 public class GetAnalysisController {
 
   private final GetAnalysesUseCase useCase;
@@ -205,6 +207,7 @@ public class GetAnalysisController {
       })
   public ResponseEntity<AnalysesResponses> getAnalyses(
       @Parameter(hidden = true) Pageable pageable) {
+    log.info("getAnalyses controller. API Version: 1");
 
     AnalysesResponses response = useCase.getAnalysesResponses(pageable);
     if (response.analyses().isEmpty()) {

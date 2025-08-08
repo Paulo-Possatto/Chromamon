@@ -14,6 +14,9 @@ import lombok.Builder;
  * @param carbonMonoxide the ppm value of carbon monoxide gas.
  * @param carbonDioxide the ppm value of carbon dioxide gas.
  * @param createdDateTime the date and time in which the data was stored in the database.
+ * @param lastUpdateDateTime the date and time in which the data was last modified in the database.
+ * @param userCreated the user who added the data in the first time.
+ * @param userLastUpdated the user who last modified the data.
  */
 @Builder
 @Schema(

@@ -1,89 +1,33 @@
 # Analysis Service
 
+// TODO: Add description about the service
+
 ## Before Beginning:
+
 // TODO: Add information about .env file and how to set it in environmental variables.
+
+#### Properties for .env file:
+```text
+DATABASE_NAME=<Your database name>
+DATABASE_USER=<Your database user>
+DATABASE_PASS=<Your database password>
+```
 
 // TODO: Show how to enable containers necessary for the application.
 
+// TODO: Point the necessary mvn commands (clean install, javadoc:javadoc)
+
 ## What does it do?
 
-## Structure
-// TODO: Fix architecture
+// TODO: Explain what the service does
 
-```text
-src/main/java/es/paulopossatto/chromamon/analysisservice
-├── application/                                    
-│   ├── dto/
-│   │   ├── request/
-│   │   └── response/
-│   ├── exception/
-│   │   ├── ApplicationExceptionHandler.java (Class)     
-│   │   ├── BadRequestException.java (Exception)
-│   │   ├── CustomException.java (Exception)
-│   │   ├── ForbiddenException.java (Exception)
-│   │   ├── InternalServerError.java (Exception)
-│   │   ├── NotAcceptableException.java (Exception)
-│   │   ├── NotFoundException.java (Exception)
-│   │   └── Unauthorized.java (Exception)
-│   ├── ports/                                      
-│   │   ├── input/                                 
-│   │   └── output/  
-│   │       ├── AnalysisRepositoryPort.java (Interface)
-│   │       ├── ChromatographyRepositoryPort.java (Interface)
-│   │       └── ObservationRepositoryPort.java (Interface)
-│   └── service/                                    
-│
-├── domain/
-│   ├── enums/
-│   │   ├── ExtractionMethod.java (Enum)
-│   │   └── OilType.java (Enum)
-│   ├── model/
-│   │   ├── Analysis.java (Record)
-│   │   ├── Chromatography.java (Record)
-│   │   └── Observation.java (Record)
-│   └── service/
-│
-├── infrastructure/                                 
-│   ├── config/
-│   │   ├── EnvConfig.java (Class)
-│   │   └── OpenApiConfig.java (Class)
-│   ├── converters/
-│   │   ├── ExtractionMethod.java (Class)
-│   │   └── OilTypeConverter.java (Class)
-│   ├── entity/
-│   │   ├── AnalysisEntity.java (Record)
-│   │   ├── ChromatographyEntity.java (Record)
-│   │   └── ObservationEntity.java (Record)
-│   ├── input/
-│   │   ├── kafka/
-│   │   └── rest/
-│   │   │   ├── annotations/
-│   │   │   └── controllers/
-│   ├── mapper/
-│   │   ├── ChromatographyEntityMapper.java (Class)
-│   │   └── ObservationEntityMapper.java (Class)
-│   ├── output/ --
-│   │   ├── kafka/
-│   │   ├── client/
-│   │   └── persistence/
-│   │       ├── adapters/
-│   │       │   ├── ChromatographyRepositoryAdapter.java (class)
-│   │       │   └── ObservationRepositoryAdapter.java (Class)
-│   │       └── repositories/
-│   │           ├── AnalysisJpaRepository.java (Interface)
-│   │           ├── ChromatographyJpaRepository.java (Interface)
-│   │           └── ObservationJpaRepository.java (Interface)
-│   └── security/ --
-│       ├── JwtAuthFilter.java (Class)
-│       ├── JwtTokenUtil.java (Class)
-│       ├── ProfileChecker.java (Class)
-│       ├── RolesEnum.java (Enum)
-│       └── SecurityConfig.java (Class)
-│
-└── ChromamonAnalysisServiceApplication.java  (Class)
-```
+## Structure
+
+// TODO: Explain the reason of why using hexagonal architecture
 
 ## API Documentation:
+
+### Swagger:
 
 When the application starts, you can check
 the [Swagger](http://localhost:8080/swagger-ui/index.html) file at
@@ -93,10 +37,22 @@ to the port you're using
 
 // TODO: Update swagger file with the clean install (target/test-classes/swagger/swagger.yaml)
 
+### JavaDoc:
+
+// TODO: Add javadoc documentation
+
 ## Testing methods:
+
+// TODO: Show code coverage HTML path and how it works
 
 ### Contract:
 
+// TODO: Show path to Contract testing and how to do it
+
 ### Unit:
 
+// TODO: Show path to Unit testing and how to do it
+
 ### Integration:
+
+// TODO: Show path to Integration testing and how to do it
