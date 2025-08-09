@@ -1,5 +1,8 @@
 package es.paulopossatto.chromamon.analysisservice.constants;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+
 public class ValuesConstants {
 
   public static final String API_VERSION_HEADER_NAME = "X-API-Version";
@@ -13,4 +16,20 @@ public class ValuesConstants {
   public static final String EXISTING_IDENTIFIER = "AN_0000000001";
 
   public static final String NON_EXISTING_IDENTIFIER = "AN_9999999999";
+
+  public static final OffsetDateTime START_DATE_WITH_ANAYLSES = OffsetDateTime.of(
+      2025, 6, 25, 0, 0, 0, 0, ZoneOffset.ofHours(2)
+  );
+
+  public static final OffsetDateTime END_DATE_WITH_ANAYLSES = OffsetDateTime.of(
+      2025, 6, 26, 23, 59, 59, 999, ZoneOffset.ofHours(2)
+  );
+
+  public static final OffsetDateTime START_DATE_WITHOUT_ANAYLSES = OffsetDateTime.of(
+      2022, 6, 25, 0, 0, 0, 0, ZoneOffset.ofHours(2)
+  );
+
+  public static final OffsetDateTime END_DATE_WITHOUT_ANAYLSES = OffsetDateTime.of(
+      2022, 6, 26, 23, 59, 59, 999, ZoneOffset.ofHours(2)
+  );
 }

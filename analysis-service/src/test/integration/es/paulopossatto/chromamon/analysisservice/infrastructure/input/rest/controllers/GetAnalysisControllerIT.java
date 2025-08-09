@@ -43,15 +43,13 @@ class GetAnalysisControllerIT {
   @Test
   @DisplayName("""
       GIVEN an request to the getAnalyses endpoint
-      AND the database has valid data
+      AND the database has no data
       WHEN the request is made
-      AND the requested the first version of the API
+      AND is requested the first version of the API
       AND no pageable parameter is added
-      THEN response is 200 ok
-      AND should have a size of 3
+      THEN response is 204 no content
       """)
-  @Sql(scripts = "/mocked-db/clean-sample.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  void whenRequestIsDoneSuccessfullyAndThereIsValidDataInDatabase_thenReturn200Ok() {
+  void whenRequestIsMadeAndThereIsNoDataInDatabase_thenReturn204NoContent() {
     String url = String.format(GET_ANALYSES_PATH, port);
 
     HttpHeaders headers = new HttpHeaders();
@@ -61,7 +59,29 @@ class GetAnalysisControllerIT {
         url, HttpMethod.GET, new HttpEntity<>(headers), AnalysesResponses.class
     );
 
-    log.info("Response: {}", response);
+    assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+  }
+
+  @Test
+  @DisplayName("""
+      GIVEN an request to the getAnalyses endpoint
+      AND the database has valid data
+      WHEN the request is made
+      AND is requested the first version of the API
+      AND no pageable parameter is added
+      THEN response is 200 ok
+      AND should have a size of 3
+      """)
+  @Sql(scripts = "/mocked-db/sample-valid-analyses.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  void whenRequestIsDoneSuccessfullyAndThereIsValidDataInDatabase_thenReturn200Ok() {
+    String url = String.format(GET_ANALYSES_PATH, port);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(API_VERSION_HEADER_NAME, API_VERSION_HEADER_VALUE_V1);
+
+    ResponseEntity<AnalysesResponses> response = testRestTemplate.exchange(
+        url, HttpMethod.GET, new HttpEntity<>(headers), AnalysesResponses.class
+    );
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertNotNull(response.getBody());
