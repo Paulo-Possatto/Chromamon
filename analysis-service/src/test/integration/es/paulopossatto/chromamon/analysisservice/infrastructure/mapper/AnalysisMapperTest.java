@@ -4,9 +4,11 @@ import es.paulopossatto.chromamon.analysisservice.constants.AnalysesMother;
 import es.paulopossatto.chromamon.analysisservice.domain.model.Analysis;
 import es.paulopossatto.chromamon.analysisservice.infrastructure.entity.AnalysisEntity;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Unit test class for the Analysis Mapper.
  */
 @SpringBootTest
+@ActiveProfiles("integration-test")
+@Tag("integration")
 public class AnalysisMapperTest {
 
   @Autowired

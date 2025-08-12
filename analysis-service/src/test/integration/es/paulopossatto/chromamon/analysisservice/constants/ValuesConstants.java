@@ -46,6 +46,6 @@ public class ValuesConstants {
       "12.34"
   );
 
-  public static final String STRING_DECIMAL_NUMBER = "12.34";
+  public static final String STRING_DECIMAL_NUMBER = "12,34";
 
 }

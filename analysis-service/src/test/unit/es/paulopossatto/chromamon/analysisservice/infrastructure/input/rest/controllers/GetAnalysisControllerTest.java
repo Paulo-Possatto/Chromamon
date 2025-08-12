@@ -4,6 +4,7 @@ import es.paulopossatto.chromamon.analysisservice.application.dto.response.Analy
 import es.paulopossatto.chromamon.analysisservice.application.usecases.GetAnalysesUseCase;
 import es.paulopossatto.chromamon.analysisservice.constants.AnalysesMother;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,8 +18,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Unit tests for the Get Analysis controller.
+ */
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
+@Tag("unit")
 public class GetAnalysisControllerTest {
 
   @InjectMocks
