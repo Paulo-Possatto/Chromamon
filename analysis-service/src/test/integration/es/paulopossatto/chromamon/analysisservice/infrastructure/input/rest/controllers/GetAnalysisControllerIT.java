@@ -1,6 +1,7 @@
 package es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.controllers;
 
 import es.paulopossatto.chromamon.analysisservice.application.dto.response.AnalysesResponses;
+import es.paulopossatto.chromamon.analysisservice.application.dto.response.ErrorResponse;
 import es.paulopossatto.chromamon.analysisservice.infrastructure.config.PostgresqlTestContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +20,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.web.client.HttpClientErrorException;
 
 import static es.paulopossatto.chromamon.analysisservice.constants.PathsContants.GET_ANALYSES_PATH;
 import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.API_VERSION_HEADER_NAME;
 import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.API_VERSION_HEADER_VALUE_V1;
+import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.BAD_API_VERSION_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(PostgresqlTestContainer.class)
@@ -86,5 +90,25 @@ class GetAnalysisControllerIT {
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertNotNull(response.getBody());
     assertEquals(3, response.getBody().totalItems());
+  }
+
+  @Test
+  @DisplayName("""
+      GIVEN an request to the GetAnalyses endpoint
+      AND the database has valid data
+      WHEN the request is made
+      AND is requested an wrong API version
+      AND no pageable parameter is added
+      THEN should throw a 400 error response
+      """)
+  void whenRequestIsDoneWithBadApiVersionHeader_thenReturn400Error() {
+    String url = String.format(GET_ANALYSES_PATH, port);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(API_VERSION_HEADER_NAME, BAD_API_VERSION_VALUE);
+
+    ResponseEntity<ErrorResponse> error = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), ErrorResponse.class);
+
+    assertEquals(HttpStatus.BAD_REQUEST, error.getStatusCode());
   }
 }

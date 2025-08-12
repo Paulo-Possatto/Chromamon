@@ -3,7 +3,11 @@ package es.paulopossatto.chromamon.analysisservice.infrastructure.mapper;
 import static es.paulopossatto.chromamon.analysisservice.infrastructure.mapper.MapperConstants.FORMATTER;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
@@ -19,7 +23,16 @@ public interface ConstantsMapper {
    */
   @Named("stringToOffsetDateTime")
   default OffsetDateTime map(String value) {
-    return OffsetDateTime.parse(value, FORMATTER);
+    if (value == null) {
+      return null;
+    }
+    try {
+      LocalDateTime ldt = LocalDateTime.parse(value, FORMATTER);
+      ZoneOffset offset = ZonedDateTime.now().getOffset();
+      return ldt.atOffset(offset);
+    } catch (DateTimeParseException e2) {
+      throw new IllegalArgumentException("Invalid date format: " + value, e2);
+    }
   }
 
   /**
@@ -30,7 +43,7 @@ public interface ConstantsMapper {
    */
   @Named("mapOffsetDateTimeToString")
   default String map(OffsetDateTime value) {
-    return value.format(FORMATTER);
+    return value != null ? value.format(FORMATTER) : null;
   }
 
   /**
@@ -41,7 +54,7 @@ public interface ConstantsMapper {
    */
   @Named("mapBigDecimalToString")
   default String map(BigDecimal value) {
-    return MapperConstants.toStringNumber(value);
+    return value != null ? MapperConstants.toStringNumber(value) : null;
   }
 
   /**
@@ -52,6 +65,6 @@ public interface ConstantsMapper {
    */
   @Named("mapStringNumberToBigDecimal")
   default BigDecimal toBigDecimal(String value) {
-    return new BigDecimal(value);
+    return value != null ? new BigDecimal(value) : null;
   }
 }

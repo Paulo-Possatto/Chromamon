@@ -41,13 +41,6 @@ paths:
       summary: Get a list of all analyses
       description: |
         Returns a list of all the analyses stored in the database.
-
-        Roles allowed to access this resource:
-        - **ADMIN**
-        - **USER**
-        - **ENGINEER**
-        - **CHEMIST**
-        - **LAB_ANALYST**
       operationId: getAnalyses
       parameters:
       - name: page
@@ -70,12 +63,6 @@ paths:
       - name: X-API-Version
         in: header
         description: The version of the analyses API
-        required: true
-        schema:
-          type: string
-      - name: X-Chroma-Token
-        in: header
-        description: The JWT token used to access this resource
         required: true
         schema:
           type: string
@@ -194,21 +181,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error-Response"
               examples:
-                Invalid Token Response:
-                  description: The header parameter 'X-Chroma-Token' is invalid
-                  value:
-                    statusCode: 400
-                    message: Bad Request
-                    details: Header parameter 'X-Chroma-Token' has a invalid value
-                    timestamp: 22-07-2025 10:23:30
-                Empty Token Response:
-                  description: Header parameter 'X-Chroma-Token' is not present in
-                    the request
-                  value:
-                    statusCode: 400
-                    message: Bad Request
-                    details: Header parameter 'X-Chroma-Token' must not be empty
-                    timestamp: 22-07-2025 10:23:30
                 Empty API Version Response:
                   description: The header parameter 'X-API-Version' is not present
                     in the request

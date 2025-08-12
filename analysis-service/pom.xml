@@ -262,6 +262,8 @@
                         <exclude>
                             es/paulopossatto/chromamon/analysisservice/application/exception/**
                         </exclude>
+                        <exclude>**/mapper/*Impl.class</exclude>
+                        <exclude>es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/**</exclude>
                         <exclude>
                             es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/constants/**
                         </exclude>
@@ -282,7 +284,7 @@
                     </execution>
                     <execution>
                         <id>jacoco-site</id>
-                        <phase>verify</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
@@ -369,6 +371,7 @@
                         -XX:+EnableDynamicAgentLoading
                         -Xshare:off
                     </argLine>
+                    <argLine>${argLine} -Xmx2048m</argLine>
                 </configuration>
             </plugin>
             <plugin>

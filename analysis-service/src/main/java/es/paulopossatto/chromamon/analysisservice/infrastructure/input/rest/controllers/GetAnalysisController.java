@@ -47,13 +47,6 @@ public class GetAnalysisController {
       description =
           """
               Returns a list of all the analyses stored in the database.
-
-              Roles allowed to access this resource:
-              - **ADMIN**
-              - **USER**
-              - **ENGINEER**
-              - **CHEMIST**
-              - **LAB_ANALYST**
               """,
       parameters = {
         @Parameter(
@@ -76,12 +69,6 @@ public class GetAnalysisController {
             required = true,
             in = ParameterIn.HEADER,
             description = "The version of the analyses API",
-            schema = @Schema(type = SwaggerType.STRING)),
-        @Parameter(
-            name = ApiConstants.TOKEN_HEADER_NAME,
-            required = true,
-            in = ParameterIn.HEADER,
-            description = "The JWT token used to access this resource",
             schema = @Schema(type = SwaggerType.STRING))
       },
       responses = {
@@ -110,15 +97,6 @@ public class GetAnalysisController {
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ErrorResponse.class),
                     examples = {
-                      @ExampleObject(
-                          name = "Invalid Token Response",
-                          value = ApiResponseExamples.INVALID_TOKEN_RESPONSE,
-                          description = "The header parameter 'X-Chroma-Token' is invalid"),
-                      @ExampleObject(
-                          name = "Empty Token Response",
-                          value = ApiResponseExamples.EMPTY_TOKEN_RESPONSE,
-                          description =
-                              "Header parameter 'X-Chroma-Token' is not present in the request"),
                       @ExampleObject(
                           name = "Empty API Version Response",
                           value = ApiResponseExamples.EMPTY_API_VERSION_RESPONSE,

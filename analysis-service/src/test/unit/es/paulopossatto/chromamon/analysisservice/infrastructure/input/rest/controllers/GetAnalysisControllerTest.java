@@ -2,7 +2,7 @@ package es.paulopossatto.chromamon.analysisservice.infrastructure.input.rest.con
 
 import es.paulopossatto.chromamon.analysisservice.application.dto.response.AnalysesResponses;
 import es.paulopossatto.chromamon.analysisservice.application.usecases.GetAnalysesUseCase;
-import es.paulopossatto.chromamon.analysisservice.constants.unit.AnalysesMother;
+import es.paulopossatto.chromamon.analysisservice.constants.AnalysesMother;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

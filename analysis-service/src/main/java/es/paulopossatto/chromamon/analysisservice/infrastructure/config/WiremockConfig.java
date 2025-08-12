@@ -1,7 +1,9 @@
 package es.paulopossatto.chromamon.analysisservice.infrastructure.config.wiremock;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate;
 
@@ -33,6 +35,7 @@ public class WiremockConfig {
 
     wireMockServer.stubFor(
         get(urlPathTemplate(METEO_PATH))
+            .atPriority(1)
             .withQueryParam("latitude", equalTo("36.7285982"))
             .withQueryParam("longitude", equalTo("-4.4756972"))
             .withQueryParam("start_date", equalTo("2024-01-01"))
@@ -43,6 +46,19 @@ public class WiremockConfig {
                 okJson(
                     JsonUtil.loadFromFile(
                         "wiremock/__files/meteo/ok-200-los-ramos-substation-meteo.json"))));
+
+    wireMockServer.stubFor(
+        get(urlPathTemplate(METEO_PATH))
+            .atPriority(10)
+            .withQueryParam("latitude", matching(".*"))
+            .withQueryParam("longitude", matching(".*"))
+            .withQueryParam("start_date", matching(".*"))
+            .withQueryParam("end_date", matching(".*"))
+            .willReturn(
+                aResponse()
+                    .withStatus(400)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile("wiremock/__files/meteo/generic-404-response-code.json")));
 
     wireMockServer.start();
     log.info("Wiremock started!");

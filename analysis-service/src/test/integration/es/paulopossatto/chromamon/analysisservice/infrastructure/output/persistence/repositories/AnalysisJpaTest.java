@@ -17,6 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.END_DATE_WITHOUT_ANAYLSES;
 import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.END_DATE_WITH_ANAYLSES;
 import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.EXISTING_IDENTIFIER;
 import static es.paulopossatto.chromamon.analysisservice.constants.ValuesConstants.EXISTING_SERIAL_NUMBER;
@@ -177,7 +178,7 @@ public class AnalysisJpaTest {
       """)
   void shouldReturnEmptyList_whenFindByDatePeriodMethodIsCalled(){
     List<AnalysisEntity> analyses = analysisJpaRepository.findByPeriod(
-        START_DATE_WITHOUT_ANAYLSES, START_DATE_WITHOUT_ANAYLSES
+        START_DATE_WITHOUT_ANAYLSES, END_DATE_WITHOUT_ANAYLSES
     );
     assertTrue(analyses.isEmpty());
   }
