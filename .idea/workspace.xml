@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dd43f785-843e-489d-9211-b8fe89bdcd45" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/.editorconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/.local/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/.local/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/lombok.config" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/Application.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/converter/AnalysisConverter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/converter/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/dto/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/dto/request/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/dto/response/AnalysesResponses.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/dto/response/AnalysisResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/dto/response/ChromatographyResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/dto/response/ErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/dto/response/ObservationResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/dto/response/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/exception/ApplicationExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/exception/BadRequestException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/exception/CustomException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/exception/ForbiddenException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/exception/InternalServerError.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/exception/NotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/exception/UnauthorizedException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/exception/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/usecases/GetAnalysesUseCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/application/usecases/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/model/Analysis.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/model/Chromatography.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/model/GasExtractionMethod.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/model/Observation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/model/OilType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/model/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/ports/outbound/AnalysisRepositoryPort.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/ports/outbound/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/domain/service/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/config/CacheConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/config/OpenApiConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/config/WiremockConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/config/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/config/utils/JsonUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/config/utils/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/entity/AnalysisEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/entity/BaseEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/entity/ChromatographyEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/entity/GasExtractionEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/entity/ObservationEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/entity/OilTypesEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/entity/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/annotations/api/version/ApiVersion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/annotations/api/version/ApiVersionCondition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/annotations/api/version/CustomRequestMappingHandlerMapping.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/annotations/api/version/WebConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/annotations/api/version/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/GetAnalysisController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/KeepAliveController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/constants/ApiConstants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/constants/ApiResponseExamples.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/constants/RolesConstant.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/constants/SwaggerType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/constants/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/AnalysisMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/ChromatographyMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/ConstantsMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/GasExtractionMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/MapperConstants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/ObservationMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/OilTypeMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/adapters/AnalysisRepositoryAdapter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/adapters/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/repositories/AnalysisJpaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/repositories/ChromatographyJpaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/repositories/GasExtractionJpaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/repositories/ObservationJpaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/repositories/OilTypesJpaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/repositories/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/infrastructure/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/java/es/paulopossatto/chromamon/analysisservice/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/resources/db/migration/V1_0__create_functions.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/resources/db/migration/V1_1__create_tables.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/resources/db/migration/V1_2__create_triggers_and_indexes.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/resources/db/migration/V1_3__add_documentation.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/resources/local-access-token.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/main/resources/wiremock/__files/meteo/ok-200-los-ramos-substation-meteo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/contract/es/paulopossatto/chromamon/analysisservice/ApplicationPactTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/integration/es/paulopossatto/chromamon/analysisservice/ApplicationIT.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/integration/es/paulopossatto/chromamon/analysisservice/constants/PathsContants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/integration/es/paulopossatto/chromamon/analysisservice/constants/ValuesConstants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/integration/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/GetAnalysisControllerIT.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/integration/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/AnalysisMapperTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/integration/es/paulopossatto/chromamon/analysisservice/infrastructure/mapper/ConstantsMapperTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/integration/es/paulopossatto/chromamon/analysisservice/infrastructure/output/persistence/repositories/AnalysisJpaTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/java/es/paulopossatto/chromamon/analysisservice/constants/AnalysesMother.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/java/es/paulopossatto/chromamon/analysisservice/constants/contract/AnalysesResponseContract.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/java/es/paulopossatto/chromamon/analysisservice/infrastructure/config/PostgresqlTestContainer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/resources/application-test.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/resources/local-access-token.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/resources/mocked-db/add-valid-analysis.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/resources/mocked-db/clean-sample.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/resources/mocked-db/erase-additional-analysis.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/resources/mocked-db/sample-valid-analyses.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/resources/pacts/get-requests-analyses-service.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/resources/swagger/swagger.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/unit/es/paulopossatto/chromamon/analysisservice/ApplicationTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis-service/src/test/unit/es/paulopossatto/chromamon/analysisservice/infrastructure/input/rest/controllers/GetAnalysisControllerTest.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="31VZaT1VpUMx8jMGxMTJLXYCf7b" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/paulo/Projetos/Chromamon/chromamon",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dd43f785-843e-489d-9211-b8fe89bdcd45" name="Changes" comment="" />
+      <created>1755611263405</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1755611263405</updated>
+      <workItem from="1755611264492" duration="2452000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -1,6 +1,49 @@
 # Chromamon
 
-Chromamon is a microservices-based system designed to analyze and process chromatographic data from transformer insulating oil in electrical substations. The system provides comprehensive analysis, diagnostics, and reporting capabilities through various specialized services.
+Chromamon is a monolithic-based system designed to analyze and process chromatographic data from transformer insulating oil in electrical substations. The system provides comprehensive analysis, diagnostics, results and reporting capabilities.
+
+## Project Structure
+
+```
+
+```
+
+## Architecture Overview
+
+Each service follows the Hexagonal Architecture (Ports and Adapters) pattern:
+
+### Core Layers
+
+1. **Domain Layer** (`domain/`)
+   - Contains business logic and entities
+   - Independent of external concerns
+   - Pure Java/business rules
+
+2. **Application Layer** (`application/`)
+   - Contains use cases and port definitions
+   - Orchestrates the flow of data
+   - Defines interfaces (ports) for external dependencies
+
+3. **Infrastructure Layer** (`infrastructure/`)
+   - Contains technical details and implementations
+   - Adapters for external services/databases
+   - Framework-specific code
+
+### Ports and Adapters
+
+- **Input Ports**: Interfaces defining the operations the application offers
+- **Output Ports**: Interfaces defining the operations the application needs
+- **Input Adapters**: Implementations of input ports (e.g., REST controllers, Kafka consumers)
+- **Output Adapters**: Implementations of output ports (e.g., database repositories, external services)
+
+### Benefits of Hexagonal Architecture
+
+- Clear separation of concerns
+- Domain logic isolation
+- Easy to test (domain logic can be tested without infrastructure)
+- Flexible and maintainable
+- Easy to change implementations (e.g., switch databases)
+- Protection against external changes
 
 ## System Architecture
 
@@ -47,11 +90,9 @@ The project is structured into multiple microservices, each with its specific re
 - Java 21
 - Spring Boot 3.5.0
 - Maven
-- Apache Kafka (for inter-service communication)
 - Multiple databases:
   - PostgreSQL
   - MongoDB
-  - MySQL
 - JasperSoft Studio (for report generation)
 - Docker and Docker Compose for containerization
 

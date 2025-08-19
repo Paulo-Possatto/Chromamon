@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: Chromamon
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health, info
+  prometheus:
+    metrics:
+      export:
+        enabled: true

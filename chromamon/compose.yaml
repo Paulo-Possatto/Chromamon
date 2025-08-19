@@ -1,0 +1,38 @@
+services:
+  prometheus:
+    image: 'prometheus:latest'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  grafana:
+    image: 'grafana:latest'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    environment:
+      - 'GF_SECURITY_ADMIN_USER=${GF_ADMIN_USER}'
+      - 'GF_SECURITY_ADMIN_PASSWORD=${GF_ADMIN_PASS}'
+  wiremock:
+    image: 'wiremock:latest'
+    volumes:
+      - ./__files:/home/wiremock/__files
+      - ./mappings:/home/wiremock/mappings
+    entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
+  mongodb:
+    image: 'mongo:latest'
+    environment:
+      - 'MONGO_INITDB_DATABASE=${MG_DATABASE_NAME}'
+      - 'MONGO_INITDB_ROOT_PASSWORD=${MG_DATABASE_PASS}'
+      - 'MONGO_INITDB_ROOT_USERNAME=${MG_DATABASE_USER}'
+    ports:
+      - '27017'
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=${PG_DATABASE_NAME}'
+      - 'POSTGRES_PASSWORD=${PG_DATABASE_PASS}'
+      - 'POSTGRES_USER=${PG_DATABASE_USER}'
+    ports:
+      - '5432'
