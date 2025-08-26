@@ -19,12 +19,6 @@ public class HomeController {
 
    @GetMapping("/")
    public String home(Model model) {
-      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-      boolean isLoggedIn = auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-      model.addAttribute("isLoggedIn", isLoggedIn);
-      if (isLoggedIn) {
-         model.addAttribute("username", auth.getName());
-      }
       return "landing";
    }
 
