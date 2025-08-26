@@ -1,13 +1,270 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: Chromamon
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${PG_DATABASE_NAME}
+    username: ${PG_DATABASE_USER}
+    password: ${PG_DATABASE_PASS}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 30000
+      leak-detection-threshold: 60000
 
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+  data:
+    mongodb:
+      uri: mongodb://${MG_DATABASE_NAME}:${MG_DATABASE_PASS}@localhost:27017/?authSource=admin
+      auto-index-creation: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    validate-on-migrate: true
+    clean-disabled: true
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics,prometheus
+    endpoint:
+      health:
+        show-details: always
+    metrics:
+      tags:
+        application: ${spring.application.name}
+
+  freemarker:
+    template-loader-path: classpath:/templates/layout
+    suffix: .ftlh
+    content-type: text/html
+    charset: UTF-8
+    cache: false
+    settings:
+      template_update_delay: 0
+      default_encoding: UTF-8
+      output_encoding: UTF-8
+      locale: en_US
+      date_format: MMM dd, yyyy
+      time_format: HH:mm:ss
+      datetime_format: MMM dd, yyyy HH:mm:ss
+      number_format: "0.######"
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret: ${JWT_SECRET}
+          issuer-uri: http://localhost:8080
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+      cache-period: 0
+  mvc:
+    static-path-pattern: /static/**
+
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+
+  quartz:
+    jobStore:
+      dataSource: quartzDataSource
+    dataSource:
+      quartzDataSource:
+        driver: org.postgresql.Driver
+        URL: jdbc:postgresql://localhost:5432/${PG_DATABASE_NAME}
+        user: ${PG_DATABASE_USER}
+        password: ${PG_DATABASE_PASS}
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      expiration: ${JWT_EXPIRATION:86400000}
+
+  chromatography:
+    analysis:
+      max-file-size: 50MB
+      allowed-file-types: xlsx,csv,txt
+      temp-dir: ${TEMP_DIR:/tmp/chromatography}
+
+    reports:
+      output-dir: ${REPORTS_DIR:/tmp/reports}
+      template-dir: classpath:/reports/templates
+      max-retention-days: 30
+
+    transformer:
+      default-oil-type: mineral
+      max-age-years: 50
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  compression:
+    enabled: true
+    mime-types: text/html,text/css,application/javascript,application/json
+  error:
+    whitelabel:
+      enabled: false
+
+# Management & Actuator Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: prometheus, health, info
+        include: health,info,metrics,prometheus,env
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+    metrics:
+      access: unrestricted
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.9,0.95,0.99
+
+  info:
+    env:
+      enabled: true
+    build:
+      enabled: true
+    git:
+      enabled: true
+      mode: full
   prometheus:
     metrics:
       export:
         enabled: true
+        step: 60s
+
+# Logging Configuration
+logging:
+  level:
+    com.chromatography: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    io.jsonwebtoken: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+  file:
+    name: logs/transformer-analysis.log
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 30
+
+# OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    display-request-duration: true
+    show-actuator: true
+  show-actuator: true
+  group-configs:
+    - group: 'analysis'
+      paths-to-match: '/api/v1/analyses/**'
+      display-name: 'Chromatographic analyses'
+    - group: 'transformers'
+      paths-to-match: '/api/v1/transformers/**'
+      display-name: 'Transformers'
+    - group: 'diagnostics'
+      paths-to-match: '/api/v1/diagnostics/**'
+      display-name: 'Diagnostics'
+    - group: 'reports'
+      paths-to-match: '/api/v1/reports/**'
+      display-name: 'Reports'
+    - group: 'auth'
+      paths-to-match: '/api/v1/auth/**'
+      display-name: 'Authentication'
+
+---
+# Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${PG_DATABASE_NAME}
+    username: ${PG_DATABASE_USER}
+    password: ${PG_DATABASE_PASS}
+
+  data:
+    mongodb:
+      uri: mongodb://${MG_DATABASE_NAME}:${MG_DATABASE_PASS}@localhost:27017/?authSource=admin
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+logging:
+  level:
+    com.chromatography: DEBUG
+    root: INFO
+
+---
+# Test Profile
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    com.chromatography: DEBUG
+    org.springframework.test: DEBUG
