@@ -1,0 +1,87 @@
+<div class="row">
+  <div class="col-12">
+    <h2>Generate Reports</h2>
+    <p class="text-muted">Generate PDF reports for analyses and transformers</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5><i class="fas fa-flask me-2"></i>Analysis Report</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="analysisId" class="form-label">Analysis ID</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="analysisId" 
+            [(ngModel)]="analysisId"
+            placeholder="Enter analysis ID">
+        </div>
+        <button 
+          class="btn btn-primary w-100" 
+          (click)="generateAnalysisReport()"
+          [disabled]="!analysisId || generating">
+          @if (generating) {
+            <span class="spinner-border spinner-border-sm me-1"></span>
+          }
+          Generate Analysis Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5><i class="fas fa-bolt me-2"></i>Transformer Report</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="transformerId" class="form-label">Transformer ID</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="transformerId" 
+            [(ngModel)]="transformerId"
+            placeholder="Enter transformer ID">
+        </div>
+        <button 
+          class="btn btn-primary w-100" 
+          (click)="generateTransformerReport()"
+          [disabled]="!transformerId || generating">
+          @if (generating) {
+            <span class="spinner-border spinner-border-sm me-1"></span>
+          }
+          Generate Transformer Report
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5><i class="fas fa-history me-2"></i>Recent Reports</h5>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle me-2"></i>
+          Reports will be automatically downloaded when generated.
+        </div>
+        
+        <div class="d-flex justify-content-center">
+          <div class="text-center">
+            <i class="fas fa-file-pdf fa-3x text-danger mb-3"></i>
+            <p class="mb-0">Your generated reports will appear here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,286 @@
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>{{ isEditMode ? 'Edit Transformer' : 'Add New Transformer' }}</h2>
+      <button class="btn btn-secondary" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (transformerForm) {
+  <form [formGroup]="transformerForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Basic Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="tag" class="form-label">Tag *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="tag" 
+                formControlName="tag"
+                [class.is-invalid]="transformerForm.get('tag')?.invalid && transformerForm.get('tag')?.touched">
+              @if (transformerForm.get('tag')?.hasError('required') && transformerForm.get('tag')?.touched) {
+                <div class="invalid-feedback">
+                  Tag is required
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="serialNumber" class="form-label">Serial Number *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="serialNumber" 
+                formControlName="serialNumber"
+                [class.is-invalid]="transformerForm.get('serialNumber')?.invalid && transformerForm.get('serialNumber')?.touched">
+              @if (transformerForm.get('serialNumber')?.hasError('required') && transformerForm.get('serialNumber')?.touched) {
+                <div class="invalid-feedback">
+                  Serial number is required
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="manufacturer" class="form-label">Manufacturer *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="manufacturer" 
+                formControlName="manufacturer"
+                [class.is-invalid]="transformerForm.get('manufacturer')?.invalid && transformerForm.get('manufacturer')?.touched">
+              @if (transformerForm.get('manufacturer')?.hasError('required') && transformerForm.get('manufacturer')?.touched) {
+                <div class="invalid-feedback">
+                  Manufacturer is required
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="model" class="form-label">Model</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="model" 
+                formControlName="model">
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="yearManufacture" class="form-label">Year of Manufacture</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="yearManufacture" 
+                    formControlName="yearManufacture"
+                    min="1900" 
+                    max="2030">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="installationDate" class="form-label">Installation Date</label>
+                  <input 
+                    type="date" 
+                    class="form-control" 
+                    id="installationDate" 
+                    formControlName="installationDate">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Technical Specifications</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="nominalPowerKva" class="form-label">Nominal Power (kVA) *</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="nominalPowerKva" 
+                    formControlName="nominalPowerKva"
+                    step="0.01"
+                    [class.is-invalid]="transformerForm.get('nominalPowerKva')?.invalid && transformerForm.get('nominalPowerKva')?.touched">
+                  @if (transformerForm.get('nominalPowerKva')?.hasError('required') && transformerForm.get('nominalPowerKva')?.touched) {
+                    <div class="invalid-feedback">
+                      Nominal power is required
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="primaryVoltageKv" class="form-label">Primary Voltage (kV) *</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="primaryVoltageKv" 
+                    formControlName="primaryVoltageKv"
+                    step="0.01"
+                    [class.is-invalid]="transformerForm.get('primaryVoltageKv')?.invalid && transformerForm.get('primaryVoltageKv')?.touched">
+                  @if (transformerForm.get('primaryVoltageKv')?.hasError('required') && transformerForm.get('primaryVoltageKv')?.touched) {
+                    <div class="invalid-feedback">
+                      Primary voltage is required
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="secondaryVoltageKv" class="form-label">Secondary Voltage (kV) *</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="secondaryVoltageKv" 
+                    formControlName="secondaryVoltageKv"
+                    step="0.01"
+                    [class.is-invalid]="transformerForm.get('secondaryVoltageKv')?.invalid && transformerForm.get('secondaryVoltageKv')?.touched">
+                  @if (transformerForm.get('secondaryVoltageKv')?.hasError('required') && transformerForm.get('secondaryVoltageKv')?.touched) {
+                    <div class="invalid-feedback">
+                      Secondary voltage is required
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="connectionType" class="form-label">Connection Type *</label>
+                  <select 
+                    class="form-select" 
+                    id="connectionType" 
+                    formControlName="connectionType"
+                    [class.is-invalid]="transformerForm.get('connectionType')?.invalid && transformerForm.get('connectionType')?.touched">
+                    <option value="">Select connection type</option>
+                    <option value="DELTA-DELTA">Delta-Delta</option>
+                    <option value="DELTA-WYE">Delta-Wye</option>
+                    <option value="WYE-WYE">Wye-Wye</option>
+                    <option value="WYE-DELTA">Wye-Delta</option>
+                  </select>
+                  @if (transformerForm.get('connectionType')?.hasError('required') && transformerForm.get('connectionType')?.touched) {
+                    <div class="invalid-feedback">
+                      Connection type is required
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="coolingType" class="form-label">Cooling Type *</label>
+                  <select 
+                    class="form-select" 
+                    id="coolingType" 
+                    formControlName="coolingType"
+                    [class.is-invalid]="transformerForm.get('coolingType')?.invalid && transformerForm.get('coolingType')?.touched">
+                    <option value="">Select cooling type</option>
+                    <option value="ONAN">ONAN (Oil Natural Air Natural)</option>
+                    <option value="ONAF">ONAF (Oil Natural Air Forced)</option>
+                    <option value="OFAF">OFAF (Oil Forced Air Forced)</option>
+                    <option value="OFWF">OFWF (Oil Forced Water Forced)</option>
+                  </select>
+                  @if (transformerForm.get('coolingType')?.hasError('required') && transformerForm.get('coolingType')?.touched) {
+                    <div class="invalid-feedback">
+                      Cooling type is required
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="status" class="form-label">Status</label>
+                  <select class="form-select" id="status" formControlName="status">
+                    <option value="">Select status</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+                    <option value="MAINTENANCE">Maintenance</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Location Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="location" class="form-label">Location *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="location" 
+                formControlName="location"
+                [class.is-invalid]="transformerForm.get('location')?.invalid && transformerForm.get('location')?.touched">
+              @if (transformerForm.get('location')?.hasError('required') && transformerForm.get('location')?.touched) {
+                <div class="invalid-feedback">
+                  Location is required
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="substation" class="form-label">Substation</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="substation" 
+                formControlName="substation">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary" (click)="goBack()">
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="transformerForm.invalid || isSubmitting">
+            @if (isSubmitting) {
+              <span class="spinner-border spinner-border-sm me-1"></span>
+            }
+            {{ isEditMode ? 'Update' : 'Create' }} Transformer
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+}
+
+@if (errorMessage) {
+  <div class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+}

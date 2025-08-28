@@ -1,0 +1,271 @@
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>{{ isEditMode ? 'Edit Analysis' : 'Add New Analysis' }}</h2>
+      <button class="btn btn-secondary" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="analysisForm" (ngSubmit)="onSubmit()" @If="analysisForm">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5>General Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="transformerId" class="form-label">Transformer ID *</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="transformerId" 
+              formControlName="transformerId"
+              [class.is-invalid]="analysisForm.get('transformerId')!.invalid && analysisForm.get('transformerId')!.touched">
+            <div class="invalid-feedback" @If="analysisForm.get('transformerId')!.hasError('required')">
+              Transformer ID is required
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="analysisDate" class="form-label">Analysis Date *</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="analysisDate" 
+                  formControlName="analysisDate"
+                  [class.is-invalid]="analysisForm.get('analysisDate')!.invalid && analysisForm.get('analysisDate')!.touched">
+                <div class="invalid-feedback" @If="analysisForm.get('analysisDate')!.hasError('required')">
+                  Analysis date is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="sampleDate" class="form-label">Sample Date *</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="sampleDate" 
+                  formControlName="sampleDate"
+                  [class.is-invalid]="analysisForm.get('sampleDate')!.invalid && analysisForm.get('sampleDate')!.touched">
+                <div class="invalid-feedback" @If="analysisForm.get('sampleDate')!.hasError('required')">
+                  Sample date is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="laboratory" class="form-label">Laboratory *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="laboratory" 
+                  formControlName="laboratory"
+                  [class.is-invalid]="analysisForm.get('laboratory')!.invalid && analysisForm.get('laboratory')!.touched">
+                <div class="invalid-feedback" @If="analysisForm.get('laboratory')!.hasError('required')">
+                  Laboratory is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="method" class="form-label">Method *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="method" 
+                  formControlName="method"
+                  [class.is-invalid]="analysisForm.get('method')!.invalid && analysisForm.get('method')!.touched">
+                <div class="invalid-feedback" @If="analysisForm.get('method')!.hasError('required')">
+                  Method is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="sampleTemperatureCelsius" class="form-label">Sample Temperature (°C)</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="sampleTemperatureCelsius" 
+              formControlName="sampleTemperatureCelsius"
+              step="0.1">
+          </div>
+
+          <div class="mb-3">
+            <label for="sampleCondition" class="form-label">Sample Condition</label>
+            <select class="form-select" id="sampleCondition" formControlName="sampleCondition">
+              <option value="">Select condition</option>
+              <option value="GOOD">Good</option>
+              <option value="FAIR">Fair</option>
+              <option value="POOR">Poor</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="observations" class="form-label">Observations</label>
+            <textarea 
+              class="form-control" 
+              id="observations" 
+              formControlName="observations"
+              rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5>Dissolved Gases (ppm)</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="hydrogenH2Ppm" class="form-label">Hydrogen (H2)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="hydrogenH2Ppm" 
+                  formControlName="hydrogenH2Ppm"
+                  step="0.01">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="methaneCh4Ppm" class="form-label">Methane (CH4)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="methaneCh4Ppm" 
+                  formControlName="methaneCh4Ppm"
+                  step="0.01">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="acetyleneC2h2Ppm" class="form-label">Acetylene (C2H2)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="acetyleneC2h2Ppm" 
+                  formControlName="acetyleneC2h2Ppm"
+                  step="0.01">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="ethyleneC2h4Ppm" class="form-label">Ethylene (C2H4)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="ethyleneC2h4Ppm" 
+                  formControlName="ethyleneC2h4Ppm"
+                  step="0.01">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="ethaneC2h6Ppm" class="form-label">Ethane (C2H6)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="ethaneC2h6Ppm" 
+                  formControlName="ethaneC2h6Ppm"
+                  step="0.01">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="carbonMonoxideCoPpm" class="form-label">Carbon Monoxide (CO)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="carbonMonoxideCoPpm" 
+                  formControlName="carbonMonoxideCoPpm"
+                  step="0.01">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="carbonDioxideCo2Ppm" class="form-label">Carbon Dioxide (CO2)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="carbonDioxideCo2Ppm" 
+                  formControlName="carbonDioxideCo2Ppm"
+                  step="0.01">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="oxygenO2Ppm" class="form-label">Oxygen (O2)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="oxygenO2Ppm" 
+                  formControlName="oxygenO2Ppm"
+                  step="0.01">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="nitrogenN2Ppm" class="form-label">Nitrogen (N2)</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="nitrogenN2Ppm" 
+                  formControlName="nitrogenN2Ppm"
+                  step="0.01">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" (click)="goBack()">
+          Cancel
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="analysisForm.invalid || isSubmitting">
+          <span @If="isSubmitting" class="spinner-border spinner-border-sm me-1"></span>
+          {{ isEditMode ? 'Update' : 'Create' }} Analysis
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div @If="errorMessage" class="alert alert-danger mt-3">
+  {{ errorMessage }}
+</div>

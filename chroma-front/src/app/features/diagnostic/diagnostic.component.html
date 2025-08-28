@@ -1,0 +1,153 @@
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Diagnostic Analysis</h2>
+      <button class="btn btn-secondary" (click)="backToAnalyses()">
+        <i class="fas fa-arrow-left"></i> Back to Analyses
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Analysis Information -->
+<div class="row mb-4" @if="analysis">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5>Analysis Details</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <p><strong>Analysis ID:</strong> {{ analysis.id! }}</p>
+            <p><strong>Transformer ID:</strong> {{ analysis.transformerId! }}</p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>Analysis Date:</strong> {{ analysis.analysisDate! | date }}</p>
+            <p><strong>Sample Date:</strong> {{ analysis.sampleDate! | date }}</p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>Laboratory:</strong> {{ analysis.laboratory! }}</p>
+            <p><strong>Method:</strong> {{ analysis.method! }}</p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>Status:</strong> 
+              <span class="badge bg-primary">{{ analysis.status }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Generate Diagnostic Section -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5>Generate Diagnostic</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-wrap gap-2">
+          <button 
+            class="btn btn-outline-primary" 
+            (click)="generateDiagnostic('DUVAL')"
+            [disabled]="generating">
+            @if (generating) {
+              <span class="spinner-border spinner-border-sm me-1"></span>
+            }
+            Duval Triangle
+          </button>
+          <button 
+            class="btn btn-outline-success" 
+            (click)="generateDiagnostic('ROGERS')"
+            [disabled]="generating">
+            @if (generating) {
+              <span class="spinner-border spinner-border-sm me-1"></span>
+            }
+            Rogers Ratio
+          </button>
+          <button 
+            class="btn btn-outline-info" 
+            (click)="generateDiagnostic('IEC')"
+            [disabled]="generating">
+            @if (generating) {
+              <span class="spinner-border spinner-border-sm me-1"></span>
+            }
+            IEC Method
+          </button>
+          <button 
+            class="btn btn-outline-warning" 
+            (click)="generateDiagnostic('LABORELEC')"
+            [disabled]="generating">
+            @if (generating) {
+              <span class="spinner-border spinner-border-sm me-1"></span>
+            }
+            Laborelec Method
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Existing Diagnostics -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Generated Diagnostics</h5>
+        <span class="badge bg-secondary">{{ diagnostics.length }} diagnostics</span>
+      </div>
+      <div class="card-body">
+        @if (loading) {
+          <div class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        } @else if (diagnostics.length === 0) {
+          <div class="alert alert-info">
+            No diagnostics generated yet. Click on the buttons above to generate diagnostics.
+          </div>
+        } @else {
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Method</th>
+                      <th>Generated At</th>
+                      <th>Conclusion</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (diagnostic of diagnostics; track diagnostic.method) {
+                      <tr>
+                        <td>
+                          <span class="badge" [ngClass]="getMethodBadgeClass(diagnostic.method)">
+                            {{ diagnostic.method }}
+                          </span>
+                        </td>
+                        <td>{{ diagnostic.generatedAt | date:'short' }}</td>
+                        <td>{{ diagnostic.conclusion }}</td>
+                        <td>
+                          <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-download"></i> Export
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

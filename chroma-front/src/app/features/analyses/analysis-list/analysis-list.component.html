@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Chromatographic Analyses</h2>
+  <button class="btn btn-primary" (click)="addAnalysis()">
+    <i class="fas fa-plus"></i> Add Analysis
+  </button>
+</div>
+
+<div *ngIf="loading" class="text-center">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="!loading && analyses.length === 0" class="alert alert-info">
+  No analyses found.
+</div>
+
+<div *ngIf="!loading && analyses.length > 0" class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Transformer ID</th>
+        <th>Analysis Date</th>
+        <th>Laboratory</th>
+        <th>Method</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let analysis of analyses">
+        <td>{{ analysis.id }}</td>
+        <td>{{ analysis.transformerId }}</td>
+        <td>{{ analysis.analysisDate | date }}</td>
+        <td>{{ analysis.laboratory }}</td>
+        <td>{{ analysis.method }}</td>
+        <td>
+          <span class="badge bg-primary">{{ analysis.status }}</span>
+        </td>
+        <td>
+          <div class="btn-group" role="group">
+            <button 
+              class="btn btn-sm btn-outline-primary" 
+              (click)="editAnalysis(analysis.id)"
+              title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button 
+              class="btn btn-sm btn-outline-danger" 
+              (click)="deleteAnalysis(analysis.id)"
+              title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+            <button 
+              class="btn btn-sm btn-outline-info" 
+              (click)="viewDiagnostic(analysis.id)"
+              title="Diagnostic">
+              <i class="fas fa-stethoscope"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
