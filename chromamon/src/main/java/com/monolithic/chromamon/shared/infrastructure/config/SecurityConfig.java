@@ -1,6 +1,8 @@
 package com.monolithic.chromamon.shared.infrastructure.config;
 
+import com.monolithic.chromamon.login.domain.port.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -26,6 +29,7 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
    @Value("${spring.security.oauth2.resourceserver.jwt.secret}")
@@ -39,19 +43,9 @@ public class SecurityConfig {
          .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
          .authorizeHttpRequests(authz -> authz
             // Public endpoints
-            .requestMatchers("/api/v1/auth/login", "/api/v1/auth/validate").permitAll()
+            .requestMatchers("/api/v1/auth/**").permitAll()
             .requestMatchers("/actuator/**").permitAll()
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            .requestMatchers("/").permitAll()
-            .requestMatchers(
-               "/about",
-               "/contact",
-               "/create-account",
-               "/forgot-password",
-               "/landing",
-               "/layout",
-               "/login").permitAll()
-            .requestMatchers("/static/css/**", "/static/js/**", "/static/images/**").permitAll()
             // Protected endpoints
             .anyRequest().authenticated()
          )
