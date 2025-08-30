@@ -1,8 +1,8 @@
 package com.monolithic.chromamon.login.application.service;
 
+import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.request.LoginRequest;
 import com.monolithic.chromamon.login.domain.model.response.LoginResponse;
-import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.port.JwtService;
 import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
@@ -12,11 +12,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -25,7 +31,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LoginService {
+public class LoginService implements UserDetailsService {
 
    @Value("${application.security.jwt.expiration}")
    private long jwtExpiration;
@@ -113,5 +119,22 @@ public class LoginService {
       String username = jwtService.extractUsername(token);
       return userRepository.findByUsername(username)
          .orElseThrow(() -> new RuntimeException("User not found"));
+   }
+
+   @Override
+   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+      User userResponse = userRepository.findByUsername(username)
+         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+      Set<GrantedAuthority> authorities = HashSet.newHashSet(userResponse.getRole().getPermissionStrings().size());
+      for(String permission : userResponse.getRole().getPermissionStrings()){
+         authorities.add(new SimpleGrantedAuthority(permission));
+      }
+
+      return org.springframework.security.core.userdetails.User
+         .withUsername(userResponse.getUsername())
+         .password(userResponse.getPassword())
+         .authorities(authorities)
+         .build();
    }
 }

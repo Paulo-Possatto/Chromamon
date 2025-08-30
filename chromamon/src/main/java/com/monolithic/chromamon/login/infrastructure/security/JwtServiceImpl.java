@@ -5,7 +5,6 @@ import com.monolithic.chromamon.login.domain.port.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,11 +103,14 @@ public class JwtServiceImpl implements JwtService {
       Date expiryDate = new Date(now.getTime() + expiration);
 
       return Jwts.builder()
+         .header()
+         .add("typ", "JWT")
+         .and()
          .claims(extraClaims)
          .subject(username)
          .issuedAt(now)
          .expiration(expiryDate)
-         .signWith(secretKey, SignatureAlgorithm.HS512)
+         .signWith(secretKey, Jwts.SIG.HS512)
          .compact();
    }
 }

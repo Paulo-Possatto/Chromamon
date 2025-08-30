@@ -1,5 +1,6 @@
 package com.monolithic.chromamon.shared.infrastructure.config;
 
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,16 +12,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.SecretKey;
 import java.util.List;
 
 @Configuration
@@ -30,8 +33,10 @@ import java.util.List;
 @Slf4j
 public class SecurityConfig {
 
-   @Value("${spring.security.oauth2.resourceserver.jwt.secret}")
+   @Value("${application.security.jwt.secret-key:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}")
    private String jwtSecret;
+
+   private final JwtAuthFilter jwtAuthFilter;
 
    @Bean
    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,6 +53,7 @@ public class SecurityConfig {
             // Protected endpoints
             .anyRequest().authenticated()
          )
+         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
          .oauth2ResourceServer(oauth2 -> oauth2
             .jwt(jwt -> jwt
                .decoder(jwtDecoder())
@@ -60,8 +66,8 @@ public class SecurityConfig {
 
    @Bean
    public JwtDecoder jwtDecoder() {
-      SecretKeySpec secretKey = new SecretKeySpec(jwtSecret.getBytes(), "HmacSHA512");
-      return NimbusJwtDecoder.withSecretKey(secretKey).build();
+      SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+      return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS512).build();
    }
 
    @Bean
