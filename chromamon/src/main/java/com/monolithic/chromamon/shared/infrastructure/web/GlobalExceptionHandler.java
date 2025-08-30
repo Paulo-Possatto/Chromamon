@@ -2,7 +2,6 @@ package com.monolithic.chromamon.shared.infrastructure.web;
 
 import com.monolithic.chromamon.shared.domain.security.SwaggerType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -150,5 +149,17 @@ public class GlobalExceptionHandler {
       String message,
       String path,
       Map<String, String> validationErrors
-   ) {}
+   ) {
+      @Override
+      public String toString() {
+         return "{\n" +
+            "\t\"timestamp\": \"" + timestamp + "\",\n" +
+            "\t\"status\": \"" + status + "\",\n" +
+            "\t\"error\": \"" + error + "\",\n" +
+            "\t\"message\": \"" + message + "\",\n" +
+            "\t\"path\": \"" + path + "\",\n" +
+            "\t\"validationErrors\": \"" + validationErrors + "\"\n" +
+            '}';
+      }
+   }
 }

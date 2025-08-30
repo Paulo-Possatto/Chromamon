@@ -26,6 +26,11 @@ public class User {
    private LocalDateTime updatedAt;
    private LocalDateTime lastLoginAt;
 
+   /**
+    * Generates the user full name.
+    *
+    * @return the user's full name.
+    */
    public String getFullName() {
       return firstName + " " + lastName;
    }

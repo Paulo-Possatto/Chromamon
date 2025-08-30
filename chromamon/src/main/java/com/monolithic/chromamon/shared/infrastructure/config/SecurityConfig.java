@@ -37,6 +37,7 @@ public class SecurityConfig {
    private String jwtSecret;
 
    private final JwtAuthFilter jwtAuthFilter;
+   private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
    @Bean
    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -59,7 +60,8 @@ public class SecurityConfig {
                .decoder(jwtDecoder())
                .jwtAuthenticationConverter(jwtAuthenticationConverter())
             )
-         );
+         )
+         .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint));
 
       return http.build();
    }

@@ -2,13 +2,16 @@ package com.monolithic.chromamon.login.infrastructure.security;
 
 import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.port.JwtService;
+import com.monolithic.chromamon.shared.domain.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -88,12 +91,15 @@ public class JwtServiceImpl implements JwtService {
    private Claims extractAllClaims(String token) {
       try {
          return Jwts.parser()
-            .setSigningKey(secretKey)
+            .verifyWith(secretKey)
             .build()
-            .parseClaimsJws(token)
-            .getBody();
+            .parseSignedClaims(token)
+            .getPayload();
       } catch (JwtException e) {
          log.error("Error extracting jwtToken claims: {}", e.getMessage());
+         throw new InvalidTokenException("Token invalid or expired: " + e.getMessage(), e);
+      } catch (Exception e) {
+         log.error("Internal Error: {}", e.getMessage());
          throw new RuntimeException("Invalid jwtToken", e);
       }
    }

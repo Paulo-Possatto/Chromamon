@@ -2,6 +2,7 @@ package com.monolithic.chromamon.login.application.service;
 
 import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
+import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
 import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
 import com.monolithic.chromamon.shared.application.security.HasPermission;
@@ -37,7 +38,7 @@ public class UserService {
     */
    @HasPermission(Permission.USER_CREATE)
    @Transactional
-   public User createUser(CreateUserRequest userRequest) {
+   public CreateUserResponse createUser(CreateUserRequest userRequest) {
       log.info("Creating new user: {}", userRequest.username());
 
       if (userRepository.existsByUsername(userRequest.username())) {
@@ -63,7 +64,15 @@ public class UserService {
       User savedUser = userRepository.save(user);
       log.info("User successfully created: {}", savedUser.getUsername());
 
-      return savedUser;
+      return CreateUserResponse.builder()
+         .id(savedUser.getId())
+         .username(savedUser.getUsername())
+         .email(savedUser.getEmail())
+         .firstName(savedUser.getFirstName())
+         .fullName(savedUser.getFullName())
+         .role(savedUser.getRole())
+         .isActive(savedUser.getActive())
+         .build();
    }
 
    @HasPermission(Permission.USER_READ)
