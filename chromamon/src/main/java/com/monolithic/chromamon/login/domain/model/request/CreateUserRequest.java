@@ -56,7 +56,19 @@ public record CreateUserRequest(
    @NotBlank(message = "Last Name is obligatory")
    @Size(max = 40, message = "Last name cannot succeed 40 characters")
    String lastName,
+   @NotBlank(message = "Role is obligatory")
+   @Pattern(
+      regexp = "ADMIN|OPERATIONS|MAINTENANCE|ENGINEERING|PLANNING|" +
+         "CUSTOMER_SERVICE|BUSINESS|MANAGEMENT|ADMINISTRATION|TECHNOLOGY|" +
+         "ANALYST|SAFETY|USER",
+      message = "Role selected is not acceptable"
+   )
    Role role,
+   @NotBlank(message = "Active is obligatory")
+   @Pattern(
+      regexp = "true|false",
+      message = "Active must be true or false"
+   )
    Boolean active
 ) {
 }
