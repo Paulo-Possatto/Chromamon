@@ -4,6 +4,7 @@ import com.monolithic.chromamon.shared.application.security.HasPermission;
 import com.monolithic.chromamon.shared.application.security.PermissionService;
 import com.monolithic.chromamon.shared.domain.security.Role;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PermissionAspect {
 
    private final PermissionService permissionService;
@@ -28,6 +30,7 @@ public class PermissionAspect {
          throw new AccessDeniedException("User Not Authenticated");
       }
 
+      log.info("Checking permissions for user {}", authentication.getName());
       Jwt jwt = (Jwt) authentication.getPrincipal();
       Long userId = jwt.getClaim("userId");
       String roleStr = jwt.getClaim("role");

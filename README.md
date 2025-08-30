@@ -106,8 +106,8 @@ mvn spring-boot:run
 ## Default user
 
 ```
-User: admin@chromamon.com
-Password: admin123
+Email: admin@chromamon.com
+Password: Admin123
 ```
 
 **⚠️ Important**: Change the default password on the first use.

@@ -4,8 +4,6 @@ import com.monolithic.chromamon.analysis.domain.model.Analysis;
 import com.monolithic.chromamon.analysis.domain.model.AnalysisStatus;
 import com.monolithic.chromamon.analysis.domain.port.AnalysisRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;

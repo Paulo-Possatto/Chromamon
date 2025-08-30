@@ -1,7 +1,8 @@
 package com.monolithic.chromamon.diagnostic.application;
 
 import com.monolithic.chromamon.analysis.domain.model.Analysis;
-import com.monolithic.chromamon.diagnostic.domain.model.*;
+import com.monolithic.chromamon.diagnostic.domain.model.DiagnosticMethod;
+import com.monolithic.chromamon.diagnostic.domain.model.DiagnosticResult;
 import com.monolithic.chromamon.shared.application.security.HasPermission;
 import com.monolithic.chromamon.shared.domain.security.Permission;
 import org.springframework.stereotype.Service;

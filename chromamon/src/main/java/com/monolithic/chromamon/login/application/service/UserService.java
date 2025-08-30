@@ -1,6 +1,7 @@
 package com.monolithic.chromamon.login.application.service;
 
 import com.monolithic.chromamon.login.domain.model.User;
+import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
 import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
 import com.monolithic.chromamon.shared.application.security.HasPermission;
@@ -8,12 +9,17 @@ import com.monolithic.chromamon.shared.application.security.PermissionService;
 import com.monolithic.chromamon.shared.domain.security.Permission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Service class for user-related resources.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -23,23 +29,36 @@ public class UserService {
    private final PasswordEncoder passwordEncoder;
    private final PermissionService permissionService;
 
+   /**
+    * Service for creating a new user.
+    *
+    * @param userRequest the CreateUserRequest object
+    * @return the User object with the data stored in the database.
+    */
    @HasPermission(Permission.USER_CREATE)
    @Transactional
-   public User createUser(User user) {
-      log.info("Creating new user: {}", user.getUsername());
+   public User createUser(CreateUserRequest userRequest) {
+      log.info("Creating new user: {}", userRequest.username());
 
-      if (userRepository.existsByUsername(user.getUsername())) {
-         throw new RuntimeException("Username already exists: " + user.getUsername());
+      if (userRepository.existsByUsername(userRequest.username())) {
+         throw new HttpClientErrorException(HttpStatus.CONFLICT, "Username already exists: " + userRequest.username());
       }
 
-      if (userRepository.existsByEmail(user.getEmail())) {
-         throw new RuntimeException("Email already exists: " + user.getEmail());
+      if (userRepository.existsByEmail(userRequest.email())) {
+         throw new HttpClientErrorException(HttpStatus.CONFLICT, "Email already exists: " + userRequest.email());
       }
 
-      user.setPassword(passwordEncoder.encode(user.getPassword()));
-      user.setActive(true);
-      user.setCreatedAt(LocalDateTime.now());
-      user.setUpdatedAt(LocalDateTime.now());
+      User user = User.builder()
+         .username(userRequest.username())
+         .email(userRequest.email())
+         .password(passwordEncoder.encode(userRequest.password()))
+         .firstName(userRequest.firstName())
+         .lastName(userRequest.lastName())
+         .role(userRequest.role())
+         .active(userRequest.active())
+         .createdAt(LocalDateTime.now())
+         .updatedAt(LocalDateTime.now())
+         .build();
 
       User savedUser = userRepository.save(user);
       log.info("User successfully created: {}", savedUser.getUsername());

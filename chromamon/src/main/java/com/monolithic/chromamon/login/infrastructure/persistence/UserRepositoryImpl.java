@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -51,7 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
    public List<User> findAll() {
       return jpaRepository.findAll().stream()
          .map(userMapper::toDomain)
-         .collect(Collectors.toList());
+         .toList();
    }
 
    @Override

@@ -105,7 +105,8 @@ application:
   security:
     jwt:
       secret-key: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-      expiration: ${JWT_EXPIRATION:86400000}
+      expiration: ${JWT_EXPIRATION:86400}
+      auth-scheme: ${JWT_AUTH_SCHEME:Bearer}
 
   chromatography:
     analysis:
@@ -185,7 +186,7 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
   file:
-    name: logs/transformer-analysis.log
+    name: logs/chromamon.log
   logback:
     rollingpolicy:
       max-file-size: 100MB

@@ -1,5 +1,6 @@
 package com.monolithic.chromamon.shared.infrastructure.config;
 
+import com.monolithic.chromamon.shared.domain.security.SwaggerType;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -8,8 +9,15 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @OpenAPIDefinition(
+   tags = {
+      @Tag(
+         name = SwaggerType.TAG_AUTHENTICATION,
+         description = "Endpoints for authentication and user management"
+      )
+   },
    info = @Info(
       title = "Chromamon",
       description = "API for chromatographic analysis in electrical substation transformers",

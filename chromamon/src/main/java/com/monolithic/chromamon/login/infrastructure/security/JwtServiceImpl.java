@@ -94,8 +94,8 @@ public class JwtServiceImpl implements JwtService {
             .parseClaimsJws(token)
             .getBody();
       } catch (JwtException e) {
-         log.error("Error extracting token claims: {}", e.getMessage());
-         throw new RuntimeException("Invalid token", e);
+         log.error("Error extracting jwtToken claims: {}", e.getMessage());
+         throw new RuntimeException("Invalid jwtToken", e);
       }
    }
 

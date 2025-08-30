@@ -6,6 +6,7 @@ target/
 .env
 /logs/**
 /logs/**.log
+logs/
 
 ### STS ###
 .apt_generated
