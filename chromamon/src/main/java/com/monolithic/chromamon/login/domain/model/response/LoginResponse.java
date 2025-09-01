@@ -14,6 +14,8 @@ import java.util.Set;
  * @param tokenType the type of authorization used by the token.
  * @param expiresIn the unix epoch value for when the token expires.
  * @param username the username for the logged user.
+ * @param idCode the internal identifier code.
+ * @param uuid the user unique identifier.
  * @param email the logged user email.
  * @param fullName the logged user full name.
  * @param role the logged user role.
@@ -30,8 +32,10 @@ import java.util.Set;
       {
          "jwtToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
          "tokenType": "Bearer",
-         "expiresIn": "1516239022",
+         "expiresIn": "864000",
          "username": "JohnDoe",
+         "uuid": "3191403f-15f2-4797-a671-4172031a979a",
+         "idCode": "DR69TD",
          "email": "john.doe@email.com",
          "fullName": "John Smith Doe",
          "role": "ENGINEER",
@@ -74,6 +78,22 @@ public record LoginResponse(
       implementation = String.class
    )
    String username,
+   @Schema(
+      name = "uuid",
+      description = "The user unique identifier",
+      type = SwaggerType.STRING,
+      examples = "",
+      implementation = String.class
+   )
+   String uuid,
+   @Schema(
+      name = "idCode",
+      description = "The user internal identification",
+      type = SwaggerType.STRING,
+      examples = "AB12CD",
+      implementation = String.class
+   )
+   String idCode,
    @Schema(
       name = "email",
       description = "The user's email",

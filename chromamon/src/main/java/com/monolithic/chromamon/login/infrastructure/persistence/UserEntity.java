@@ -19,6 +19,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users_data", schema = "users")
@@ -32,6 +33,12 @@ public class UserEntity {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
+
+   @Column(name = "uuid", nullable = false, unique = true)
+   private UUID uuid;
+
+   @Column(name = "id_code", nullable = false, unique = true, length = 6)
+   private String idCode;
 
    @Column(name = "username", nullable = false, unique = true)
    private String username;

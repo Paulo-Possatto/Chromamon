@@ -16,9 +16,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.lang.reflect.Array;
-import java.util.List;
-
 @Aspect
 @Component
 @RequiredArgsConstructor

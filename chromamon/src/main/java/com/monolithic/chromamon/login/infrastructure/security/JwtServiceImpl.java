@@ -9,9 +9,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -20,6 +18,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+/**
+ * Implementation services for all JWT-related operations.
+ */
 @Service
 @Slf4j
 public class JwtServiceImpl implements JwtService {
@@ -37,14 +38,14 @@ public class JwtServiceImpl implements JwtService {
    @Override
    public String generateToken(User user, Set<String> permissions) {
       Map<String, Object> extraClaims = new HashMap<>();
-      extraClaims.put("userId", user.getId());
-      extraClaims.put("email", user.getEmail());
-      extraClaims.put("firstName", user.getFirstName());
-      extraClaims.put("lastName", user.getLastName());
-      extraClaims.put("role", user.getRole().name());
+      extraClaims.put("userId", user.id());
+      extraClaims.put("email", user.email());
+      extraClaims.put("firstName", user.firstName());
+      extraClaims.put("lastName", user.lastName());
+      extraClaims.put("role", user.role().name());
       extraClaims.put("permissions", permissions);
 
-      return buildToken(extraClaims, user.getUsername(), jwtExpiration);
+      return buildToken(extraClaims, user.username(), jwtExpiration);
    }
 
    @Override

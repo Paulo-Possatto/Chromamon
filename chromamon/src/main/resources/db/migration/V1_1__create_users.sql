@@ -1,8 +1,8 @@
--- V1__Create_users_table.sql
--- Migration para criar a tabela de usuários
 CREATE TABLE users.users_data
 (
     id            BIGSERIAL PRIMARY KEY,
+    uuid          UUID NOT NULL UNIQUE,
+    id_code       VARCHAR(6) NOT NULL UNIQUE,
     username      VARCHAR(50)  NOT NULL UNIQUE,
     email         VARCHAR(100) NOT NULL UNIQUE,
     password      VARCHAR(255) NOT NULL,
@@ -22,7 +22,6 @@ CREATE TABLE users.users_data
 )
     );
 
--- Índices para melhor performance
 CREATE INDEX idx_users_username ON users.users_data (username);
 CREATE INDEX idx_users_email ON users.users_data (email);
 CREATE INDEX idx_users_role ON users.users_data (role);

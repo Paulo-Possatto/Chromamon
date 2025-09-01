@@ -17,6 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service class for user-related resources.
@@ -62,100 +63,169 @@ public class UserService {
          .build();
 
       User savedUser = userRepository.save(user);
-      log.info("User successfully created: {}", savedUser.getUsername());
+      log.info("User successfully created: {}", savedUser.username());
 
       return CreateUserResponse.builder()
-         .id(savedUser.getId())
-         .username(savedUser.getUsername())
-         .email(savedUser.getEmail())
-         .firstName(savedUser.getFirstName())
+         .id(savedUser.id())
+         .username(savedUser.username())
+         .email(savedUser.email())
+         .firstName(savedUser.firstName())
          .fullName(savedUser.getFullName())
-         .role(savedUser.getRole())
-         .isActive(savedUser.getActive())
+         .role(savedUser.role())
+         .isActive(savedUser.active())
          .build();
    }
 
+   /**
+    * Gets all users stored in the database.
+    *
+    * @return a list of all the users.
+    */
    @HasPermission(Permission.USER_READ)
    public List<User> getAllUsers() {
       return userRepository.findAll();
    }
 
+   /**
+    * Get a specific user
+    *
+    * @param id the user id.
+    * @return the user information.
+    */
    @HasPermission(Permission.USER_READ)
    public User getUserById(Long id) {
       return userRepository.findById(id)
-         .orElseThrow(() -> new RuntimeException("User not found: " + id));
+         .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + id));
    }
 
+   /**
+    * Updated the user information.
+    *
+    * @param id the id of the user to be updated.
+    * @param userUpdates the required information to be changed
+    * @return the updated user information
+    */
    @HasPermission(Permission.USER_UPDATE)
    @Transactional
    public User updateUser(Long id, User userUpdates) {
       log.info("Updating user: {}", id);
 
       User existingUser = getUserById(id);
+      User.UserBuilder updatedUser = User.builder();
 
-      if (userUpdates.getFirstName() != null) {
-         existingUser.setFirstName(userUpdates.getFirstName());
+      updatedUser.id(existingUser.id());
+      updatedUser.uuid(existingUser.uuid());
+      updatedUser.idCode(existingUser.idCode());
+
+      if(userUpdates.username() != null) {
+         updatedUser.username(userUpdates.username());
+      } else{
+         updatedUser.username(existingUser.username());
       }
-      if (userUpdates.getLastName() != null) {
-         existingUser.setLastName(userUpdates.getLastName());
-      }
-      if (userUpdates.getEmail() != null && !userUpdates.getEmail().equals(existingUser.getEmail())) {
-         if (userRepository.existsByEmail(userUpdates.getEmail())) {
-            throw new RuntimeException("Email already exists: " + userUpdates.getEmail());
+      if (userUpdates.email() != null && !userUpdates.email().equals(existingUser.email())) {
+         if (userRepository.existsByEmail(userUpdates.email())) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT, "Email already exists: " + userUpdates.email());
          }
-         existingUser.setEmail(userUpdates.getEmail());
+         updatedUser.email(userUpdates.email());
       }
-      if (userUpdates.getRole() != null) {
-         existingUser.setRole(userUpdates.getRole());
+      if (userUpdates.password() != null && !userUpdates.password().isEmpty()) {
+         updatedUser.password(passwordEncoder.encode(userUpdates.password()));
+      } else {
+         updatedUser.password(existingUser.password());
       }
-      if (userUpdates.getActive() != null) {
-         existingUser.setActive(userUpdates.getActive());
+      if (userUpdates.firstName() != null) {
+         updatedUser.firstName(userUpdates.firstName());
+      } else {
+         updatedUser.firstName(existingUser.firstName());
       }
-      if (userUpdates.getPassword() != null && !userUpdates.getPassword().isEmpty()) {
-         existingUser.setPassword(passwordEncoder.encode(userUpdates.getPassword()));
+      if (userUpdates.lastName() != null) {
+         updatedUser.lastName(userUpdates.lastName());
+      } else {
+         updatedUser.lastName(existingUser.lastName());
+      }
+      if (userUpdates.role() != null) {
+         updatedUser.role(userUpdates.role());
+      } else {
+         updatedUser.role(existingUser.role());
+      }
+      if (userUpdates.active() != null) {
+         updatedUser.active(userUpdates.active());
+      } else {
+         updatedUser.active(existingUser.active());
       }
 
-      existingUser.setUpdatedAt(LocalDateTime.now());
+      updatedUser.updatedAt(LocalDateTime.now());
 
-      User updatedUser = userRepository.save(existingUser);
-      log.info("User successfully updated: {}", updatedUser.getUsername());
+      User savedUpdatedUser = userRepository.save(updatedUser.build());
+      log.info("User successfully updated: {}", savedUpdatedUser.username());
 
-      return updatedUser;
+      return savedUpdatedUser;
    }
 
+   /**
+    * Deletes a user from the database (Will be changed in the future)
+    *
+    * @param id the id of the user to be deleted.
+    */
    @HasPermission(Permission.USER_DELETE)
    @Transactional
    public void deleteUser(Long id) {
       log.info("Deleting user: {}", id);
 
-      if (!userRepository.findById(id).isPresent()) {
-         throw new RuntimeException("User not found: " + id);
+      if (userRepository.findById(id).isEmpty()) {
+         throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + id);
       }
 
       userRepository.deleteById(id);
       log.info("User successfully deleted: {}", id);
    }
 
+   /**
+    * Grants a specific permission to a user.
+    *
+    * @param userId the id of the user that the permission will be granted.
+    * @param permission the specific permission to be granted.
+    */
    @HasPermission(Permission.USER_UPDATE)
    @Transactional
    public void grantPermission(Long userId, Permission permission) {
       log.info("Grating permission '{}' for user '{}'", permission, userId);
 
-      if (userRepository.findById(userId).isEmpty()) {
-         throw new RuntimeException("User not found: " + userId);
+      User user = userRepository.findById(userId).orElse(null);
+
+      if (user == null) {
+         throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + userId);
+      }
+
+      Set<Permission> permissions = user.role().getPermissions();
+      if(permissions.contains(permission)) {
+         throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "User already have the permission: " + permission);
       }
 
       permissionService.grantPermission(userId, permission);
       log.info("Permission successfully granted");
    }
 
+   /**
+    * Revokes a specific permission from a user.
+    *
+    * @param userId the id of the user.
+    * @param permission the permission to be revoked
+    */
    @HasPermission(Permission.USER_UPDATE)
    @Transactional
    public void revokePermission(Long userId, Permission permission) {
       log.info("Revoking permission {} from user {}", permission, userId);
 
-      if (!userRepository.findById(userId).isPresent()) {
-         throw new RuntimeException("User not found: " + userId);
+      User user = userRepository.findById(userId).orElse(null);
+
+      if (user == null) {
+         throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + userId);
+      }
+
+      Set<Permission> permissions = user.role().getPermissions();
+      if(!permissions.contains(permission)) {
+         throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "User already doesn't have the permission: " + permission);
       }
 
       permissionService.revokePermission(userId, permission);

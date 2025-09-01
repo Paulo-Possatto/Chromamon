@@ -1,5 +1,3 @@
--- V4__Create_analyses_table.sql
--- Migration para criar a tabela de análises cromatográficas
 CREATE TABLE analyses.analyses
 (
     id                            BIGSERIAL PRIMARY KEY,
@@ -10,7 +8,6 @@ CREATE TABLE analyses.analyses
     method                        VARCHAR(50)  NOT NULL DEFAULT 'ASTM_D3612',
     sample_temperature_celsius    DECIMAL(5, 2),
 
-    -- Gases em ppm (partes por milhão)
     hydrogen_h2_ppm               DECIMAL(10, 3),
     methane_ch4_ppm               DECIMAL(10, 3),
     acetylene_c2h2_ppm            DECIMAL(10, 3),
@@ -21,15 +18,12 @@ CREATE TABLE analyses.analyses
     oxygen_o2_ppm                 DECIMAL(10, 3),
     nitrogen_n2_ppm               DECIMAL(10, 3),
 
-    -- Gases totais
     total_dissolved_gas_tdg_ppm   DECIMAL(10, 3),
     total_combustible_gas_tcg_ppm DECIMAL(10, 3),
 
-    -- Observações e comentários
     observations                  TEXT,
     sample_condition              VARCHAR(50)           DEFAULT 'NORMAL',
 
-    -- Metadados
     status                        VARCHAR(20)  NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'COMPLETED', 'CANCELLED')),
     created_at                    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at                    TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
@@ -47,7 +41,6 @@ CREATE TABLE analyses.analyses
         )
 );
 
--- Índices
 CREATE INDEX idx_analyses_transformer_id ON analyses.analyses (transformer_id);
 CREATE INDEX idx_analyses_analysis_date ON analyses.analyses (analysis_date);
 CREATE INDEX idx_analyses_sample_date ON analyses.analyses (sample_date);

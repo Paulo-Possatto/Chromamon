@@ -1,5 +1,3 @@
--- V2__Create_user_permissions_table.sql
--- Migration para criar a tabela de permissões personalizadas dos usuários
 CREATE TABLE users.user_permissions
 (
     id         BIGSERIAL PRIMARY KEY,
@@ -26,7 +24,6 @@ CREATE TABLE users.user_permissions
         ))
 );
 
--- Índices
 CREATE INDEX idx_user_permissions_user_id ON users.user_permissions (user_id);
 CREATE INDEX idx_user_permissions_permission ON users.user_permissions (permission);
 CREATE INDEX idx_user_permissions_granted ON users.user_permissions (granted);

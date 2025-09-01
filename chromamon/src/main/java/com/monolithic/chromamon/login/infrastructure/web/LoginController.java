@@ -2,11 +2,11 @@ package com.monolithic.chromamon.login.infrastructure.web;
 
 import com.monolithic.chromamon.login.application.service.LoginService;
 import com.monolithic.chromamon.login.application.service.UserService;
+import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
 import com.monolithic.chromamon.login.domain.model.request.LoginRequest;
 import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
 import com.monolithic.chromamon.login.domain.model.response.LoginResponse;
-import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.shared.domain.security.Permission;
 import com.monolithic.chromamon.shared.domain.security.SwaggerType;
 import com.monolithic.chromamon.shared.infrastructure.web.GlobalExceptionHandler;
@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -316,7 +315,7 @@ public class LoginController {
                          "status": 500,
                          "error": "Internal Server Error",
                          "message": "Internal Server Error",
-                         "path": "/api/v1/auth/login",
+                         "path": "/api/v1/auth/validate",
                          "validationErrors": null
                      }
                      """
@@ -346,12 +345,11 @@ public class LoginController {
    }
 
    /**
+    * Endpoint to create a new user (Requires role with permission).
     *
-    *
-    * @param user
-    * @return
+    * @param user the necessary data for creating a new user.
+    * @return the information about the created user.
     */
-   //TODO: Generate API Responses for swagger: 409, 500
    @Tag(name = SwaggerType.TAG_AUTHENTICATION)
    @Operation(
       summary = "Create user",
@@ -399,12 +397,52 @@ public class LoginController {
                   implementation = GlobalExceptionHandler.ErrorResponse.class,
                   example = """
                      {
-                         "timestamp": "2025-08-30T17:41:43.247846674",
-                         "status": "403",
+                         "timestamp": "2025-08-31T19:22:02.023790528",
+                         "status": 403,
                          "error": "Forbidden",
-                         "message": "User does not have permission to access this resource",
+                         "message": "Access Denied: Insufficient permission: user:create",
                          "path": "/api/v1/auth/users",
-                         "validationErrors": "null"
+                         "validationErrors": null
+                     }
+                     """
+               )
+            )
+         ),
+         @ApiResponse(
+            responseCode = "409",
+            description = "The user trying to be added to the system already exists",
+            content = @Content(
+               mediaType = MediaType.APPLICATION_JSON_VALUE,
+               schema = @Schema(
+                  implementation = GlobalExceptionHandler.ErrorResponse.class,
+                  example = """
+                     {
+                         "timestamp": "2025-08-31T19:23:12.230182497",
+                         "status": 409,
+                         "error": "Conflict",
+                         "message": "Username already exists: <username>",
+                         "path": "/api/v1/auth/users",
+                         "validationErrors": null
+                     }
+                     """
+               )
+            )
+         ),
+         @ApiResponse(
+            responseCode = "500",
+            description = "The user trying to be added to the system already exists",
+            content = @Content(
+               mediaType = MediaType.APPLICATION_JSON_VALUE,
+               schema = @Schema(
+                  implementation = GlobalExceptionHandler.ErrorResponse.class,
+                  example = """
+                     {
+                         "timestamp": "2025-08-29T20:13:30.565819877",
+                         "status": 500,
+                         "error": "Internal Server Error",
+                         "message": "Internal Server Error",
+                         "path": "/api/v1/auth/users",
+                         "validationErrors": null
                      }
                      """
                )

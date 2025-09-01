@@ -57,17 +57,17 @@ public class LoginService implements UserDetailsService {
       User user = userRepository.findByEmail(loginRequest.email())
          .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found"));
 
-      if (Boolean.FALSE.equals(user.getActive())) {
+      if (Boolean.FALSE.equals(user.active())) {
          throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "User inactive");
       }
 
-      if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
+      if (!passwordEncoder.matches(loginRequest.password(), user.password())) {
          throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED,"Invalid credentials");
       }
 
-      userRepository.updateLastLoginAt(user.getId(), LocalDateTime.now());
+      userRepository.updateLastLoginAt(user.id(), LocalDateTime.now());
 
-      Set<String> permissions = permissionService.getUserPermissions(user.getId(), user.getRole())
+      Set<String> permissions = permissionService.getUserPermissions(user.id(), user.role())
          .stream()
          .map(Permission::getPermission)
          .collect(java.util.stream.Collectors.toSet());
@@ -77,16 +77,18 @@ public class LoginService implements UserDetailsService {
       LocalDateTime now = LocalDateTime.now();
       LocalDateTime expiresAt = now.plusSeconds(jwtExpiration);
 
-      log.info("Successful authentication for user: {}", user.getUsername());
+      log.info("Successful authentication for user: {}", user.username());
 
       return LoginResponse.builder()
          .jwtToken(token)
          .tokenType(jwtAuthScheme)
          .expiresIn(jwtExpiration)
-         .username(user.getUsername())
-         .email(user.getEmail())
+         .username(user.username())
+         .uuid(user.uuid().toString())
+         .idCode(user.idCode())
+         .email(user.email())
          .fullName(user.getFullName())
-         .role(user.getRole().name())
+         .role(user.role().name())
          .permissions(permissions)
          .issuedAt(now)
          .expiresAt(expiresAt)
@@ -126,14 +128,14 @@ public class LoginService implements UserDetailsService {
       User userResponse = userRepository.findByUsername(username)
          .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-      Set<GrantedAuthority> authorities = HashSet.newHashSet(userResponse.getRole().getPermissionStrings().size());
-      for(String permission : userResponse.getRole().getPermissionStrings()){
+      Set<GrantedAuthority> authorities = HashSet.newHashSet(userResponse.role().getPermissionStrings().size());
+      for(String permission : userResponse.role().getPermissionStrings()){
          authorities.add(new SimpleGrantedAuthority(permission));
       }
 
       return org.springframework.security.core.userdetails.User
-         .withUsername(userResponse.getUsername())
-         .password(userResponse.getPassword())
+         .withUsername(userResponse.username())
+         .password(userResponse.password())
          .authorities(authorities)
          .build();
    }

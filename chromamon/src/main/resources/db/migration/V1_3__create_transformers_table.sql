@@ -1,5 +1,3 @@
--- V3__Create_transformers_table.sql
--- Migration para criar a tabela de transformadores
 CREATE TABLE transformers.transformers
 (
     id                   BIGSERIAL PRIMARY KEY,
@@ -33,7 +31,6 @@ CREATE TABLE transformers.transformers
     CONSTRAINT transformers_voltage_check CHECK (primary_voltage_kv > 0 AND secondary_voltage_kv > 0)
 );
 
--- Índices
 CREATE INDEX idx_transformers_tag ON transformers.transformers (tag);
 CREATE INDEX idx_transformers_serial_number ON transformers.transformers (serial_number);
 CREATE INDEX idx_transformers_substation ON transformers.transformers (substation);
