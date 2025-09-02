@@ -82,7 +82,7 @@ public record LoginResponse(
       name = "uuid",
       description = "The user unique identifier",
       type = SwaggerType.STRING,
-      examples = "",
+      examples = "5187f7f1-9c98-4b2b-ad01-2061b8bcac5f",
       implementation = String.class
    )
    String uuid,

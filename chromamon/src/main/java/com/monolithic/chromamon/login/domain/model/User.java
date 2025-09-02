@@ -18,7 +18,7 @@ import java.util.UUID;
  * @param firstName the user first name.
  * @param lastName the user last name.
  * @param role the user role.
- * @param active the flag that indicates if the user is active.
+ * @param active the flag that indicates if the user is isActive.
  * @param createdAt when the user was created.
  * @param updatedAt when the user was last updated.
  * @param lastLoginAt the last time when the user logged in.

@@ -3,6 +3,7 @@ package com.monolithic.chromamon.login.application.service;
 import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
 import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
+import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
 import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
 import com.monolithic.chromamon.shared.application.security.HasPermission;
@@ -16,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service class for user-related resources.
@@ -82,8 +85,21 @@ public class UserService {
     * @return a list of all the users.
     */
    @HasPermission(Permission.USER_READ)
-   public List<User> getAllUsers() {
-      return userRepository.findAll();
+   public List<GetUserResponse> getAllUsers() {
+      return userRepository.findAll().stream()
+         .map(user -> GetUserResponse.builder()
+            .id(user.id())
+            .uuid(user.uuid().toString())
+            .idCode(user.idCode())
+            .username(user.username())
+            .email(user.email())
+            .firstName(user.firstName())
+            .lastName(user.lastName())
+            .role(user.role())
+            .isActive(user.active())
+            .lastLoginAt(user.lastLoginAt())
+            .build())
+         .toList();
    }
 
    /**

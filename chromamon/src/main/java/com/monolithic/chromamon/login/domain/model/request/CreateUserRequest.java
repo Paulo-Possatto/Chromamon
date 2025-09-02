@@ -19,7 +19,7 @@ import lombok.Builder;
  * @param firstName the new user first name
  * @param lastName the new user last name
  * @param role the role that the user will have
- * @param active the boolean that indicates if the new user is active
+ * @param active the boolean that indicates if the new user is isActive
  */
 @Builder
 @Schema(
@@ -34,7 +34,7 @@ import lombok.Builder;
          "firstName": "John",
          "lastName": "Smith Doe",
          "Role": "MANAGEMENT",
-         "active": true
+         "isActive": true
       }
       """
 )
@@ -104,7 +104,7 @@ public record CreateUserRequest(
    Role role,
    @NotNull(message = "Active is obligatory")
    @Schema(
-      name = "active",
+      name = "isActive",
       description = "Defines if the user can or cannot use the application's granted services",
       implementation = Boolean.class,
       type = SwaggerType.BOOLEAN,

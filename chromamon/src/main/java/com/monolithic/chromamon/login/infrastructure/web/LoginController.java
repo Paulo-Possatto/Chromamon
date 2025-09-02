@@ -6,6 +6,7 @@ import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
 import com.monolithic.chromamon.login.domain.model.request.LoginRequest;
 import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
+import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
 import com.monolithic.chromamon.login.domain.model.response.LoginResponse;
 import com.monolithic.chromamon.shared.domain.security.Permission;
 import com.monolithic.chromamon.shared.domain.security.SwaggerType;
@@ -470,11 +471,18 @@ public class LoginController {
       return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
    }
 
+   /**
+    * Endpoint to get all users stored in the database.
+    *
+    * @return a list of all the users.
+    */
    @Operation(summary = "List users", description = "List all users from the system")
    @SecurityRequirement(name = "bearerAuth")
    @GetMapping("/users")
-   public ResponseEntity<List<User>> getAllUsers() {
-      List<User> users = userService.getAllUsers();
+   //TODO: Change from list to pageable
+   //TODO: Add swagger information
+   public ResponseEntity<List<GetUserResponse>> getAllUsers() {
+      List<GetUserResponse> users = userService.getAllUsers();
       return ResponseEntity.ok(users);
    }
 
