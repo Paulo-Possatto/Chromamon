@@ -486,6 +486,12 @@ public class LoginController {
       return ResponseEntity.ok(users);
    }
 
+   /**
+    * Get a specific user from its ID.
+    *
+    * @param id the user ID
+    * @return the information of the searched user.
+    */
    @Operation(summary = "Search user", description = "Search a user by its ID")
    @SecurityRequirement(name = "bearerAuth")
    @GetMapping("/users/{id}")
@@ -494,6 +500,13 @@ public class LoginController {
       return ResponseEntity.ok(user);
    }
 
+   /**
+    * Updates a user information.
+    *
+    * @param id the ID of the user to be updated
+    * @param user the updated information of the user
+    * @return the information updated in the database
+    */
    @Operation(summary = "Update user", description = "Updates user data")
    @SecurityRequirement(name = "bearerAuth")
    @PutMapping("/users/{id}")
@@ -502,14 +515,27 @@ public class LoginController {
       return ResponseEntity.ok(updatedUser);
    }
 
+   /**
+    * Deletes a user from the database.
+    *
+    * @param id the ID of the user to be deleted.
+    * @return an ok affirmation if the user is deleted.
+    */
    @Operation(summary = "Delete user", description = "Remove a user from the system")
    @SecurityRequirement(name = "bearerAuth")
    @DeleteMapping("/users/{id}")
    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
       userService.deleteUser(id);
-      return ResponseEntity.noContent().build();
+      return ResponseEntity.ok().build();
    }
 
+   /**
+    * Grants a specific permission for a user.
+    *
+    * @param userId the id of the user to grant the permission.
+    * @param permission the permission to be granted.
+    * @return an ok response if nothing bad happens.
+    */
    @Operation(summary = "Grant permission", description = "Grant a specific permission for a user")
    @SecurityRequirement(name = "bearerAuth")
    @PostMapping("/users/{userId}/permissions/{permission}/grant")
@@ -520,6 +546,13 @@ public class LoginController {
       return ResponseEntity.ok().build();
    }
 
+   /**
+    * Revokes a specific permission for a user.
+    *
+    * @param userId the id of the user to revoke the permission.
+    * @param permission the permission to be revoked from the user.
+    * @return a ok response if the revoke step is successful
+    */
    @Operation(summary = "Revoke permission", description = "Remove a permission from a specific user")
    @SecurityRequirement(name = "bearerAuth")
    @PostMapping("/users/{userId}/permissions/{permission}/revoke")
