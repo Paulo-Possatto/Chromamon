@@ -50,7 +50,8 @@ public class SecurityConfig {
             // Public endpoints
             .requestMatchers("/api/v1/auth/**").permitAll()
             .requestMatchers("/actuator/**").permitAll()
-            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+            .requestMatchers("/api/v1/health/status").permitAll()
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
             // Protected endpoints
             .anyRequest().authenticated()
          )
