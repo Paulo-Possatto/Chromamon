@@ -1,4 +1,4 @@
-package com.monolithic.chromamon.login.infrastructure.persistence;
+package com.monolithic.chromamon.login.infrastructure.persistence.database;
 
 import com.monolithic.chromamon.shared.domain.security.Role;
 import jakarta.persistence.Column;

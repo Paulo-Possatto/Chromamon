@@ -1,6 +1,7 @@
-package com.monolithic.chromamon.login.infrastructure.persistence;
+package com.monolithic.chromamon.login.infrastructure.persistence.mapper;
 
 import com.monolithic.chromamon.login.domain.model.User;
+import com.monolithic.chromamon.login.infrastructure.persistence.database.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;

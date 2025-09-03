@@ -1,44 +1,25 @@
 package com.monolithic.chromamon.login.infrastructure.web;
 
 import com.monolithic.chromamon.login.application.service.LoginService;
-import com.monolithic.chromamon.login.application.service.UserService;
-import com.monolithic.chromamon.login.domain.model.User;
-import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
 import com.monolithic.chromamon.login.domain.model.request.LoginRequest;
-import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
-import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
 import com.monolithic.chromamon.login.domain.model.response.LoginResponse;
-import com.monolithic.chromamon.shared.domain.security.Permission;
 import com.monolithic.chromamon.shared.domain.security.SwaggerType;
 import com.monolithic.chromamon.shared.infrastructure.web.GlobalExceptionHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -50,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
    private final LoginService loginService;
-   private final UserService userService;
 
    /**
     * Generates the JWT jwtToken from the login parameters.
@@ -267,303 +247,5 @@ public class LoginController {
       LoginRequest loginRequest) {
       LoginResponse response = loginService.authenticate(loginRequest);
       return ResponseEntity.ok(response);
-   }
-
-   /**
-    * Endpoint for checking the JWT token validation.
-    *
-    * @param token the string JWT token.
-    * @return true or false depending on the validation.
-    */
-   @Tag(name = SwaggerType.TAG_AUTHENTICATION)
-   @Operation(
-      summary = "Validate the user token",
-      description = "Checks if the user using the application has a valid token",
-      operationId = "validateToken"
-   )
-   @ApiResponses(
-      value = {
-         @ApiResponse(
-            responseCode = "200",
-            description = "Successfully checked the token validation",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = Boolean.class
-               ),
-               examples = {
-                  @ExampleObject(
-                     name = "Valid token",
-                     description = "The returned boolean if the token is valid",
-                     value = "true"
-                  ),
-                  @ExampleObject(
-                     name = "Invalid token",
-                     description = "The returned boolean if the token is not valid",
-                     value = "false"
-                  )
-               }
-            )
-         ),
-         @ApiResponse(
-            responseCode = "500",
-            description = "Some error occurred while validating the token, contact the IT",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
-                     {
-                         "timestamp": "2025-08-29T20:13:30.565819877",
-                         "status": 500,
-                         "error": "Internal Server Error",
-                         "message": "Internal Server Error",
-                         "path": "/api/v1/auth/validate",
-                         "validationErrors": null
-                     }
-                     """
-               )
-            )
-         )
-      }
-   )
-   @PostMapping(
-      value = "/validate",
-      produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<Boolean> validateToken(
-      @RequestParam
-      @NotBlank(message = "")
-      @Parameter(
-         name = "token",
-         description = "The string value of the JWT token generated by the application",
-         required = true,
-         schema = @Schema(
-            implementation = String.class
-         ),
-         in = ParameterIn.QUERY
-      )
-      String token) {
-      boolean isValid = loginService.validateToken(token);
-      return ResponseEntity.ok(isValid);
-   }
-
-   /**
-    * Endpoint to create a new user (Requires role with permission).
-    *
-    * @param user the necessary data for creating a new user.
-    * @return the information about the created user.
-    */
-   @Tag(name = SwaggerType.TAG_AUTHENTICATION)
-   @Operation(
-      summary = "Create user",
-      description = "Creates a new user for the system",
-      operationId = "createUser"
-   )
-   @ApiResponses(
-      value = {
-         @ApiResponse(
-            responseCode = "201",
-            description = "The new user has been successfully added into the application database",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = CreateUserResponse.class
-               )
-            )
-         ),
-         @ApiResponse(
-            responseCode = "401",
-            description = "The 'Authorization' header token does not start with the required authorization scheme or is not present",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
-                     {
-                         "timestamp": "2025-08-30T17:41:43.247846674",
-                         "status": "401",
-                         "error": "Unauthorized",
-                         "message": "Authorization token invalid or not present",
-                         "path": "/api/v1/auth/users",
-                         "validationErrors": "null"
-                     }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
-            responseCode = "403",
-            description = "The role that the user have does not has the necessary permission to access the resource",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
-                     {
-                         "timestamp": "2025-08-31T19:22:02.023790528",
-                         "status": 403,
-                         "error": "Forbidden",
-                         "message": "Access Denied: Insufficient permission: user:create",
-                         "path": "/api/v1/auth/users",
-                         "validationErrors": null
-                     }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
-            responseCode = "409",
-            description = "The user trying to be added to the system already exists",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
-                     {
-                         "timestamp": "2025-08-31T19:23:12.230182497",
-                         "status": 409,
-                         "error": "Conflict",
-                         "message": "Username already exists: <username>",
-                         "path": "/api/v1/auth/users",
-                         "validationErrors": null
-                     }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
-            responseCode = "500",
-            description = "The user trying to be added to the system already exists",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
-                     {
-                         "timestamp": "2025-08-29T20:13:30.565819877",
-                         "status": 500,
-                         "error": "Internal Server Error",
-                         "message": "Internal Server Error",
-                         "path": "/api/v1/auth/users",
-                         "validationErrors": null
-                     }
-                     """
-               )
-            )
-         )
-      }
-   )
-   @SecurityRequirement(name = "bearerAuth")
-   @PostMapping(
-      value = "/users",
-      produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<CreateUserResponse> createUser(
-      @Valid
-      @RequestBody
-      @Parameter(
-         name = "user",
-         schema = @Schema(
-            implementation = CreateUserRequest.class
-         ),
-         description = "The necessary object to create a new user",
-         required = true
-      )
-      CreateUserRequest user) {
-      CreateUserResponse createdUser = userService.createUser(user);
-      return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-   }
-
-   /**
-    * Endpoint to get all users stored in the database.
-    *
-    * @param pageable the pageable params.
-    * @return a list of all the users.
-    */
-   @Operation(summary = "List users", description = "List all users from the system")
-   @SecurityRequirement(name = "bearerAuth")
-   @GetMapping("/users")
-   public ResponseEntity<Page<GetUserResponse>> getAllUsers(
-      @PageableDefault(sort = "idCode", direction = Sort.Direction.ASC) Pageable pageable) {
-      Page<GetUserResponse> users = userService.getAllUsers(pageable);
-      return ResponseEntity.ok(users);
-   }
-
-   /**
-    * Get a specific user from its ID.
-    *
-    * @param codeId the user internal ID
-    * @return the information of the searched user.
-    */
-   @Operation(summary = "Search user", description = "Search a user by its internal ID")
-   @SecurityRequirement(name = "bearerAuth")
-   @GetMapping("/users/{codeId}")
-   public ResponseEntity<GetUserResponse> getUserById(
-      @PathVariable(name = "codeId")
-      String codeId) {
-      GetUserResponse user = userService.getUserByCodeId(codeId);
-      return ResponseEntity.ok(user);
-   }
-
-   /**
-    * Updates a user information.
-    *
-    * @param id the ID of the user to be updated
-    * @param user the updated information of the user
-    * @return the information updated in the database
-    */
-   @Operation(summary = "Update user", description = "Updates user data")
-   @SecurityRequirement(name = "bearerAuth")
-   @PutMapping("/users/{id}")
-   public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-      User updatedUser = userService.updateUser(id, user);
-      return ResponseEntity.ok(updatedUser);
-   }
-
-   /**
-    * Deletes a user from the database.
-    *
-    * @param id the ID of the user to be deleted.
-    * @return an ok affirmation if the user is deleted.
-    */
-   @Operation(summary = "Delete user", description = "Remove a user from the system")
-   @SecurityRequirement(name = "bearerAuth")
-   @DeleteMapping("/users/{id}")
-   public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-      userService.deleteUser(id);
-      return ResponseEntity.ok().build();
-   }
-
-   /**
-    * Grants a specific permission for a user.
-    *
-    * @param userId the id of the user to grant the permission.
-    * @param permission the permission to be granted.
-    * @return an ok response if nothing bad happens.
-    */
-   @Operation(summary = "Grant permission", description = "Grant a specific permission for a user")
-   @SecurityRequirement(name = "bearerAuth")
-   @PostMapping("/users/{userId}/permissions/{permission}/grant")
-   public ResponseEntity<Void> grantPermission(
-      @PathVariable Long userId,
-      @PathVariable Permission permission) {
-      userService.grantPermission(userId, permission);
-      return ResponseEntity.ok().build();
-   }
-
-   /**
-    * Revokes a specific permission for a user.
-    *
-    * @param userId the id of the user to revoke the permission.
-    * @param permission the permission to be revoked from the user.
-    * @return a ok response if the revoke step is successful
-    */
-   @Operation(summary = "Revoke permission", description = "Remove a permission from a specific user")
-   @SecurityRequirement(name = "bearerAuth")
-   @PostMapping("/users/{userId}/permissions/{permission}/revoke")
-   public ResponseEntity<Void> revokePermission(
-      @PathVariable Long userId,
-      @PathVariable Permission permission) {
-      userService.revokePermission(userId, permission);
-      return ResponseEntity.ok().build();
    }
 }

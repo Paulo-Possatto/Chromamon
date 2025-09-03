@@ -1,4 +1,4 @@
-package com.monolithic.chromamon.login.infrastructure.persistence;
+package com.monolithic.chromamon.login.infrastructure.persistence.database;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

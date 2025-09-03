@@ -1,8 +1,11 @@
-package com.monolithic.chromamon.login.infrastructure.persistence;
+package com.monolithic.chromamon.login.infrastructure.persistence.impl;
 
 import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
+import com.monolithic.chromamon.login.infrastructure.persistence.database.UserEntity;
+import com.monolithic.chromamon.login.infrastructure.persistence.database.UserJpaRepository;
+import com.monolithic.chromamon.login.infrastructure.persistence.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,6 +16,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation for user CRUD processes.
+ */
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
