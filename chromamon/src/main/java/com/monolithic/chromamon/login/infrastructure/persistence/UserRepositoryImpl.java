@@ -1,8 +1,12 @@
 package com.monolithic.chromamon.login.infrastructure.persistence;
 
 import com.monolithic.chromamon.login.domain.model.User;
+import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -47,10 +51,25 @@ public class UserRepositoryImpl implements UserRepository {
    }
 
    @Override
-   public List<User> findAll() {
-      return jpaRepository.findAll().stream()
-         .map(userMapper::toDomain)
+   public Page<GetUserResponse> findAll(Pageable pageable) {
+      Page<UserEntity> entityPage = jpaRepository.findAll(pageable);
+
+      List<GetUserResponse> userDomainList = entityPage.getContent().stream()
+         .map(user -> GetUserResponse.builder()
+            .id(user.getId())
+            .uuid(user.getUuid().toString())
+            .idCode(user.getIdCode())
+            .username(user.getUsername())
+            .email(user.getEmail())
+            .firstName(user.getFirstName())
+            .lastName(user.getLastName())
+            .role(user.getRole())
+            .isActive(user.getActive())
+            .lastLoginAt(user.getLastLoginAt())
+            .build())
          .toList();
+
+      return new PageImpl<>(userDomainList, pageable, entityPage.getTotalElements());
    }
 
    @Override

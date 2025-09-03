@@ -11,16 +11,15 @@ import com.monolithic.chromamon.shared.application.security.PermissionService;
 import com.monolithic.chromamon.shared.domain.security.Permission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Service class for user-related resources.
@@ -80,26 +79,15 @@ public class UserService {
    }
 
    /**
-    * Gets all users stored in the database.
+    * Returns a pageable of all the users.
     *
-    * @return a list of all the users.
+    * @param pageable the pageable interface for the query
+    * @return a page of the users
     */
    @HasPermission(Permission.USER_READ)
-   public List<GetUserResponse> getAllUsers() {
-      return userRepository.findAll().stream()
-         .map(user -> GetUserResponse.builder()
-            .id(user.id())
-            .uuid(user.uuid().toString())
-            .idCode(user.idCode())
-            .username(user.username())
-            .email(user.email())
-            .firstName(user.firstName())
-            .lastName(user.lastName())
-            .role(user.role())
-            .isActive(user.active())
-            .lastLoginAt(user.lastLoginAt())
-            .build())
-         .toList();
+   public Page<GetUserResponse> getAllUsers(Pageable pageable) {
+      log.debug("Getting all users... Page number: {}, page size: {}", pageable.getPageNumber(), pageable.getPageSize());
+      return userRepository.findAll(pageable);
    }
 
    /**

@@ -1,8 +1,10 @@
 package com.monolithic.chromamon.login.domain.port;
 
 import com.monolithic.chromamon.login.domain.model.User;
+import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
@@ -17,7 +19,7 @@ public interface UserRepository {
 
    void deleteById(Long id);
 
-   List<User> findAll();
+   Page<GetUserResponse> findAll(Pageable pageable);
 
    boolean existsByUsername(String username);
 
