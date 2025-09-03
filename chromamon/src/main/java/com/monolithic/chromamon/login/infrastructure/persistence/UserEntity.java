@@ -59,7 +59,7 @@ public class UserEntity {
    @Column(name = "role", nullable = false)
    private Role role;
 
-   @Column(name = "isActive", nullable = false)
+   @Column(name = "active", nullable = false)
    private Boolean active = true;
 
    @CreatedDate
