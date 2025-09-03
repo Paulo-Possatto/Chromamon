@@ -26,4 +26,6 @@ public interface UserRepository {
    boolean existsByEmail(String email);
 
    void updateLastLoginAt(Long userId, java.time.LocalDateTime lastLoginAt);
+
+   Optional<User> getByIdCode(String idCode);
 }

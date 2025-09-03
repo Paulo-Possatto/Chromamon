@@ -476,12 +476,12 @@ public class LoginController {
    /**
     * Endpoint to get all users stored in the database.
     *
+    * @param pageable the pageable params.
     * @return a list of all the users.
     */
    @Operation(summary = "List users", description = "List all users from the system")
    @SecurityRequirement(name = "bearerAuth")
    @GetMapping("/users")
-   //TODO: Add swagger information
    public ResponseEntity<Page<GetUserResponse>> getAllUsers(
       @PageableDefault(sort = "idCode", direction = Sort.Direction.ASC) Pageable pageable) {
       Page<GetUserResponse> users = userService.getAllUsers(pageable);
@@ -491,14 +491,16 @@ public class LoginController {
    /**
     * Get a specific user from its ID.
     *
-    * @param id the user ID
+    * @param codeId the user internal ID
     * @return the information of the searched user.
     */
-   @Operation(summary = "Search user", description = "Search a user by its ID")
+   @Operation(summary = "Search user", description = "Search a user by its internal ID")
    @SecurityRequirement(name = "bearerAuth")
-   @GetMapping("/users/{id}")
-   public ResponseEntity<User> getUserById(@PathVariable Long id) {
-      User user = userService.getUserById(id);
+   @GetMapping("/users/{codeId}")
+   public ResponseEntity<GetUserResponse> getUserById(
+      @PathVariable(name = "codeId")
+      String codeId) {
+      GetUserResponse user = userService.getUserByCodeId(codeId);
       return ResponseEntity.ok(user);
    }
 

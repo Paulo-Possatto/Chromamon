@@ -93,13 +93,25 @@ public class UserService {
    /**
     * Get a specific user
     *
-    * @param id the user id.
+    * @param codeId the user internal id.
     * @return the user information.
     */
    @HasPermission(Permission.USER_READ)
-   public User getUserById(Long id) {
-      return userRepository.findById(id)
-         .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + id));
+   public GetUserResponse getUserByCodeId(String codeId) {
+      return userRepository.getByIdCode(codeId)
+         .map(user -> GetUserResponse.builder()
+            .id(user.id())
+               .uuid(user.uuid().toString())
+               .idCode(user.idCode())
+               .username(user.username())
+               .email(user.email())
+               .firstName(user.firstName())
+               .lastName(user.lastName())
+               .role(user.role())
+               .isActive(user.active())
+               .lastLoginAt(user.lastLoginAt())
+               .build())
+         .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + codeId));
    }
 
    /**
@@ -114,7 +126,8 @@ public class UserService {
    public User updateUser(Long id, User userUpdates) {
       log.info("Updating user: {}", id);
 
-      User existingUser = getUserById(id);
+      User existingUser = userRepository.findById(id)
+         .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + id));
       User.UserBuilder updatedUser = User.builder();
 
       updatedUser.id(existingUser.id());

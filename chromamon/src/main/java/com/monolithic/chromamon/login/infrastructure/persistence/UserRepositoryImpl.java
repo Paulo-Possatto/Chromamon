@@ -86,4 +86,10 @@ public class UserRepositoryImpl implements UserRepository {
    public void updateLastLoginAt(Long userId, LocalDateTime lastLoginAt) {
       jpaRepository.updateLastLoginAt(userId, lastLoginAt);
    }
+
+   @Override
+   public Optional<User> getByIdCode(String idCode) {
+      return jpaRepository.findByIdCode(idCode)
+         .map(userMapper::toDomain);
+   }
 }
