@@ -57,25 +57,9 @@ public class UserRepositoryImpl implements UserRepository {
    }
 
    @Override
-   public Page<GetUserResponse> findAll(Pageable pageable) {
+   public Page<User> findAll(Pageable pageable) {
       Page<UserEntity> entityPage = jpaRepository.findAll(pageable);
-
-      List<GetUserResponse> userDomainList = entityPage.getContent().stream()
-         .map(user -> GetUserResponse.builder()
-            .id(user.getId())
-            .uuid(user.getUuid().toString())
-            .idCode(user.getIdCode())
-            .username(user.getUsername())
-            .email(user.getEmail())
-            .firstName(user.getFirstName())
-            .lastName(user.getLastName())
-            .role(user.getRole())
-            .isActive(user.getActive())
-            .lastLoginAt(user.getLastLoginAt())
-            .build())
-         .toList();
-
-      return new PageImpl<>(userDomainList, pageable, entityPage.getTotalElements());
+      return entityPage.map(userMapper::toDomain);
    }
 
    @Override

@@ -1,7 +1,6 @@
 package com.monolithic.chromamon.login.infrastructure.web;
 
 import com.monolithic.chromamon.login.application.service.UserService;
-import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
 import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import com.monolithic.chromamon.shared.infrastructure.web.GlobalExceptionHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -106,7 +105,7 @@ public class DeleteUserController {
                          "timestamp": "2025-08-31T19:22:02.023790528",
                          "status": 403,
                          "error": "Forbidden",
-                         "message": "Access Denied: Insufficient permission: user:create",
+                         "message": "Access Denied: Insufficient permission: user:delete",
                          "path": "/api/v1/auth/users/1",
                          "validationErrors": null
                      }

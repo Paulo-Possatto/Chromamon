@@ -6,6 +6,7 @@ import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
 import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
 import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
+import com.monolithic.chromamon.login.infrastructure.persistence.mapper.UserMapper;
 import com.monolithic.chromamon.shared.application.security.HasPermission;
 import com.monolithic.chromamon.shared.application.security.PermissionService;
 import com.monolithic.chromamon.shared.domain.security.Permission;
@@ -32,6 +33,7 @@ public class UserService {
    private final UserRepository userRepository;
    private final PasswordEncoder passwordEncoder;
    private final PermissionService permissionService;
+   private final UserMapper userMapper;
 
    /**
     * Service for creating a new user.
@@ -87,7 +89,7 @@ public class UserService {
    @HasPermission(Permission.USER_READ)
    public Page<GetUserResponse> getAllUsers(Pageable pageable) {
       log.debug("Getting all users... Page number: {}, page size: {}", pageable.getPageNumber(), pageable.getPageSize());
-      return userRepository.findAll(pageable);
+      return userRepository.findAll(pageable).map(userMapper::toGetUserResponse);
    }
 
    /**
@@ -99,18 +101,7 @@ public class UserService {
    @HasPermission(Permission.USER_READ)
    public GetUserResponse getUserByCodeId(String codeId) {
       return userRepository.getByIdCode(codeId)
-         .map(user -> GetUserResponse.builder()
-            .id(user.id())
-               .uuid(user.uuid().toString())
-               .idCode(user.idCode())
-               .username(user.username())
-               .email(user.email())
-               .firstName(user.firstName())
-               .lastName(user.lastName())
-               .role(user.role())
-               .isActive(user.active())
-               .lastLoginAt(user.lastLoginAt())
-               .build())
+         .map(userMapper::toGetUserResponse)
          .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + codeId));
    }
 
