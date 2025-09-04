@@ -6,14 +6,11 @@ import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
 import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import com.monolithic.chromamon.shared.infrastructure.web.GlobalExceptionHandler;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,7 +43,6 @@ public class CreateUserController {
       operationId = "createUser",
       method = SwaggerConstants.METHOD_POST,
       tags = {
-         SwaggerConstants.TAG_AUTHENTICATION,
          SwaggerConstants.TAG_USER
       },
       requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
