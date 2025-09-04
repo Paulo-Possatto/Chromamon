@@ -7,8 +7,15 @@ import lombok.NoArgsConstructor;
  * The data types used by swagger.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SwaggerType {
-
+public class SwaggerConstants {
+   /**
+    * The localhost URL for local development.
+    */
+   public static final String SERVER_LOCALHOST = "http://localhost:8080";
+   /**
+    * The authorization name.
+    */
+   public static final String AUTH_NAME = "bearerAuth";
    /**
     * Swagger data type for strings (can also be dates).
     */
@@ -34,7 +41,27 @@ public class SwaggerType {
     */
    public static final String INTEGER = "integer";
    /**
+    * Constant for GET endpoints
+    */
+   public static final String METHOD_GET = "GET";
+   /**
+    * Constant for POST endpoints
+    */
+   public static final String METHOD_POST = "POST";
+   /**
+    * Constant for PUT endpoints
+    */
+   public static final String METHOD_PUT = "PUT";
+   /**
+    * Constant for DELETE endpoints
+    */
+   public static final String METHOD_DELETE = "DELETE";
+   /**
     * Swagger tag name for tags related to Log in resources.
     */
    public static final String TAG_AUTHENTICATION = "Authentication";
+   /**
+    * Tag for endpoints related to user operations.
+    */
+   public static final String TAG_USER = "User";
 }

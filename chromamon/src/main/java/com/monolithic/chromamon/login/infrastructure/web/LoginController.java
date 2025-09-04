@@ -3,7 +3,7 @@ package com.monolithic.chromamon.login.infrastructure.web;
 import com.monolithic.chromamon.login.application.service.LoginService;
 import com.monolithic.chromamon.login.domain.model.request.LoginRequest;
 import com.monolithic.chromamon.login.domain.model.response.LoginResponse;
-import com.monolithic.chromamon.shared.domain.security.SwaggerType;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import com.monolithic.chromamon.shared.infrastructure.web.GlobalExceptionHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,7 +38,7 @@ public class LoginController {
     * @param loginRequest the DTO required to do the login.
     * @return a response entity with the generated JWT object.
     */
-   @Tag(name = SwaggerType.TAG_AUTHENTICATION)
+   @Tag(name = SwaggerConstants.TAG_AUTHENTICATION)
    @Operation(
       summary = "Authenticate user",
       description = "Does the login and returns the JWT jwtToken",

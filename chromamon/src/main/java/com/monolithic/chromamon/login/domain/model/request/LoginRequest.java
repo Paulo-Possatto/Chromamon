@@ -1,6 +1,6 @@
 package com.monolithic.chromamon.login.domain.model.request;
 
-import com.monolithic.chromamon.shared.domain.security.SwaggerType;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -19,7 +19,7 @@ import lombok.Builder;
 @Schema(
    name = "LoginRequest",
    description = "The request object for log in user to the application",
-   type = SwaggerType.OBJECT,
+   type = SwaggerConstants.OBJECT,
    example = """
       {
          "email": "john.doe@email.com",
@@ -31,7 +31,7 @@ public record LoginRequest(
    @Schema(
       name = "email",
       description = "The user email to access the application",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "john.doe@email.com",
       implementation = String.class
    )
@@ -41,7 +41,7 @@ public record LoginRequest(
    @Schema(
       name = "password",
       description = "The user password to access the application",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "IAmAnEngineer123",
       implementation = String.class,
       pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{7,20}$"

@@ -3,7 +3,7 @@ package com.monolithic.chromamon.login.infrastructure.web;
 import com.monolithic.chromamon.login.application.service.UserService;
 import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
 import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
-import com.monolithic.chromamon.shared.domain.security.SwaggerType;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import com.monolithic.chromamon.shared.infrastructure.web.GlobalExceptionHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +39,7 @@ public class CreateUserController {
     * @param user the necessary data for creating a new user.
     * @return the information about the created user.
     */
-   @Tag(name = SwaggerType.TAG_AUTHENTICATION)
+   @Tag(name = SwaggerConstants.TAG_AUTHENTICATION)
    @Operation(
       summary = "Create user",
       description = "Creates a new user for the system",

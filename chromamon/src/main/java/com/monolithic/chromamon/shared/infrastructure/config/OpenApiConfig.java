@@ -1,6 +1,6 @@
 package com.monolithic.chromamon.shared.infrastructure.config;
 
-import com.monolithic.chromamon.shared.domain.security.SwaggerType;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -11,10 +11,13 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+/**
+ * Global configuration for Open API.
+ */
 @OpenAPIDefinition(
    tags = {
       @Tag(
-         name = SwaggerType.TAG_AUTHENTICATION,
+         name = SwaggerConstants.TAG_AUTHENTICATION,
          description = "Endpoints for authentication and user management"
       )
    },
@@ -34,12 +37,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
    servers = {
       @Server(
          description = "Development Environment",
-         url = "http://localhost:8080"
+         url = SwaggerConstants.SERVER_LOCALHOST
       )
    }
 )
 @SecurityScheme(
-   name = "bearerAuth",
+   name = SwaggerConstants.AUTH_NAME,
    description = "JWT Bearer Token",
    scheme = "bearer",
    type = SecuritySchemeType.HTTP,

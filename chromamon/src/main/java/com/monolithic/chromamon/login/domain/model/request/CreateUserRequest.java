@@ -1,7 +1,7 @@
 package com.monolithic.chromamon.login.domain.model.request;
 
 import com.monolithic.chromamon.shared.domain.security.Role;
-import com.monolithic.chromamon.shared.domain.security.SwaggerType;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,7 +25,7 @@ import lombok.Builder;
 @Schema(
    name = "CreateUserRequest",
    description = "The request object for creating a new user",
-   type = SwaggerType.OBJECT,
+   type = SwaggerConstants.OBJECT,
    example = """
       {
          "username": "JohnDoe",
@@ -44,7 +44,7 @@ public record CreateUserRequest(
       name = "username",
       description = "The user's username",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "JohnDoe"
    )
    String username,
@@ -54,7 +54,7 @@ public record CreateUserRequest(
       name = "email",
       description = "The user's email (It's used to log in the application)",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "john.doe@email.com"
    )
    String email,
@@ -68,7 +68,7 @@ public record CreateUserRequest(
       name = "password",
       description = "The user's password (It's used to log in the application)",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "IAmStillNotTheAdmin123",
       pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$"
    )
@@ -79,7 +79,7 @@ public record CreateUserRequest(
       name = "firstName",
       description = "The user's first name",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "John"
    )
    String firstName,
@@ -89,7 +89,7 @@ public record CreateUserRequest(
       name = "lastName",
       description = "The user's last name",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "Smith Doe"
    )
    String lastName,
@@ -98,7 +98,7 @@ public record CreateUserRequest(
       name = "role",
       description = "The user's role in the application",
       implementation = Role.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "MANAGEMENT"
    )
    Role role,
@@ -107,7 +107,7 @@ public record CreateUserRequest(
       name = "isActive",
       description = "Defines if the user can or cannot use the application's granted services",
       implementation = Boolean.class,
-      type = SwaggerType.BOOLEAN,
+      type = SwaggerConstants.BOOLEAN,
       example = "true"
    )
    Boolean active

@@ -1,6 +1,6 @@
 package com.monolithic.chromamon.shared.infrastructure.web;
 
-import com.monolithic.chromamon.shared.domain.security.SwaggerType;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -130,7 +130,7 @@ public class GlobalExceptionHandler {
    @Schema(
       name = "ErrorResponse",
       description = "Response object for when an error occurs",
-      type = SwaggerType.OBJECT,
+      type = SwaggerConstants.OBJECT,
       example = """
          {
             "timestamp": "The timestamp of when the error happened",

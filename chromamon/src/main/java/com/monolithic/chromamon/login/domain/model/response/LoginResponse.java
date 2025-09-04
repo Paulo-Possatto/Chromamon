@@ -1,6 +1,6 @@
 package com.monolithic.chromamon.login.domain.model.response;
 
-import com.monolithic.chromamon.shared.domain.security.SwaggerType;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -27,7 +27,7 @@ import java.util.Set;
 @Schema(
    name = "LoginResponse",
    description = "Response DTO for when login is successful",
-   type = SwaggerType.OBJECT,
+   type = SwaggerConstants.OBJECT,
    examples = """
       {
          "jwtToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
@@ -49,7 +49,7 @@ public record LoginResponse(
    @Schema(
       name = "jwtToken",
       description = "JWT token string value",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
       implementation = String.class
    )
@@ -57,7 +57,7 @@ public record LoginResponse(
    @Schema(
       name = "tokenType",
       description = "The token authorization type",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "Bearer",
       implementation = String.class
    )
@@ -65,7 +65,7 @@ public record LoginResponse(
    @Schema(
       name = "expiresIn",
       description = "Expiration time in seconds since Unix epoch",
-      type = SwaggerType.INTEGER,
+      type = SwaggerConstants.INTEGER,
       example = "1516239022",
       implementation = Long.class
    )
@@ -73,7 +73,7 @@ public record LoginResponse(
    @Schema(
       name = "username",
       description = "The username for the logged user",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "JohnDoe",
       implementation = String.class
    )
@@ -81,7 +81,7 @@ public record LoginResponse(
    @Schema(
       name = "uuid",
       description = "The user unique identifier",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "5187f7f1-9c98-4b2b-ad01-2061b8bcac5f",
       implementation = String.class
    )
@@ -89,7 +89,7 @@ public record LoginResponse(
    @Schema(
       name = "idCode",
       description = "The user internal identification",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "AB12CD",
       implementation = String.class
    )
@@ -97,7 +97,7 @@ public record LoginResponse(
    @Schema(
       name = "email",
       description = "The user's email",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "john.doe@email.com",
       implementation = String.class
    )
@@ -105,7 +105,7 @@ public record LoginResponse(
    @Schema(
       name = "fullName",
       description = "The user's complete name",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "John Smith Doe",
       implementation = String.class
    )
@@ -113,7 +113,7 @@ public record LoginResponse(
    @Schema(
       name = "role",
       description = "The user role for the application",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "ENGINEER",
       implementation = String.class
    )
@@ -121,7 +121,7 @@ public record LoginResponse(
    @Schema(
       name = "permissions",
       description = "The array of permissions the user has",
-      type = SwaggerType.ARRAY,
+      type = SwaggerConstants.ARRAY,
       examples = "[\"analysis:read\", \"diagnostic:read\", \"transformer:read\", \"report:read\", \"report:create\"]",
       implementation = Set.class
    )
@@ -129,7 +129,7 @@ public record LoginResponse(
    @Schema(
       name = "issuedAt",
       description = "The date and time of when the token was issued",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "2024-05-01T13:30:10.0",
       implementation = LocalDateTime.class
    )
@@ -137,7 +137,7 @@ public record LoginResponse(
    @Schema(
       name = "expiresAt",
       description = "The date and time of when the token expires",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "2024-05-01T15:30:10.0",
       implementation = LocalDateTime.class
    )

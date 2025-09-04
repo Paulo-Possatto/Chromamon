@@ -1,7 +1,7 @@
 package com.monolithic.chromamon.login.domain.model.response;
 
 import com.monolithic.chromamon.shared.domain.security.Role;
-import com.monolithic.chromamon.shared.domain.security.SwaggerType;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Schema(
    name = "GetUserResponse",
    description = "The response object when the user information is requested",
-   type = SwaggerType.OBJECT,
+   type = SwaggerConstants.OBJECT,
    example = """
       {
          "id": "1",
@@ -45,7 +45,7 @@ public record GetUserResponse(
    @Schema(
       name = "id",
       description = "The database-generated ID for the user",
-      type = SwaggerType.INTEGER,
+      type = SwaggerConstants.INTEGER,
       implementation = Long.class,
       example = "1"
    )
@@ -53,7 +53,7 @@ public record GetUserResponse(
    @Schema(
       name = "uuid",
       description = "The user unique identifier",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "5187f7f1-9c98-4b2b-ad01-2061b8bcac5f",
       implementation = String.class
    )
@@ -61,7 +61,7 @@ public record GetUserResponse(
    @Schema(
       name = "idCode",
       description = "The user internal identification",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "AB12CD",
       implementation = String.class
    )
@@ -70,7 +70,7 @@ public record GetUserResponse(
       name = "username",
       description = "The user's username",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "JohnDoe"
    )
    String username,
@@ -78,7 +78,7 @@ public record GetUserResponse(
       name = "email",
       description = "The user's email",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "john.doe@email.com"
    )
    String email,
@@ -86,7 +86,7 @@ public record GetUserResponse(
       name = "firstName",
       description = "The user's first name",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "John"
    )
    String firstName,
@@ -94,7 +94,7 @@ public record GetUserResponse(
       name = "lastName",
       description = "The user's last name",
       implementation = String.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "Smith Doe"
    )
    String lastName,
@@ -102,7 +102,7 @@ public record GetUserResponse(
       name = "role",
       description = "The user's role in the application",
       implementation = Role.class,
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       example = "MANAGEMENT"
    )
    Role role,
@@ -110,14 +110,14 @@ public record GetUserResponse(
       name = "isActive",
       description = "Defines if the user can or cannot use the application's granted services",
       implementation = Boolean.class,
-      type = SwaggerType.BOOLEAN,
+      type = SwaggerConstants.BOOLEAN,
       example = "true"
    )
    Boolean isActive,
    @Schema(
       name = "lastLoginAt",
       description = "The date and time of when the user last logged in",
-      type = SwaggerType.STRING,
+      type = SwaggerConstants.STRING,
       examples = "2025-05-01T15:30:10.0",
       implementation = LocalDateTime.class
    )
