@@ -33,7 +33,7 @@ import lombok.Builder;
          "password": "IAmStillNotTheAdmin123",
          "firstName": "John",
          "lastName": "Smith Doe",
-         "Role": "MANAGEMENT",
+         "role": "MANAGEMENT",
          "isActive": true
       }
       """

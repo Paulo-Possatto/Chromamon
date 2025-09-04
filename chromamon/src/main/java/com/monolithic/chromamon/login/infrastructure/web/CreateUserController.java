@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +40,34 @@ public class CreateUserController {
     * @param user the necessary data for creating a new user.
     * @return the information about the created user.
     */
-   @Tag(name = SwaggerConstants.TAG_AUTHENTICATION)
    @Operation(
       summary = "Create user",
       description = "Creates a new user for the system",
-      operationId = "createUser"
-   )
-   @ApiResponses(
-      value = {
+      operationId = "createUser",
+      method = SwaggerConstants.METHOD_POST,
+      tags = {
+         SwaggerConstants.TAG_AUTHENTICATION,
+         SwaggerConstants.TAG_USER
+      },
+      requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+         description = "Information required to add a new user to the system",
+         content = @Content(
+            mediaType = MediaType.APPLICATION_JSON_VALUE,
+            schema = @Schema(implementation = CreateUserRequest.class)
+         ),
+         required = true
+      ),
+      security = {
+         @SecurityRequirement(
+            name = SwaggerConstants.AUTH_NAME
+         )
+      },
+      servers = {
+         @Server(
+            url = SwaggerConstants.SERVER_LOCALHOST
+         )
+      },
+      responses = {
          @ApiResponse(
             responseCode = "201",
             description = "The new user has been successfully added into the application database",
@@ -54,6 +75,28 @@ public class CreateUserController {
                mediaType = MediaType.APPLICATION_JSON_VALUE,
                schema = @Schema(
                   implementation = CreateUserResponse.class
+               )
+            )
+         ),
+         @ApiResponse(
+            responseCode = "400",
+            description = "Some parameter(s) does not comply with the required constraint(s)",
+            content = @Content(
+               mediaType = MediaType.APPLICATION_JSON_VALUE,
+               schema = @Schema(
+                  implementation = GlobalExceptionHandler.ErrorResponse.class,
+                  example = """
+                     {
+                         "timestamp": "2025-09-04T17:22:09.649681754",
+                         "status": 400,
+                         "error": "Bad Request",
+                         "message": "Error validating fields",
+                         "path": "/api/v1/auth/users",
+                         "validationErrors": {
+                             "password": "Password must contain at least one uppercase letter, one lowercase letter and one number"
+                         }
+                     }
+                     """
                )
             )
          ),
@@ -67,7 +110,7 @@ public class CreateUserController {
                   example = """
                      {
                          "timestamp": "2025-08-30T17:41:43.247846674",
-                         "status": "401",
+                         "status": 401,
                          "error": "Unauthorized",
                          "message": "Authorization token invalid or not present",
                          "path": "/api/v1/auth/users",
@@ -139,21 +182,12 @@ public class CreateUserController {
          )
       }
    )
-   @SecurityRequirement(name = "bearerAuth")
    @PostMapping(
       value = "/users",
       produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<CreateUserResponse> createUser(
       @Valid
       @RequestBody
-      @Parameter(
-         name = "user",
-         schema = @Schema(
-            implementation = CreateUserRequest.class
-         ),
-         description = "The necessary object to create a new user",
-         required = true
-      )
       CreateUserRequest user) {
       CreateUserResponse createdUser = userService.createUser(user);
       return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
