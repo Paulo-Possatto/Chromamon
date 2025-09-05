@@ -188,7 +188,6 @@ public class GrantPermissionController {
          )
       }
    )
-   @SecurityRequirement(name = "bearerAuth")
    @PostMapping("/users/{userId}/permissions/{permission}/grant")
    public ResponseEntity<Void> grantPermission(
       @PathVariable Long userId,

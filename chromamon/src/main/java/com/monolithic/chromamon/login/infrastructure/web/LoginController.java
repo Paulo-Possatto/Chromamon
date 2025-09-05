@@ -11,8 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.servers.Server;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -38,14 +37,30 @@ public class LoginController {
     * @param loginRequest the DTO required to do the login.
     * @return a response entity with the generated JWT object.
     */
-   @Tag(name = SwaggerConstants.TAG_AUTHENTICATION)
    @Operation(
       summary = "Authenticate user",
       description = "Does the login and returns the JWT jwtToken",
-      operationId = "doLogin"
-   )
-   @ApiResponses(
-      value = {
+      operationId = "doLogin",
+      method = SwaggerConstants.METHOD_POST,
+      tags = {
+         SwaggerConstants.TAG_USER,
+         SwaggerConstants.TAG_AUTHENTICATION
+      },
+      servers = {
+         @Server(
+            url = SwaggerConstants.SERVER_LOCALHOST
+         )
+      },
+      requestBody =  @io.swagger.v3.oas.annotations.parameters.RequestBody(
+         description = "The required information from the user to log in the application",
+         required = true,
+         content = @Content(
+            schema = @Schema(
+               implementation = LoginRequest.class
+            )
+         )
+      ),
+      responses = {
          @ApiResponse(
             responseCode = "200",
             description = "Successful login and generating jwtToken",
@@ -237,12 +252,7 @@ public class LoginController {
       @Valid
       @RequestBody
       @Parameter(
-         name = "loginRequest",
-         description = "The object containing the necessary information to log in the user",
-         required = true,
-         schema = @Schema(
-            implementation = LoginRequest.class
-         )
+         hidden = true
       )
       LoginRequest loginRequest) {
       LoginResponse response = loginService.authenticate(loginRequest);
