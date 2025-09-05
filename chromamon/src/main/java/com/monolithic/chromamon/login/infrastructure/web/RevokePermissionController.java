@@ -2,9 +2,19 @@ package com.monolithic.chromamon.login.infrastructure.web;
 
 import com.monolithic.chromamon.login.application.service.UserService;
 import com.monolithic.chromamon.shared.domain.security.Permission;
+import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
+import com.monolithic.chromamon.shared.infrastructure.web.GlobalExceptionHandler;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.enums.ParameterStyle;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +36,158 @@ public class RevokePermissionController {
     *
     * @param userId the id of the user to revoke the permission.
     * @param permission the permission to be revoked from the user.
-    * @return a ok response if the revoke step is successful
+    * @return an ok response if the revoke step is successful
     */
-   @Operation(summary = "Revoke permission", description = "Remove a permission from a specific user")
-   @SecurityRequirement(name = "bearerAuth")
+   @Operation(
+      summary = "Revoke permission",
+      description = "Revoke a specific permission for a user",
+      operationId = "revokePermission",
+      method = SwaggerConstants.METHOD_POST,
+      tags = {
+         SwaggerConstants.TAG_USER
+      },
+      security = {
+         @SecurityRequirement(
+            name = SwaggerConstants.AUTH_NAME
+         )
+      },
+      servers = {
+         @Server(
+            url = SwaggerConstants.SERVER_LOCALHOST
+         )
+      },
+      parameters = {
+         @Parameter(
+            name = "userId",
+            in = ParameterIn.PATH,
+            description = "The ID of the user to have the permission revoked",
+            required = true,
+            style = ParameterStyle.SIMPLE,
+            schema = @Schema(
+               implementation = String.class,
+               type = SwaggerConstants.STRING
+            ),
+            example = "1"
+         ),
+         @Parameter(
+            name = "permission",
+            in = ParameterIn.PATH,
+            description = "The permission to be revoked to the specified user",
+            required = true,
+            style = ParameterStyle.SIMPLE,
+            schema = @Schema(
+               implementation = Permission.class,
+               type = SwaggerConstants.STRING
+            )
+         )
+      },
+      responses = {
+         @ApiResponse(
+            responseCode = "200",
+            description = "The permission was successfully revoked from the given user"
+         ),
+         @ApiResponse(
+            responseCode = "400",
+            description = "The user already does not the given permission",
+            content = @Content(
+               mediaType = MediaType.APPLICATION_JSON_VALUE,
+               schema = @Schema(
+                  implementation = GlobalExceptionHandler.ErrorResponse.class,
+                  example = """
+                     {
+                         "timestamp": "2025-09-04T17:22:09.649681754",
+                         "status": 400,
+                         "error": "Bad Request",
+                         "message": "User does not have the permission: TRANSFORMER_READ",
+                         "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
+                         "validationErrors": null
+                     }
+                     """
+               )
+            )
+         ),
+         @ApiResponse(
+            responseCode = "401",
+            description = "The 'Authorization' header token does not start with the required authorization scheme or is not present",
+            content = @Content(
+               mediaType = MediaType.APPLICATION_JSON_VALUE,
+               schema = @Schema(
+                  implementation = GlobalExceptionHandler.ErrorResponse.class,
+                  example = """
+                     {
+                         "timestamp": "2025-08-30T17:41:43.247846674",
+                         "status": 401,
+                         "error": "Unauthorized",
+                         "message": "Authorization token invalid or not present",
+                         "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
+                         "validationErrors": "null"
+                     }
+                     """
+               )
+            )
+         ),
+         @ApiResponse(
+            responseCode = "403",
+            description = "The role that the user have does not has the necessary permission to access the resource",
+            content = @Content(
+               mediaType = MediaType.APPLICATION_JSON_VALUE,
+               schema = @Schema(
+                  implementation = GlobalExceptionHandler.ErrorResponse.class,
+                  example = """
+                     {
+                         "timestamp": "2025-08-31T19:22:02.023790528",
+                         "status": 403,
+                         "error": "Forbidden",
+                         "message": "Access Denied: Insufficient permission: user:update",
+                         "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
+                         "validationErrors": null
+                     }
+                     """
+               )
+            )
+         ),
+         @ApiResponse(
+            responseCode = "404",
+            description = "The user with the given ID was not found in the database",
+            content = @Content(
+               mediaType = MediaType.APPLICATION_JSON_VALUE,
+               schema = @Schema(
+                  implementation = GlobalExceptionHandler.ErrorResponse.class,
+                  example = """
+                     {
+                         "timestamp": "2025-08-29T20:13:30.565819877",
+                         "status": 404,
+                         "error": "Not Found",
+                         "message": "User not found",
+                         "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
+                         "validationErrors": null
+                     }
+                     """
+               )
+            )
+         ),
+         @ApiResponse(
+            responseCode = "500",
+            description = "Something went wrong while trying to revoke permission",
+            content = @Content(
+               mediaType = MediaType.APPLICATION_JSON_VALUE,
+               schema = @Schema(
+                  implementation = GlobalExceptionHandler.ErrorResponse.class,
+                  example = """
+                     {
+                         "timestamp": "2025-08-29T20:13:30.565819877",
+                         "status": 500,
+                         "error": "Internal Server Error",
+                         "message": "Internal Server Error",
+                         "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
+                         "validationErrors": null
+                     }
+                     """
+               )
+            )
+         )
+      }
+   )
    @PostMapping("/users/{userId}/permissions/{permission}/revoke")
    public ResponseEntity<Void> revokePermission(
       @PathVariable Long userId,
