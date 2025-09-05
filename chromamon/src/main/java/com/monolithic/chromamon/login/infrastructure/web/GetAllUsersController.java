@@ -225,7 +225,7 @@ public class GetAllUsersController {
          ),
          @ApiResponse(
             responseCode = "500",
-            description = "Something went wrong while trying to delete the user",
+            description = "Something went wrong while retrieving users",
             content = @Content(
                mediaType = MediaType.APPLICATION_JSON_VALUE,
                schema = @Schema(
