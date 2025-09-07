@@ -13,6 +13,10 @@ public class SwaggerConstants {
     */
    public static final String SERVER_LOCALHOST = "http://localhost:8080";
    /**
+    * The development server.
+    */
+   public static final String DEV_SERVER = "192.168.1.40";
+   /**
     * The authorization name.
     */
    public static final String AUTH_NAME = "bearerAuth";

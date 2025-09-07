@@ -36,8 +36,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
    ),
    servers = {
       @Server(
-         description = "Development Environment",
+         description = "Local Development Environment",
          url = SwaggerConstants.SERVER_LOCALHOST
+      ),
+      @Server(
+         description = "Development Server",
+         url = SwaggerConstants.DEV_SERVER
       )
    }
 )
