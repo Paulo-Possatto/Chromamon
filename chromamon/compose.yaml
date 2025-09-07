@@ -1,4 +1,58 @@
 services:
+  chromamon:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      wiremock:
+        condition: service_started
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${PG_DATABASE_NAME}
+      - SPRING_DATA_MONGODB_URI=mongodb://${MG_DATABASE_USER}:${MG_DATABASE_PASS}@mongodb:27017/${MG_DATABASE_NAME}?authSource=admin
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=${PG_DATABASE_NAME}'
+      - 'POSTGRES_PASSWORD=${PG_DATABASE_PASS}'
+      - 'POSTGRES_USER=${PG_DATABASE_USER}'
+    ports:
+      - '5433:5432'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${PG_DATABASE_USER} -d ${PG_DATABASE_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  mongodb:
+    image: 'mongo:latest'
+    environment:
+      - 'MONGO_INITDB_DATABASE=${MG_DATABASE_NAME}'
+      - 'MONGO_INITDB_ROOT_PASSWORD=${MG_DATABASE_PASS}'
+      - 'MONGO_INITDB_ROOT_USERNAME=${MG_DATABASE_USER}'
+    ports:
+      - '27017:27017'
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
   prometheus:
     image: 'prom/prometheus'
     volumes:
@@ -20,22 +74,6 @@ services:
       - ./__files:/home/wiremock/__files
       - ./mappings:/home/wiremock/mappings
     entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
-  mongodb:
-    image: 'mongo:latest'
-    environment:
-      - 'MONGO_INITDB_DATABASE=${MG_DATABASE_NAME}'
-      - 'MONGO_INITDB_ROOT_PASSWORD=${MG_DATABASE_PASS}'
-      - 'MONGO_INITDB_ROOT_USERNAME=${MG_DATABASE_USER}'
-    ports:
-      - '27017:27017'
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=${PG_DATABASE_NAME}'
-      - 'POSTGRES_PASSWORD=${PG_DATABASE_PASS}'
-      - 'POSTGRES_USER=${PG_DATABASE_USER}'
-    ports:
-      - '5433:5432'
   sonarqube:
     image: sonarqube:community
     container_name: sonarqube
@@ -62,7 +100,6 @@ services:
       nofile:
         soft: 65536
         hard: 65536
-    profiles: [ "sonar" ]
 
 volumes:
   sonarqube_data:
