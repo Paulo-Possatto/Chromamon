@@ -1,0 +1,41 @@
+name: Deploy on dev server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # TODO: Clean install before creating image
+      # TODO: Verify coverage
+      # TODO: Check with sonarqube
+      - name: Login no Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Image build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: paulopossatto/chromamon:latest
+
+      - name: Server deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/app
+            docker compose pull
+            docker compose up -d
