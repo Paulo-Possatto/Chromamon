@@ -1,10 +1,9 @@
 package com.monolithic.chromamon.login.domain.model;
 
 import com.monolithic.chromamon.shared.domain.security.Role;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Builder;
 
 /**
  * The domain object used for the login service.
@@ -25,27 +24,26 @@ import java.util.UUID;
  */
 @Builder
 public record User(
-   Long id,
-   UUID uuid,
-   String idCode,
-   String username,
-   String email,
-   String password,
-   String firstName,
-   String lastName,
-   Role role,
-   Boolean active,
-   LocalDateTime createdAt,
-   LocalDateTime updatedAt,
-   LocalDateTime lastLoginAt)
-{
+    Long id,
+    UUID uuid,
+    String idCode,
+    String username,
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    Role role,
+    Boolean active,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt,
+    LocalDateTime lastLoginAt) {
 
-   /**
-    * Generates the user full name based on internal params.
-    *
-    * @return the user's full name.
-    */
-   public String getFullName() {
-      return firstName + " " + lastName;
-   }
+  /**
+   * Generates the user full name based on internal params.
+   *
+   * @return the user's full name.
+   */
+  public String getFullName() {
+    return firstName + " " + lastName;
+  }
 }

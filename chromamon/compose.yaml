@@ -1,28 +1,4 @@
 services:
-  chromamon:
-    image: 'paulopossatto/chromamon:latest'
-    ports:
-      - "8080:8080"
-    env_file:
-      - .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongodb:
-        condition: service_healthy
-      wiremock:
-        condition: service_started
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${PG_DATABASE_NAME}
-      - SPRING_DATA_MONGODB_URI=mongodb://${MG_DATABASE_USER}:${MG_DATABASE_PASS}@mongodb:27017/${MG_DATABASE_NAME}?authSource=admin
-    restart: unless-stopped
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 120s
-
   postgres:
     image: 'postgres:latest'
     environment:

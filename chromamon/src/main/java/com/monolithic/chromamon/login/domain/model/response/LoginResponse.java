@@ -2,10 +2,9 @@ package com.monolithic.chromamon.login.domain.model.response;
 
 import com.monolithic.chromamon.shared.domain.security.SwaggerConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.Set;
+import lombok.Builder;
 
 /**
  * Response object for when login is successful.
@@ -25,10 +24,11 @@ import java.util.Set;
  */
 @Builder
 @Schema(
-   name = "LoginResponse",
-   description = "Response DTO for when login is successful",
-   type = SwaggerConstants.OBJECT,
-   examples = """
+    name = "LoginResponse",
+    description = "Response DTO for when login is successful",
+    type = SwaggerConstants.OBJECT,
+    examples =
+        """
       {
          "jwtToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
          "tokenType": "Bearer",
@@ -43,104 +43,91 @@ import java.util.Set;
          "issuedAt": "2024-05-01T13:30:10.0",
          "expiresAt": "2024-05-01T15:30:10.0"
       }
-      """
-)
+      """)
 public record LoginResponse(
-   @Schema(
-      name = "jwtToken",
-      description = "JWT token string value",
-      type = SwaggerConstants.STRING,
-      example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-      implementation = String.class
-   )
-   String jwtToken,
-   @Schema(
-      name = "tokenType",
-      description = "The token authorization type",
-      type = SwaggerConstants.STRING,
-      example = "Bearer",
-      implementation = String.class
-   )
-   String tokenType,
-   @Schema(
-      name = "expiresIn",
-      description = "Expiration time in seconds since Unix epoch",
-      type = SwaggerConstants.INTEGER,
-      example = "1516239022",
-      implementation = Long.class
-   )
-   Long expiresIn,
-   @Schema(
-      name = "username",
-      description = "The username for the logged user",
-      type = SwaggerConstants.STRING,
-      examples = "JohnDoe",
-      implementation = String.class
-   )
-   String username,
-   @Schema(
-      name = "uuid",
-      description = "The user unique identifier",
-      type = SwaggerConstants.STRING,
-      examples = "5187f7f1-9c98-4b2b-ad01-2061b8bcac5f",
-      implementation = String.class
-   )
-   String uuid,
-   @Schema(
-      name = "idCode",
-      description = "The user internal identification",
-      type = SwaggerConstants.STRING,
-      examples = "AB12CD",
-      implementation = String.class
-   )
-   String idCode,
-   @Schema(
-      name = "email",
-      description = "The user's email",
-      type = SwaggerConstants.STRING,
-      examples = "john.doe@email.com",
-      implementation = String.class
-   )
-   String email,
-   @Schema(
-      name = "fullName",
-      description = "The user's complete name",
-      type = SwaggerConstants.STRING,
-      examples = "John Smith Doe",
-      implementation = String.class
-   )
-   String fullName,
-   @Schema(
-      name = "role",
-      description = "The user role for the application",
-      type = SwaggerConstants.STRING,
-      examples = "ENGINEER",
-      implementation = String.class
-   )
-   String role,
-   @Schema(
-      name = "permissions",
-      description = "The array of permissions the user has",
-      type = SwaggerConstants.ARRAY,
-      examples = "[\"analysis:read\", \"diagnostic:read\", \"transformer:read\", \"report:read\", \"report:create\"]",
-      implementation = Set.class
-   )
-   Set<String> permissions,
-   @Schema(
-      name = "issuedAt",
-      description = "The date and time of when the token was issued",
-      type = SwaggerConstants.STRING,
-      examples = "2024-05-01T13:30:10.0",
-      implementation = LocalDateTime.class
-   )
-   LocalDateTime issuedAt,
-   @Schema(
-      name = "expiresAt",
-      description = "The date and time of when the token expires",
-      type = SwaggerConstants.STRING,
-      examples = "2024-05-01T15:30:10.0",
-      implementation = LocalDateTime.class
-   )
-   LocalDateTime expiresAt
-) {
-}
+    @Schema(
+            name = "jwtToken",
+            description = "JWT token string value",
+            type = SwaggerConstants.STRING,
+            example =
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+            implementation = String.class)
+        String jwtToken,
+    @Schema(
+            name = "tokenType",
+            description = "The token authorization type",
+            type = SwaggerConstants.STRING,
+            example = "Bearer",
+            implementation = String.class)
+        String tokenType,
+    @Schema(
+            name = "expiresIn",
+            description = "Expiration time in seconds since Unix epoch",
+            type = SwaggerConstants.INTEGER,
+            example = "1516239022",
+            implementation = Long.class)
+        Long expiresIn,
+    @Schema(
+            name = "username",
+            description = "The username for the logged user",
+            type = SwaggerConstants.STRING,
+            examples = "JohnDoe",
+            implementation = String.class)
+        String username,
+    @Schema(
+            name = "uuid",
+            description = "The user unique identifier",
+            type = SwaggerConstants.STRING,
+            examples = "5187f7f1-9c98-4b2b-ad01-2061b8bcac5f",
+            implementation = String.class)
+        String uuid,
+    @Schema(
+            name = "idCode",
+            description = "The user internal identification",
+            type = SwaggerConstants.STRING,
+            examples = "AB12CD",
+            implementation = String.class)
+        String idCode,
+    @Schema(
+            name = "email",
+            description = "The user's email",
+            type = SwaggerConstants.STRING,
+            examples = "john.doe@email.com",
+            implementation = String.class)
+        String email,
+    @Schema(
+            name = "fullName",
+            description = "The user's complete name",
+            type = SwaggerConstants.STRING,
+            examples = "John Smith Doe",
+            implementation = String.class)
+        String fullName,
+    @Schema(
+            name = "role",
+            description = "The user role for the application",
+            type = SwaggerConstants.STRING,
+            examples = "ENGINEER",
+            implementation = String.class)
+        String role,
+    @Schema(
+            name = "permissions",
+            description = "The array of permissions the user has",
+            type = SwaggerConstants.ARRAY,
+            examples =
+                "[\"analysis:read\", \"diagnostic:read\", \"transformer:read\", \"report:read\", \"report:create\"]",
+            implementation = Set.class)
+        Set<String> permissions,
+    @Schema(
+            name = "issuedAt",
+            description = "The date and time of when the token was issued",
+            type = SwaggerConstants.STRING,
+            examples = "2024-05-01T13:30:10.0",
+            implementation = LocalDateTime.class)
+        LocalDateTime issuedAt,
+    @Schema(
+            name = "expiresAt",
+            description = "The date and time of when the token expires",
+            type = SwaggerConstants.STRING,
+            examples = "2024-05-01T15:30:10.0",
+            implementation = LocalDateTime.class)
+        LocalDateTime expiresAt) {}

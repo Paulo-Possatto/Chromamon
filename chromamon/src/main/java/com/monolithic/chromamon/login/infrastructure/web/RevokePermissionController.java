@@ -21,79 +21,61 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Controller for revoking a user permission.
- */
+/** Controller for revoking a user permission. */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class RevokePermissionController {
 
-   private final UserService userService;
+  private final UserService userService;
 
-   /**
-    * Revokes a specific permission for a user.
-    *
-    * @param userId the id of the user to revoke the permission.
-    * @param permission the permission to be revoked from the user.
-    * @return an ok response if the revoke step is successful
-    */
-   @Operation(
+  /**
+   * Revokes a specific permission for a user.
+   *
+   * @param userId the id of the user to revoke the permission.
+   * @param permission the permission to be revoked from the user.
+   * @return an ok response if the revoke step is successful
+   */
+  @Operation(
       summary = "Revoke permission",
       description = "Revoke a specific permission for a user",
       operationId = "revokePermission",
       method = SwaggerConstants.METHOD_POST,
-      tags = {
-         SwaggerConstants.TAG_USER
-      },
-      security = {
-         @SecurityRequirement(
-            name = SwaggerConstants.AUTH_NAME
-         )
-      },
-      servers = {
-         @Server(
-            url = SwaggerConstants.SERVER_LOCALHOST
-         )
-      },
+      tags = {SwaggerConstants.TAG_USER},
+      security = {@SecurityRequirement(name = SwaggerConstants.AUTH_NAME)},
+      servers = {@Server(url = SwaggerConstants.SERVER_LOCALHOST)},
       parameters = {
-         @Parameter(
+        @Parameter(
             name = "userId",
             in = ParameterIn.PATH,
             description = "The ID of the user to have the permission revoked",
             required = true,
             style = ParameterStyle.SIMPLE,
-            schema = @Schema(
-               implementation = String.class,
-               type = SwaggerConstants.STRING
-            ),
-            example = "1"
-         ),
-         @Parameter(
+            schema = @Schema(implementation = String.class, type = SwaggerConstants.STRING),
+            example = "1"),
+        @Parameter(
             name = "permission",
             in = ParameterIn.PATH,
             description = "The permission to be revoked to the specified user",
             required = true,
             style = ParameterStyle.SIMPLE,
-            schema = @Schema(
-               implementation = Permission.class,
-               type = SwaggerConstants.STRING
-            )
-         )
+            schema = @Schema(implementation = Permission.class, type = SwaggerConstants.STRING))
       },
       responses = {
-         @ApiResponse(
+        @ApiResponse(
             responseCode = "200",
-            description = "The permission was successfully revoked from the given user"
-         ),
-         @ApiResponse(
+            description = "The permission was successfully revoked from the given user"),
+        @ApiResponse(
             responseCode = "400",
             description = "The user already does not the given permission",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GlobalExceptionHandler.ErrorResponse.class,
+                            example =
+                                """
                      {
                          "timestamp": "2025-09-04T17:22:09.649681754",
                          "status": 400,
@@ -102,18 +84,19 @@ public class RevokePermissionController {
                          "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
                          "validationErrors": null
                      }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
+                     """))),
+        @ApiResponse(
             responseCode = "401",
-            description = "The 'Authorization' header token does not start with the required authorization scheme or is not present",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
+            description =
+                "The 'Authorization' header token does not start with the required authorization scheme or is not present",
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GlobalExceptionHandler.ErrorResponse.class,
+                            example =
+                                """
                      {
                          "timestamp": "2025-08-30T17:41:43.247846674",
                          "status": 401,
@@ -122,18 +105,19 @@ public class RevokePermissionController {
                          "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
                          "validationErrors": "null"
                      }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
+                     """))),
+        @ApiResponse(
             responseCode = "403",
-            description = "The role that the user have does not has the necessary permission to access the resource",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
+            description =
+                "The role that the user have does not has the necessary permission to access the resource",
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GlobalExceptionHandler.ErrorResponse.class,
+                            example =
+                                """
                      {
                          "timestamp": "2025-08-31T19:22:02.023790528",
                          "status": 403,
@@ -142,18 +126,18 @@ public class RevokePermissionController {
                          "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
                          "validationErrors": null
                      }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
+                     """))),
+        @ApiResponse(
             responseCode = "404",
             description = "The user with the given ID was not found in the database",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GlobalExceptionHandler.ErrorResponse.class,
+                            example =
+                                """
                      {
                          "timestamp": "2025-08-29T20:13:30.565819877",
                          "status": 404,
@@ -162,18 +146,18 @@ public class RevokePermissionController {
                          "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
                          "validationErrors": null
                      }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
+                     """))),
+        @ApiResponse(
             responseCode = "500",
             description = "Something went wrong while trying to revoke permission",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GlobalExceptionHandler.ErrorResponse.class,
+                            example =
+                                """
                      {
                          "timestamp": "2025-08-29T20:13:30.565819877",
                          "status": 500,
@@ -182,17 +166,12 @@ public class RevokePermissionController {
                          "path": "/users/1/permissions/TRANSFORMER_READ/revoke",
                          "validationErrors": null
                      }
-                     """
-               )
-            )
-         )
-      }
-   )
-   @PostMapping("/users/{userId}/permissions/{permission}/revoke")
-   public ResponseEntity<Void> revokePermission(
-      @PathVariable Long userId,
-      @PathVariable Permission permission) {
-      userService.revokePermission(userId, permission);
-      return ResponseEntity.ok().build();
-   }
+                     """)))
+      })
+  @PostMapping("/users/{userId}/permissions/{permission}/revoke")
+  public ResponseEntity<Void> revokePermission(
+      @PathVariable Long userId, @PathVariable Permission permission) {
+    userService.revokePermission(userId, permission);
+    return ResponseEntity.ok().build();
+  }
 }

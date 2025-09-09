@@ -12,28 +12,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Controller for updating user data.
- */
+/** Controller for updating user data. */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class UpdateUserController {
 
-   private final UserService userService;
+  private final UserService userService;
 
-   /**
-    * Updates a user information.
-    *
-    * @param id the ID of the user to be updated
-    * @param user the updated information of the user
-    * @return the information updated in the database
-    */
-   @Operation(summary = "Update user", description = "Updates user data")
-   @SecurityRequirement(name = "bearerAuth")
-   @PutMapping("/users/{id}")
-   public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-      User updatedUser = userService.updateUser(id, user);
-      return ResponseEntity.ok(updatedUser);
-   }
+  /**
+   * Updates a user information.
+   *
+   * @param id the ID of the user to be updated
+   * @param user the updated information of the user
+   * @return the information updated in the database
+   */
+  @Operation(summary = "Update user", description = "Updates user data")
+  @SecurityRequirement(name = "bearerAuth")
+  @PutMapping("/users/{id}")
+  public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    User updatedUser = userService.updateUser(id, user);
+    return ResponseEntity.ok(updatedUser);
+  }
 }

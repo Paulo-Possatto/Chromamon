@@ -12,39 +12,37 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Entity for the user permissions.
- */
+/** Entity for the user permissions. */
 @Entity
 @Table(name = "user_permissions", schema = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserPermission {
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-   @Column(name = "user_id", nullable = false)
-   private Long userId;
+  @Column(name = "user_id", nullable = false)
+  private Long userId;
 
-   @Enumerated(EnumType.STRING)
-   @Column(name = "permission", nullable = false)
-   private Permission permission;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "permission", nullable = false)
+  private Permission permission;
 
-   @Column(name = "granted", nullable = false)
-   private Boolean granted = true;
+  @Column(name = "granted", nullable = false)
+  private Boolean granted = true;
 
-   /**
-    * Constructor without the ID parameter.4
-    *
-    * @param userId     the user identification.
-    * @param permission the user permission.
-    * @param granted    is the user permission granted?
-    */
-   public UserPermission(Long userId, Permission permission, Boolean granted) {
-      this.userId = userId;
-      this.permission = permission;
-      this.granted = granted;
-   }
+  /**
+   * Constructor without the ID parameter.4
+   *
+   * @param userId the user identification.
+   * @param permission the user permission.
+   * @param granted is the user permission granted?
+   */
+  public UserPermission(Long userId, Permission permission, Boolean granted) {
+    this.userId = userId;
+    this.permission = permission;
+    this.granted = granted;
+  }
 }

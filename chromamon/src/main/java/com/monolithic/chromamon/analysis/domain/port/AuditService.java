@@ -1,9 +1,9 @@
 package com.monolithic.chromamon.analysis.domain.port;
 
 public interface AuditService {
-   void logAnalysisCreated(String info);
+  void logAnalysisCreated(String info);
 
-   void logAnalysisUpdated(String info);
+  void logAnalysisUpdated(String info);
 
-   void logAnalysisDeleted(String info);
+  void logAnalysisDeleted(String info);
 }

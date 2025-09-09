@@ -24,84 +24,64 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Controller for getting all users.
- */
+/** Controller for getting all users. */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class GetAllUsersController {
 
-   private final UserService userService;
+  private final UserService userService;
 
-   /**
-    * Endpoint to get all users stored in the database.
-    *
-    * @param pageable the pageable params.
-    * @return a list of all the users.
-    */
-   @Operation(
+  /**
+   * Endpoint to get all users stored in the database.
+   *
+   * @param pageable the pageable params.
+   * @return a list of all the users.
+   */
+  @Operation(
       summary = "List users",
-      description = "List all users from the system into pages (default: sort by idCode in ascending order)",
+      description =
+          "List all users from the system into pages (default: sort by idCode in ascending order)",
       operationId = "getAllUsers",
       method = SwaggerConstants.METHOD_GET,
-      tags = {
-         SwaggerConstants.TAG_USER
-      },
-      security = {
-         @SecurityRequirement(
-            name = SwaggerConstants.AUTH_NAME
-         )
-      },
-      servers = {
-         @Server(
-            url = SwaggerConstants.SERVER_LOCALHOST
-         )
-      },
+      tags = {SwaggerConstants.TAG_USER},
+      security = {@SecurityRequirement(name = SwaggerConstants.AUTH_NAME)},
+      servers = {@Server(url = SwaggerConstants.SERVER_LOCALHOST)},
       parameters = {
-         @Parameter(
+        @Parameter(
             name = "page",
             in = ParameterIn.QUERY,
             description = "The page number containing an amount of users",
             style = ParameterStyle.FORM,
-            schema = @Schema(
-               implementation = Integer.class,
-               type = SwaggerConstants.INTEGER
-            ),
-            example = "0"
-         ),
-         @Parameter(
+            schema = @Schema(implementation = Integer.class, type = SwaggerConstants.INTEGER),
+            example = "0"),
+        @Parameter(
             name = "size",
             in = ParameterIn.QUERY,
             description = "The amount of elements present in a page",
             style = ParameterStyle.FORM,
-            schema = @Schema(
-               implementation = Integer.class,
-               type = SwaggerConstants.INTEGER
-            ),
-            example = "5"
-         ),
-         @Parameter(
+            schema = @Schema(implementation = Integer.class, type = SwaggerConstants.INTEGER),
+            example = "5"),
+        @Parameter(
             name = "sort",
             in = ParameterIn.QUERY,
             description = "The parameter to sort the elements",
             style = ParameterStyle.FORM,
-            schema = @Schema(
-               implementation = String.class,
-               type = SwaggerConstants.STRING
-            ),
-            example = "firstName"
-         )
+            schema = @Schema(implementation = String.class, type = SwaggerConstants.STRING),
+            example = "firstName")
       },
       responses = {
-         @ApiResponse(
+        @ApiResponse(
             responseCode = "200",
             description = "Successfully returns a page of users",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GetUserResponse.class,
-                  example = """
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GetUserResponse.class,
+                            example =
+                                """
                      {
                          "content": [
                              {
@@ -179,18 +159,19 @@ public class GetAllUsersController {
                          "numberOfElements": 4,
                          "empty": false
                      }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
+                     """))),
+        @ApiResponse(
             responseCode = "401",
-            description = "The 'Authorization' header token does not start with the required authorization scheme or is not present",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
+            description =
+                "The 'Authorization' header token does not start with the required authorization scheme or is not present",
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GlobalExceptionHandler.ErrorResponse.class,
+                            example =
+                                """
                      {
                          "timestamp": "2025-08-30T17:41:43.247846674",
                          "status": 401,
@@ -199,18 +180,19 @@ public class GetAllUsersController {
                          "path": "/api/v1/auth/users",
                          "validationErrors": "null"
                      }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
+                     """))),
+        @ApiResponse(
             responseCode = "403",
-            description = "The role that the user have does not has the necessary permission to access the resource",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
+            description =
+                "The role that the user have does not has the necessary permission to access the resource",
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GlobalExceptionHandler.ErrorResponse.class,
+                            example =
+                                """
                      {
                          "timestamp": "2025-08-31T19:22:02.023790528",
                          "status": 403,
@@ -219,18 +201,18 @@ public class GetAllUsersController {
                          "path": "/api/v1/auth/users",
                          "validationErrors": null
                      }
-                     """
-               )
-            )
-         ),
-         @ApiResponse(
+                     """))),
+        @ApiResponse(
             responseCode = "500",
             description = "Something went wrong while retrieving users",
-            content = @Content(
-               mediaType = MediaType.APPLICATION_JSON_VALUE,
-               schema = @Schema(
-                  implementation = GlobalExceptionHandler.ErrorResponse.class,
-                  example = """
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema =
+                        @Schema(
+                            implementation = GlobalExceptionHandler.ErrorResponse.class,
+                            example =
+                                """
                      {
                          "timestamp": "2025-08-29T20:13:30.565819877",
                          "status": 500,
@@ -239,18 +221,14 @@ public class GetAllUsersController {
                          "path": "/api/v1/auth/users",
                          "validationErrors": null
                      }
-                     """
-               )
-            )
-         )
-      }
-   )
-   @SecurityRequirement(name = "bearerAuth")
-   @GetMapping("/users")
-   public ResponseEntity<Page<GetUserResponse>> getAllUsers(
-      @Parameter(hidden = true)
-      @PageableDefault(sort = "idCode", direction = Sort.Direction.ASC) Pageable pageable) {
-      Page<GetUserResponse> users = userService.getAllUsers(pageable);
-      return ResponseEntity.ok(users);
-   }
+                     """)))
+      })
+  @SecurityRequirement(name = "bearerAuth")
+  @GetMapping("/users")
+  public ResponseEntity<Page<GetUserResponse>> getAllUsers(
+      @Parameter(hidden = true) @PageableDefault(sort = "idCode", direction = Sort.Direction.ASC)
+          Pageable pageable) {
+    Page<GetUserResponse> users = userService.getAllUsers(pageable);
+    return ResponseEntity.ok(users);
+  }
 }

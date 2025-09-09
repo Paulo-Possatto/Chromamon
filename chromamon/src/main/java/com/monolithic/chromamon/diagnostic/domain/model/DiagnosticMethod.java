@@ -1,3 +1,8 @@
 package com.monolithic.chromamon.diagnostic.domain.model;
 
-public enum DiagnosticMethod {DUVAL, IEEE, ROGERS, IEC}
+public enum DiagnosticMethod {
+  DUVAL,
+  IEEE,
+  ROGERS,
+  IEC
+}

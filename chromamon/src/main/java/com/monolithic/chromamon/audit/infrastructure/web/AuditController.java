@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuditController {
 
-   private final AuditMongoRepository repo;
+  private final AuditMongoRepository repo;
 
-   @HasPermission(Permission.AUDIT_READ)
-   @GetMapping
-   public Object list() {
-      return repo.findAll();
-   }
+  @HasPermission(Permission.AUDIT_READ)
+  @GetMapping
+  public Object list() {
+    return repo.findAll();
+  }
 }

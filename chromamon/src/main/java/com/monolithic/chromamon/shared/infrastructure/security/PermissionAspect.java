@@ -22,30 +22,32 @@ import org.springframework.web.client.HttpClientErrorException;
 @Slf4j
 public class PermissionAspect {
 
-   private final PermissionService permissionService;
+  private final PermissionService permissionService;
 
-   @Around("@annotation(hasPermission)")
-   public Object checkPermission(ProceedingJoinPoint joinPoint, HasPermission hasPermission) throws Throwable {
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  @Around("@annotation(hasPermission)")
+  public Object checkPermission(ProceedingJoinPoint joinPoint, HasPermission hasPermission)
+      throws Throwable {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-      if (authentication == null || !authentication.isAuthenticated()) {
-         throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "User Not Authenticated");
-      }
-      Object[] array = authentication.getAuthorities().toArray();
-      if(authentication.getAuthorities().isEmpty() || array[0].toString().contains("ANONYMOUS")) {
-         throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Token not provided");
-      }
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "User Not Authenticated");
+    }
+    Object[] array = authentication.getAuthorities().toArray();
+    if (authentication.getAuthorities().isEmpty() || array[0].toString().contains("ANONYMOUS")) {
+      throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Token not provided");
+    }
 
-      log.info("Checking permissions for user {}", authentication.getName());
-      Jwt jwt = (Jwt) authentication.getPrincipal();
-      Long userId = jwt.getClaim("userId");
-      String roleStr = jwt.getClaim("role");
-      Role role = Role.valueOf(roleStr);
+    log.info("Checking permissions for user {}", authentication.getName());
+    Jwt jwt = (Jwt) authentication.getPrincipal();
+    Long userId = jwt.getClaim("userId");
+    String roleStr = jwt.getClaim("role");
+    Role role = Role.valueOf(roleStr);
 
-      if (!permissionService.hasPermission(userId, role, hasPermission.value())) {
-         throw new AccessDeniedException("Insufficient permission: " + hasPermission.value().getPermission());
-      }
+    if (!permissionService.hasPermission(userId, role, hasPermission.value())) {
+      throw new AccessDeniedException(
+          "Insufficient permission: " + hasPermission.value().getPermission());
+    }
 
-      return joinPoint.proceed();
-   }
+    return joinPoint.proceed();
+  }
 }

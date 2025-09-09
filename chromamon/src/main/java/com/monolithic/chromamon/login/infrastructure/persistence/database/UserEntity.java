@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,9 +19,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users_data", schema = "users")
@@ -30,46 +29,46 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-   @Column(name = "uuid", nullable = false, unique = true)
-   private UUID uuid;
+  @Column(name = "uuid", nullable = false, unique = true)
+  private UUID uuid;
 
-   @Column(name = "id_code", nullable = false, unique = true, length = 6)
-   private String idCode;
+  @Column(name = "id_code", nullable = false, unique = true, length = 6)
+  private String idCode;
 
-   @Column(name = "username", nullable = false, unique = true)
-   private String username;
+  @Column(name = "username", nullable = false, unique = true)
+  private String username;
 
-   @Column(name = "email", nullable = false, unique = true)
-   private String email;
+  @Column(name = "email", nullable = false, unique = true)
+  private String email;
 
-   @Column(name = "password", nullable = false)
-   private String password;
+  @Column(name = "password", nullable = false)
+  private String password;
 
-   @Column(name = "first_name", nullable = false)
-   private String firstName;
+  @Column(name = "first_name", nullable = false)
+  private String firstName;
 
-   @Column(name = "last_name", nullable = false)
-   private String lastName;
+  @Column(name = "last_name", nullable = false)
+  private String lastName;
 
-   @Enumerated(EnumType.STRING)
-   @Column(name = "role", nullable = false)
-   private Role role;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "role", nullable = false)
+  private Role role;
 
-   @Column(name = "active", nullable = false)
-   private Boolean active = true;
+  @Column(name = "active", nullable = false)
+  private Boolean active = true;
 
-   @CreatedDate
-   @Column(name = "created_at", nullable = false, updatable = false)
-   private LocalDateTime createdAt;
+  @CreatedDate
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private LocalDateTime createdAt;
 
-   @LastModifiedDate
-   @Column(name = "updated_at")
-   private LocalDateTime updatedAt;
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
 
-   @Column(name = "last_login_at")
-   private LocalDateTime lastLoginAt;
+  @Column(name = "last_login_at")
+  private LocalDateTime lastLoginAt;
 }

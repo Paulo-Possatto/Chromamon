@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DiagnosticController {
 
-   private final DiagnosticService service;
-   private final AnalysisRepository analysisRepository;
+  private final DiagnosticService service;
+  private final AnalysisRepository analysisRepository;
 
-   @PostMapping("/{analysisId}/{method}")
-   public DiagnosticResult run(@PathVariable Long analysisId, @PathVariable DiagnosticMethod method) {
-      var analysis = analysisRepository.findById(analysisId).orElseThrow();
-      return service.diagnose(method, analysis);
-   }
+  @PostMapping("/{analysisId}/{method}")
+  public DiagnosticResult run(
+      @PathVariable Long analysisId, @PathVariable DiagnosticMethod method) {
+    var analysis = analysisRepository.findById(analysisId).orElseThrow();
+    return service.diagnose(method, analysis);
+  }
 }

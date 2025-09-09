@@ -1,15 +1,14 @@
 package com.monolithic.chromamon.diagnostic.domain.model;
 
+import java.time.Instant;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.Instant;
 
 @Data
 @Builder
 public class DiagnosticResult {
-   private Long analysisId;
-   private DiagnosticMethod method;
-   private String conclusion;
-   private Instant generatedAt;
+  private Long analysisId;
+  private DiagnosticMethod method;
+  private String conclusion;
+  private Instant generatedAt;
 }

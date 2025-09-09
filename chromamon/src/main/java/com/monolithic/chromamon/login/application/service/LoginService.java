@@ -8,6 +8,9 @@ import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
 import com.monolithic.chromamon.shared.application.security.PermissionService;
 import com.monolithic.chromamon.shared.domain.security.Permission;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,122 +24,122 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
-/**
- * Service for the login resources.
- */
+/** Service for the login resources. */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class LoginService implements UserDetailsService {
 
-   @Value("${application.security.jwt.expiration}")
-   private long jwtExpiration;
+  @Value("${application.security.jwt.expiration}")
+  private long jwtExpiration;
 
-   @Value("${application.security.jwt.auth-scheme}")
-   private String jwtAuthScheme;
+  @Value("${application.security.jwt.auth-scheme}")
+  private String jwtAuthScheme;
 
-   private final UserRepository userRepository;
-   private final PasswordEncoder passwordEncoder;
-   private final JwtService jwtService;
-   private final PermissionService permissionService;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtService jwtService;
+  private final PermissionService permissionService;
 
-   /**
-    * Validates the user logging in the application.
-    *
-    * @param loginRequest the login request object.
-    * @return an object response with the necessary details.
-    */
-   @Transactional
-   public LoginResponse authenticate(LoginRequest loginRequest) {
-      log.info("User authentication attempt: {}", loginRequest.email());
+  /**
+   * Validates the user logging in the application.
+   *
+   * @param loginRequest the login request object.
+   * @return an object response with the necessary details.
+   */
+  @Transactional
+  public LoginResponse authenticate(LoginRequest loginRequest) {
+    log.info("User authentication attempt: {}", loginRequest.email());
 
-      User user = userRepository.findByEmail(loginRequest.email())
-         .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found"));
+    User user =
+        userRepository
+            .findByEmail(loginRequest.email())
+            .orElseThrow(
+                () -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found"));
 
-      if (Boolean.FALSE.equals(user.active())) {
-         throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "User inactive");
-      }
+    if (Boolean.FALSE.equals(user.active())) {
+      throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "User inactive");
+    }
 
-      if (!passwordEncoder.matches(loginRequest.password(), user.password())) {
-         throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED,"Invalid credentials");
-      }
+    if (!passwordEncoder.matches(loginRequest.password(), user.password())) {
+      throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+    }
 
-      userRepository.updateLastLoginAt(user.id(), LocalDateTime.now());
+    userRepository.updateLastLoginAt(user.id(), LocalDateTime.now());
 
-      Set<String> permissions = permissionService.getUserPermissions(user.id(), user.role())
-         .stream()
-         .map(Permission::getPermission)
-         .collect(java.util.stream.Collectors.toSet());
+    Set<String> permissions =
+        permissionService.getUserPermissions(user.id(), user.role()).stream()
+            .map(Permission::getPermission)
+            .collect(java.util.stream.Collectors.toSet());
 
-      String token = jwtService.generateToken(user, permissions);
+    String token = jwtService.generateToken(user, permissions);
 
-      LocalDateTime now = LocalDateTime.now();
-      LocalDateTime expiresAt = now.plusSeconds(jwtExpiration);
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime expiresAt = now.plusSeconds(jwtExpiration);
 
-      log.info("Successful authentication for user: {}", user.username());
+    log.info("Successful authentication for user: {}", user.username());
 
-      return LoginResponse.builder()
-         .jwtToken(token)
-         .tokenType(jwtAuthScheme)
-         .expiresIn(jwtExpiration)
-         .username(user.username())
-         .uuid(user.uuid().toString())
-         .idCode(user.idCode())
-         .email(user.email())
-         .fullName(user.getFullName())
-         .role(user.role().name())
-         .permissions(permissions)
-         .issuedAt(now)
-         .expiresAt(expiresAt)
-         .build();
-   }
+    return LoginResponse.builder()
+        .jwtToken(token)
+        .tokenType(jwtAuthScheme)
+        .expiresIn(jwtExpiration)
+        .username(user.username())
+        .uuid(user.uuid().toString())
+        .idCode(user.idCode())
+        .email(user.email())
+        .fullName(user.getFullName())
+        .role(user.role().name())
+        .permissions(permissions)
+        .issuedAt(now)
+        .expiresAt(expiresAt)
+        .build();
+  }
 
-   /**
-    * Checks if the token is still valid.
-    *
-    * @param token the String JWT token.
-    * @return a boolean value for the validation (True -> Valid, False -> Invalid)
-    */
-   public boolean validateToken(String token) {
-      try {
-         String username = jwtService.extractUsername(token);
-         return jwtService.isTokenValid(token, username) && !jwtService.isTokenExpired(token);
-      } catch (Exception e) {
-         log.error("Error validating jwtToken: {}", e.getMessage());
-         return false;
-      }
-   }
-
-   /**
-    * Extracts the User information with the JWT Token.
-    *
-    * @param token the String JWT token.
-    * @return the User information object.
-    */
-   public User getUserFromToken(String token) {
+  /**
+   * Checks if the token is still valid.
+   *
+   * @param token the String JWT token.
+   * @return a boolean value for the validation (True -> Valid, False -> Invalid)
+   */
+  public boolean validateToken(String token) {
+    try {
       String username = jwtService.extractUsername(token);
-      return userRepository.findByUsername(username)
-         .orElseThrow(() -> new RuntimeException("User not found"));
-   }
+      return jwtService.isTokenValid(token, username) && !jwtService.isTokenExpired(token);
+    } catch (Exception e) {
+      log.error("Error validating jwtToken: {}", e.getMessage());
+      return false;
+    }
+  }
 
-   @Override
-   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-      User userResponse = userRepository.findByUsername(username)
-         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+  /**
+   * Extracts the User information with the JWT Token.
+   *
+   * @param token the String JWT token.
+   * @return the User information object.
+   */
+  public User getUserFromToken(String token) {
+    String username = jwtService.extractUsername(token);
+    return userRepository
+        .findByUsername(username)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+  }
 
-      Set<GrantedAuthority> authorities = HashSet.newHashSet(userResponse.role().getPermissionStrings().size());
-      for(String permission : userResponse.role().getPermissionStrings()){
-         authorities.add(new SimpleGrantedAuthority(permission));
-      }
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    User userResponse =
+        userRepository
+            .findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-      return org.springframework.security.core.userdetails.User
-         .withUsername(userResponse.username())
-         .password(userResponse.password())
-         .authorities(authorities)
-         .build();
-   }
+    Set<GrantedAuthority> authorities =
+        HashSet.newHashSet(userResponse.role().getPermissionStrings().size());
+    for (String permission : userResponse.role().getPermissionStrings()) {
+      authorities.add(new SimpleGrantedAuthority(permission));
+    }
+
+    return org.springframework.security.core.userdetails.User.withUsername(userResponse.username())
+        .password(userResponse.password())
+        .authorities(authorities)
+        .build();
+  }
 }

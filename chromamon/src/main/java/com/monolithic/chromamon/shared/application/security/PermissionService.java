@@ -4,70 +4,69 @@ import com.monolithic.chromamon.shared.domain.security.Permission;
 import com.monolithic.chromamon.shared.domain.security.Role;
 import com.monolithic.chromamon.shared.domain.security.UserPermission;
 import com.monolithic.chromamon.shared.infrastructure.security.UserPermissionRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-/**
- * Service for permission.
- */
+/** Service for permission. */
 @Service
 @RequiredArgsConstructor
 public class PermissionService {
 
-   private final UserPermissionRepository userPermissionRepository;
+  private final UserPermissionRepository userPermissionRepository;
 
-   public boolean hasPermission(Long userId, Role role, Permission permission) {
-      Set<Permission> rolePermissions = new HashSet<>(role.getPermissions());
+  public boolean hasPermission(Long userId, Role role, Permission permission) {
+    Set<Permission> rolePermissions = new HashSet<>(role.getPermissions());
 
-      List<UserPermission> userPermissions = userPermissionRepository.findByUserId(userId);
+    List<UserPermission> userPermissions = userPermissionRepository.findByUserId(userId);
 
-      // Aplica as permissões customizadas (pode conceder ou revogar)
-      for (UserPermission userPermission : userPermissions) {
-         if (userPermission.getGranted()) {
-            rolePermissions.add(userPermission.getPermission());
-         } else {
-            rolePermissions.remove(userPermission.getPermission());
-         }
+    // Aplica as permissões customizadas (pode conceder ou revogar)
+    for (UserPermission userPermission : userPermissions) {
+      if (userPermission.getGranted()) {
+        rolePermissions.add(userPermission.getPermission());
+      } else {
+        rolePermissions.remove(userPermission.getPermission());
       }
+    }
 
-      return rolePermissions.contains(permission);
-   }
+    return rolePermissions.contains(permission);
+  }
 
-   public Set<Permission> getUserPermissions(Long userId, Role role) {
-      Set<Permission> permissions = new HashSet<>(role.getPermissions());
+  public Set<Permission> getUserPermissions(Long userId, Role role) {
+    Set<Permission> permissions = new HashSet<>(role.getPermissions());
 
-      List<UserPermission> userPermissions = userPermissionRepository.findByUserId(userId);
+    List<UserPermission> userPermissions = userPermissionRepository.findByUserId(userId);
 
-      for (UserPermission userPermission : userPermissions) {
-         if (userPermission.getGranted()) {
-            permissions.add(userPermission.getPermission());
-         } else {
-            permissions.remove(userPermission.getPermission());
-         }
+    for (UserPermission userPermission : userPermissions) {
+      if (userPermission.getGranted()) {
+        permissions.add(userPermission.getPermission());
+      } else {
+        permissions.remove(userPermission.getPermission());
       }
+    }
 
-      return permissions;
-   }
+    return permissions;
+  }
 
-   public void grantPermission(Long userId, Permission permission) {
-      UserPermission userPermission = userPermissionRepository
-         .findByUserIdAndPermission(userId, permission)
-         .orElse(new UserPermission(userId, permission, true));
+  public void grantPermission(Long userId, Permission permission) {
+    UserPermission userPermission =
+        userPermissionRepository
+            .findByUserIdAndPermission(userId, permission)
+            .orElse(new UserPermission(userId, permission, true));
 
-      userPermission.setGranted(true);
-      userPermissionRepository.save(userPermission);
-   }
+    userPermission.setGranted(true);
+    userPermissionRepository.save(userPermission);
+  }
 
-   public void revokePermission(Long userId, Permission permission) {
-      UserPermission userPermission = userPermissionRepository
-         .findByUserIdAndPermission(userId, permission)
-         .orElse(new UserPermission(userId, permission, false));
+  public void revokePermission(Long userId, Permission permission) {
+    UserPermission userPermission =
+        userPermissionRepository
+            .findByUserIdAndPermission(userId, permission)
+            .orElse(new UserPermission(userId, permission, false));
 
-      userPermission.setGranted(false);
-      userPermissionRepository.save(userPermission);
-   }
+    userPermission.setGranted(false);
+    userPermissionRepository.save(userPermission);
+  }
 }
