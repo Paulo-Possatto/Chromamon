@@ -1,25 +1,91 @@
-name: Build and Deploy
+name: CI/CD Pipeline DEV
 
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  lint:
     runs-on: ubuntu-latest
-    environment: DEV
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Enforcer
+        run: mvn enforcer:enforce
+      - name: Format check (google-java-format)
+        run: mvn fmt:check
+      - name: Spotless check
+        run: mvn spotless:check
 
-      - name: Login to Docker Hub
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Build without tests
+        run: mvn clean install -DskipTests
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Run tests
+        run: mvn test
+
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build and analyze
+        run: mvn -B verify sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: http://localhost:9000
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: ./chromamon
@@ -27,6 +93,10 @@ jobs:
           push: true
           tags: paulopossatto/chromamon:latest
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    steps:
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -37,4 +107,4 @@ jobs:
           script: |
             cd /home/${{ secrets.SSH_USER }}/app
             docker compose pull
-            docker compose up --build -d
+            docker compose up -d
