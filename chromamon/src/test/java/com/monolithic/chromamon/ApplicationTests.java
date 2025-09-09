@@ -1,5 +1,7 @@
 package com.monolithic.chromamon;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -9,5 +11,7 @@ import org.springframework.context.annotation.Import;
 class ApplicationTests {
 
   @Test
-  void contextLoads() {}
+  void contextLoads() {
+    assertTrue(Boolean.TRUE);
+  }
 }

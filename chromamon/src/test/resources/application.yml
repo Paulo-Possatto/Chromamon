@@ -1,0 +1,11 @@
+spring:
+  flyway:
+    enabled: false
+  main:
+    allow-bean-definition-overriding: true
+
+application:
+  security:
+    jwt:
+      expiration: 36000
+      auth-scheme: Bearer
