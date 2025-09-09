@@ -87,7 +87,6 @@ jobs:
         run: mvn -B verify sonar:sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: http://localhost:9000
 
   docker:
     runs-on: ubuntu-latest
@@ -122,5 +121,7 @@ jobs:
           port: 2222
           script: |
             cd /home/${{ secrets.SSH_USER }}/app
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
             docker compose pull
             docker compose up -d
+            docker logout
