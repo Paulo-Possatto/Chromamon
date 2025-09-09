@@ -60,6 +60,7 @@ jobs:
 
   sonarqube:
     runs-on: ubuntu-latest
+    environment: DEV
     defaults:
       run:
         working-directory: ./chromamon
@@ -90,6 +91,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
+    environment: DEV
     needs: test
     steps:
       - uses: actions/checkout@v3
@@ -108,6 +110,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    environment: DEV
     needs: docker
     steps:
       - name: Deploy to Server via SSH
