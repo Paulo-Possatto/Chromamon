@@ -6,7 +6,7 @@ COMPANY=${COMPANY:-MyCompany}
 COUNTRY=${COUNTRY:-ES}
 ORGANIZATION_UNIT=""
 
-if [ -f /.dockerenv ] || [ -f /proc/1/cgroup ] && grep -q "docker" /proc/1/cgroup; then
+if grep -q docker /proc/1/cgroup; then
     IS_DOCKER=true
     echo "Docker environment detected"
 else
@@ -16,7 +16,7 @@ fi
 
 case "$ENVIRONMENT" in
     "local")
-        if [ "$IS_DOCKER" = "true" ]; then
+        if [ "$IS_DOCKER" ]; then
             KEYSTORE_PATH="/app/ssl/keystore.p12"
         else
             KEYSTORE_PATH="src/main/resources/ssl/keystore.p12"
@@ -48,7 +48,7 @@ case "$ENVIRONMENT" in
         echo "Production environment"
         ;;
     *)
-        if [ "$IS_DOCKER" = "true" ]; then
+        if [ "$IS_DOCKER" ]; then
             KEYSTORE_PATH="/app/ssl/keystore.p12"
         else
             KEYSTORE_PATH="src/main/resources/ssl/keystore.p12"
@@ -63,10 +63,10 @@ esac
 echo "Keystore path: $KEYSTORE_PATH"
 echo "SAN Extensions: $SAN_EXTENSIONS"
 
-if [ "$SSL_AUTO_GENERATE" = "true" ] && [ ! -f "$KEYSTORE_PATH" ]; then
+if [ "$SSL_AUTO_GENERATE" = true ] && [ ! -f "$KEYSTORE_PATH" ]; then
     echo "Generating SSL certificate for $ENVIRONMENT..."
 
-    mkdir -p "$(dirname "$KEYSTORE_PATH")"
+    mkdir -p $(dirname "$KEYSTORE_PATH")
 
     keytool -genkeypair -alias chroma"$ENVIRONMENT" -keyalg RSA -keysize 2048 -storetype PKCS12 \
         -keystore "$KEYSTORE_PATH" -validity 3650 \
@@ -75,13 +75,13 @@ if [ "$SSL_AUTO_GENERATE" = "true" ] && [ ! -f "$KEYSTORE_PATH" ]; then
         -ext "SAN=$SAN_EXTENSIONS"
 
     echo "SSL Certificate generated: $KEYSTORE_PATH"
-elif [ "$SSL_AUTO_GENERATE" = "false" ] && [ ! -f "$KEYSTORE_PATH" ]; then
+elif [ "$SSL_AUTO_GENERATE" = false ] && [ ! -f "$KEYSTORE_PATH" ]; then
     echo "ERROR: SSL Certificate not found for $ENVIRONMENT"
     echo "For QA/PROD environments, provide a certificate in: $KEYSTORE_PATH"
     exit 1
 fi
 
-if [ "$IS_DOCKER" = "true" ]; then
+if [ "$IS_DOCKER" ]; then
     export SERVER_SSL_KEY_STORE="file:$KEYSTORE_PATH"
     export SERVER_SSL_KEY_STORE_PASSWORD="$KEYSTORE_PASSWORD"
     export SERVER_PORT=8443
@@ -90,7 +90,7 @@ fi
 echo "Starting application in $ENVIRONMENT environment"
 echo "HTTPS available at port 8443"
 
-if [ "$IS_DOCKER" = "true" ]; then
+if [ "$IS_DOCKER" ]; then
     exec java -jar app.jar
 else
     echo "SSL certificate generated/verified for local execution"
