@@ -17,12 +17,14 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y curl && \
     rm -rf /var/lib/apt/lists/* && \
-    mkdir -p /app/ssl /app/config
+    mkdir -p /app/ssl /app/config /app/logs
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 RUN addgroup --system spring && adduser --system spring --ingroup spring
+
+RUN chown -R spring:spring /app/ssl /app/logs
 
 USER spring:spring
 
