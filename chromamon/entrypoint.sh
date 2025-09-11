@@ -6,20 +6,32 @@ COMPANY=${COMPANY:-MyCompany}
 COUNTRY=${COUNTRY:-ES}
 ORGANIZATION_UNIT=""
 
+if [ -f /.dockerenv ] || [ -f /proc/1/cgroup ] && grep -q "docker" /proc/1/cgroup; then
+    IS_DOCKER=true
+    echo "Docker environment detected"
+else
+    IS_DOCKER=false
+    echo "Local Java execution detected"
+fi
+
 case "$ENVIRONMENT" in
     "local")
-        KEYSTORE_PATH="src/main/resources/ssl/keystore.p12"
+        if [ "$IS_DOCKER" = "true" ]; then
+            KEYSTORE_PATH="/app/ssl/keystore.p12"
+        else
+            KEYSTORE_PATH="src/main/resources/ssl/keystore.p12"
+        fi
         SAN_EXTENSIONS="DNS:localhost,IP:127.0.0.1"
         SSL_AUTO_GENERATE=true
         ORGANIZATION_UNIT="Local"
-        echo "Local environment"
+        echo "Local environment (localhost/127.0.0.1)"
         ;;
     "dev")
         KEYSTORE_PATH="/app/ssl/keystore.p12"
         SAN_EXTENSIONS="IP:192.168.1.40"
         SSL_AUTO_GENERATE=true
         ORGANIZATION_UNIT="Development"
-        echo "Development environment"
+        echo "Development environment (192.168.1.40)"
         ;;
     "qa")
         KEYSTORE_PATH="/app/ssl/qa-keystore.p12"
@@ -36,7 +48,11 @@ case "$ENVIRONMENT" in
         echo "Production environment"
         ;;
     *)
-        KEYSTORE_PATH="/app/ssl/keystore.p12"
+        if [ "$IS_DOCKER" = "true" ]; then
+            KEYSTORE_PATH="/app/ssl/keystore.p12"
+        else
+            KEYSTORE_PATH="src/main/resources/ssl/keystore.p12"
+        fi
         SAN_EXTENSIONS="DNS:localhost,IP:127.0.0.1"
         SSL_AUTO_GENERATE=true
         ORGANIZATION_UNIT="Local"
@@ -50,7 +66,7 @@ echo "SAN Extensions: $SAN_EXTENSIONS"
 if [ "$SSL_AUTO_GENERATE" = "true" ] && [ ! -f "$KEYSTORE_PATH" ]; then
     echo "Generating SSL certificate for $ENVIRONMENT..."
 
-    mkdir -p "$(dirname $KEYSTORE_PATH)"
+    mkdir -p "$(dirname "$KEYSTORE_PATH")"
 
     keytool -genkeypair -alias chroma"$ENVIRONMENT" -keyalg RSA -keysize 2048 -storetype PKCS12 \
         -keystore "$KEYSTORE_PATH" -validity 3650 \
@@ -65,12 +81,19 @@ elif [ "$SSL_AUTO_GENERATE" = "false" ] && [ ! -f "$KEYSTORE_PATH" ]; then
     exit 1
 fi
 
-export SERVER_SSL_KEY_STORE="file:$KEYSTORE_PATH"
-export SERVER_SSL_KEY_STORE_PASSWORD="$KEYSTORE_PASSWORD"
-export SERVER_PORT=8443
+if [ "$IS_DOCKER" = "true" ]; then
+    export SERVER_SSL_KEY_STORE="file:$KEYSTORE_PATH"
+    export SERVER_SSL_KEY_STORE_PASSWORD="$KEYSTORE_PASSWORD"
+    export SERVER_PORT=8443
+fi
 
-echo "Starting application at the $ENVIRONMENT environment"
+echo "Starting application in $ENVIRONMENT environment"
 echo "HTTPS available at port 8443"
-if [ "$ENVIRONMENT" != "local" ]; then
+
+if [ "$IS_DOCKER" = "true" ]; then
     exec java -jar app.jar
+else
+    echo "SSL certificate generated/verified for local execution"
+    echo "Run with: mvn spring-boot:run -Dspring-boot.run.profiles=local"
+    exit 0
 fi
