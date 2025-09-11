@@ -4,11 +4,8 @@ spring:
   application:
     name: Chromamon
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE:local}
   datasource:
-    url: jdbc:postgresql://localhost:5433/${PG_DATABASE_NAME}
-    username: ${PG_DATABASE_USER}
-    password: ${PG_DATABASE_PASS}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
@@ -16,24 +13,6 @@ spring:
       idle-timeout: 300000
       connection-timeout: 30000
       leak-detection-threshold: 60000
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
-        jdbc:
-          batch_size: 25
-        order_inserts: true
-        order_updates: true
-
-  data:
-    mongodb:
-      uri: mongodb://${MG_DATABASE_NAME}:${MG_DATABASE_PASS}@localhost:27017/?authSource=admin
-      auto-index-creation: true
 
   flyway:
     enabled: true
@@ -53,36 +32,6 @@ spring:
     metrics:
       tags:
         application: ${spring.application.name}
-
-  freemarker:
-    template-loader-path: classpath:/templates/layout
-    suffix: .ftlh
-    content-type: text/html
-    charset: UTF-8
-    cache: false
-    settings:
-      template_update_delay: 0
-      default_encoding: UTF-8
-      output_encoding: UTF-8
-      locale: en_US
-      date_format: MMM dd, yyyy
-      time_format: HH:mm:ss
-      datetime_format: MMM dd, yyyy HH:mm:ss
-      number_format: "0.######"
-
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          secret: ${JWT_SECRET}
-          issuer-uri: http://localhost:8080
-
-  web:
-    resources:
-      static-locations: classpath:/static/
-      cache-period: 0
-  mvc:
-    static-path-pattern: /static/**
 
   batch:
     job:
@@ -122,8 +71,14 @@ application:
       default-oil-type: mineral
       max-age-years: 50
 
+external-apis:
+  # Add external APIs here
+  weather: https://archive-api.open-meteo.com/v1/archive
+
 server:
-  port: ${SERVER_PORT:8080}
+  port: 8443
+  ssl:
+    key-store-type: PKCS12
   servlet:
     context-path: /
     encoding:
@@ -137,7 +92,6 @@ server:
     whitelabel:
       enabled: false
 
-# Management & Actuator Configuration
 management:
   endpoints:
     web:
@@ -172,26 +126,6 @@ management:
         enabled: true
         step: 60s
 
-# Logging Configuration
-logging:
-  level:
-    com.chromatography: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.web: INFO
-    org.hibernate.SQL: INFO
-    org.hibernate.type.descriptor.sql.BasicBinder: INFO
-    io.jsonwebtoken: DEBUG
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
-  file:
-    name: logs/chromamon.log
-  logback:
-    rollingpolicy:
-      max-file-size: 100MB
-      max-history: 30
-
-# OpenAPI Configuration
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -220,51 +154,3 @@ springdoc:
     - group: 'auth'
       paths-to-match: '/api/v1/auth/**'
       display-name: 'Authentication'
-
----
-# Development Profile
-spring:
-  config:
-    activate:
-      on-profile: dev
-
-  datasource:
-    url: jdbc:postgresql://localhost:5433/${PG_DATABASE_NAME}
-    username: ${PG_DATABASE_USER}
-    password: ${PG_DATABASE_PASS}
-
-  data:
-    mongodb:
-      uri: mongodb://${MG_DATABASE_NAME}:${MG_DATABASE_PASS}@localhost:27017/?authSource=admin
-
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-  devtools:
-    restart:
-      enabled: true
-    livereload:
-      enabled: true
-
-logging:
-  level:
-    com.chromatography: DEBUG
-    root: INFO
-
----
-# Test Profile
-spring:
-  config:
-    activate:
-      on-profile: test
-
-  flyway:
-    enabled: false
-
-logging:
-  level:
-    com.chromatography: DEBUG
-    org.springframework.test: DEBUG

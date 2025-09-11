@@ -1,0 +1,61 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/${PG_DATABASE_NAME:postgres_db}_dev
+    username: ${PG_DATABASE_USER}
+    password: ${PG_DATABASE_PASS}
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/${MG_DATABASE_NAME:dev_db}
+
+  devtools:
+    restart:
+      enabled: true
+
+external-api:
+  # Add wiremock stub paths here
+  weather: http://localhost:9030/v1/archive
+
+server:
+  ssl:
+    key-store: classpath:ssl/keystore.p12
+    key-store-password: changeit
+    key-alias: chromalocal
+
+ssl:
+  auto-generate: true
+
+logging:
+  level:
+    com.monolithic.chromamon: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    io.jsonwebtoken: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+  file:
+    name: logs/chromamon.log
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 30

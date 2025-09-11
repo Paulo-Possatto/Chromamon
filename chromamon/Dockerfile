@@ -17,8 +17,16 @@ USER spring:spring
 
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /app/ssl /app/config
+
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 8443
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

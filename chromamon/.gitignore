@@ -8,6 +8,8 @@ target/
 /logs/**.log
 logs/
 .idea/
+**/src/main/resources/ssl/
+**/src/main/resources/ssl/**
 
 ### STS ###
 .apt_generated
