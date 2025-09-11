@@ -12,15 +12,16 @@ RUN mvn package -DskipTests --no-transfer-progress
 
 FROM eclipse-temurin:21-jre-jammy
 
-RUN addgroup --system spring && adduser --system spring --ingroup spring
-USER spring:spring
-
 WORKDIR /app
 
 RUN apt-get update && \
     apt-get install -y curl && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p /app/ssl /app/config
+
+RUN addgroup --system spring && adduser --system spring --ingroup spring
+
+USER spring:spring
 
 COPY --from=build /app/target/*.jar app.jar
 
