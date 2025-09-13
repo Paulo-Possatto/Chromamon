@@ -2,6 +2,7 @@ package com.monolithic.chromamon.login.infrastructure.persistence.mapper;
 
 import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
+import com.monolithic.chromamon.login.domain.model.response.UpdateUserResponse;
 import com.monolithic.chromamon.login.infrastructure.persistence.database.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,6 +30,15 @@ public interface UserMapper {
    * @return the Entity ORM.
    */
   UserEntity toEntity(User domain);
+
+  /**
+   * Converts the user domain object to a response DTO for the updated user.
+   *
+   * @param user the domain object.
+   * @return the mapped DTO.
+   */
+  @Mapping(target = "isActive", source = "active")
+  UpdateUserResponse toUpdateResponse(User user);
 
   /**
    * Converts the domain object into a GetUserResponse object.

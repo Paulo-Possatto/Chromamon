@@ -2,8 +2,10 @@ package com.monolithic.chromamon.login.application.service;
 
 import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
+import com.monolithic.chromamon.login.domain.model.request.UpdateUserRequest;
 import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
 import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
+import com.monolithic.chromamon.login.domain.model.response.UpdateUserResponse;
 import com.monolithic.chromamon.login.domain.port.AuditLoginService;
 import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
@@ -124,7 +126,7 @@ public class UserService {
    * @return the updated user information
    */
   @HasPermission(Permission.USER_UPDATE)
-  public User updateUser(Long id, User userUpdates) {
+  public UpdateUserResponse updateUser(Long id, UpdateUserRequest userUpdates) {
     log.info("Updating user: {}", id);
 
     audit.logUserUpdate("Updating user with ID " + id);
@@ -140,22 +142,12 @@ public class UserService {
     updatedUser.uuid(existingUser.uuid());
     updatedUser.idCode(existingUser.idCode());
 
-    if (userUpdates.username() != null) {
-      updatedUser.username(userUpdates.username());
-    } else {
-      updatedUser.username(existingUser.username());
-    }
     if (userUpdates.email() != null && !userUpdates.email().equals(existingUser.email())) {
       if (userRepository.existsByEmail(userUpdates.email())) {
         throw new HttpClientErrorException(
             HttpStatus.CONFLICT, "Email already exists: " + userUpdates.email());
       }
       updatedUser.email(userUpdates.email());
-    }
-    if (userUpdates.password() != null && !userUpdates.password().isEmpty()) {
-      updatedUser.password(passwordEncoder.encode(userUpdates.password()));
-    } else {
-      updatedUser.password(existingUser.password());
     }
     if (userUpdates.firstName() != null) {
       updatedUser.firstName(userUpdates.firstName());
@@ -181,11 +173,12 @@ public class UserService {
     updatedUser.updatedAt(LocalDateTime.now());
 
     User savedUpdatedUser = userRepository.save(updatedUser.build());
+
     log.info("User successfully updated: {}", savedUpdatedUser.username());
 
     audit.logUserUpdate("Updated user: " + savedUpdatedUser.username());
 
-    return savedUpdatedUser;
+    return userMapper.toUpdateResponse(savedUpdatedUser);
   }
 
   /**
