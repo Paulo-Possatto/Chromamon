@@ -19,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 /** Service class for user-related resources. */
@@ -93,11 +92,11 @@ public class UserService {
    */
   @HasPermission(Permission.USER_READ)
   public Page<GetUserResponse> getAllUsers(Pageable pageable) {
-     log.debug(
+    log.debug(
         "Getting all users... Page number: {}, page size: {}",
         pageable.getPageNumber(),
         pageable.getPageSize());
-     audit.logGetAllUsers();
+    audit.logGetAllUsers();
     return userRepository.findAll(pageable).map(userMapper::toGetUserResponse);
   }
 
@@ -109,7 +108,7 @@ public class UserService {
    */
   @HasPermission(Permission.USER_READ)
   public GetUserResponse getUserByCodeId(String codeId) {
-     audit.logGetUserCodeById("Getting user information by code id: " + codeId);
+    audit.logGetUserCodeById("Getting user information by code id: " + codeId);
     return userRepository
         .getByIdCode(codeId)
         .map(userMapper::toGetUserResponse)
