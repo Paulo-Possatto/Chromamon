@@ -4,6 +4,7 @@ import com.monolithic.chromamon.login.domain.model.User;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface UserRepository {
 
@@ -13,8 +14,10 @@ public interface UserRepository {
 
   Optional<User> findById(Long id);
 
+  @Transactional
   User save(User user);
 
+  @Transactional
   void deleteById(Long id);
 
   Page<User> findAll(Pageable pageable);

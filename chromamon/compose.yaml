@@ -10,7 +10,7 @@ services:
       - '5433:5432'
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${PG_DATABASE_USER} -d ${PG_DATABASE_NAME}" ]
-      interval: 10s
+      interval: 1800s
       timeout: 5s
       retries: 10
       start_period: 30s
@@ -25,7 +25,7 @@ services:
       - '27017:27017'
     healthcheck:
       test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
-      interval: 10s
+      interval: 900s
       timeout: 5s
       retries: 10
       start_period: 30s

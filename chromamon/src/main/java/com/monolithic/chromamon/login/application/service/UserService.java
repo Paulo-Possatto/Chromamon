@@ -4,6 +4,7 @@ import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.request.CreateUserRequest;
 import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
 import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
+import com.monolithic.chromamon.login.domain.port.AuditLoginService;
 import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
 import com.monolithic.chromamon.login.infrastructure.persistence.mapper.UserMapper;
@@ -31,6 +32,7 @@ public class UserService {
   private final PasswordEncoder passwordEncoder;
   private final PermissionService permissionService;
   private final UserMapper userMapper;
+  private final AuditLoginService audit;
 
   /**
    * Service for creating a new user.
@@ -39,9 +41,10 @@ public class UserService {
    * @return the User object with the data stored in the database.
    */
   @HasPermission(Permission.USER_CREATE)
-  @Transactional
   public CreateUserResponse createUser(CreateUserRequest userRequest) {
     log.info("Creating new user: {}", userRequest.username());
+
+    audit.logUserCreation("Creation request for user " + userRequest.username());
 
     if (userRepository.existsByUsername(userRequest.username())) {
       throw new HttpClientErrorException(
@@ -69,6 +72,8 @@ public class UserService {
     User savedUser = userRepository.save(user);
     log.info("User successfully created: {}", savedUser.username());
 
+    audit.logUserCreation("Created user: " + savedUser.username());
+
     return CreateUserResponse.builder()
         .id(savedUser.id())
         .username(savedUser.username())
@@ -88,10 +93,11 @@ public class UserService {
    */
   @HasPermission(Permission.USER_READ)
   public Page<GetUserResponse> getAllUsers(Pageable pageable) {
-    log.debug(
+     log.debug(
         "Getting all users... Page number: {}, page size: {}",
         pageable.getPageNumber(),
         pageable.getPageSize());
+     audit.logGetAllUsers();
     return userRepository.findAll(pageable).map(userMapper::toGetUserResponse);
   }
 
@@ -103,6 +109,7 @@ public class UserService {
    */
   @HasPermission(Permission.USER_READ)
   public GetUserResponse getUserByCodeId(String codeId) {
+     audit.logGetUserCodeById("Getting user information by code id: " + codeId);
     return userRepository
         .getByIdCode(codeId)
         .map(userMapper::toGetUserResponse)
@@ -118,9 +125,10 @@ public class UserService {
    * @return the updated user information
    */
   @HasPermission(Permission.USER_UPDATE)
-  @Transactional
   public User updateUser(Long id, User userUpdates) {
     log.info("Updating user: {}", id);
+
+    audit.logUserUpdate("Updating user with ID " + id);
 
     User existingUser =
         userRepository
@@ -176,6 +184,8 @@ public class UserService {
     User savedUpdatedUser = userRepository.save(updatedUser.build());
     log.info("User successfully updated: {}", savedUpdatedUser.username());
 
+    audit.logUserUpdate("Updated user: " + savedUpdatedUser.username());
+
     return savedUpdatedUser;
   }
 
@@ -185,9 +195,10 @@ public class UserService {
    * @param id the id of the user to be deleted.
    */
   @HasPermission(Permission.USER_DELETE)
-  @Transactional
   public void deleteUser(Long id) {
     log.info("Deleting user: {}", id);
+
+    audit.logUserDelete("Deleting user with ID " + id);
 
     if (userRepository.findById(id).isEmpty()) {
       throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + id);
@@ -195,6 +206,7 @@ public class UserService {
 
     userRepository.deleteById(id);
     log.info("User successfully deleted: {}", id);
+    audit.logUserDelete("Deleted user with ID " + id);
   }
 
   /**
@@ -204,7 +216,6 @@ public class UserService {
    * @param permission the specific permission to be granted.
    */
   @HasPermission(Permission.USER_UPDATE)
-  @Transactional
   public void grantPermission(Long userId, Permission permission) {
     log.info("Grating permission '{}' for user '{}'", permission, userId);
 
@@ -231,7 +242,6 @@ public class UserService {
    * @param permission the permission to be revoked
    */
   @HasPermission(Permission.USER_UPDATE)
-  @Transactional
   public void revokePermission(Long userId, Permission permission) {
     log.info("Revoking permission {} from user {}", permission, userId);
 

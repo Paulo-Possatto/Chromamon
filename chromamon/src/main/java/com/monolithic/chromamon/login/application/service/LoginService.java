@@ -8,9 +8,6 @@ import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
 import com.monolithic.chromamon.shared.application.security.PermissionService;
 import com.monolithic.chromamon.shared.domain.security.Permission;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +20,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /** Service for the login resources. */
 @Service

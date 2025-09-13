@@ -46,9 +46,9 @@ logging:
   level:
     com.monolithic.chromamon: DEBUG
     org.springframework.security: DEBUG
-    org.springframework.web: INFO
-    org.hibernate.SQL: INFO
-    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
     io.jsonwebtoken: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

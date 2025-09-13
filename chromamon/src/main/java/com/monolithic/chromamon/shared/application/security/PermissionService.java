@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /** Service for permission. */
 @Service
@@ -22,7 +23,6 @@ public class PermissionService {
 
     List<UserPermission> userPermissions = userPermissionRepository.findByUserId(userId);
 
-    // Aplica as permissões customizadas (pode conceder ou revogar)
     for (UserPermission userPermission : userPermissions) {
       if (userPermission.getGranted()) {
         rolePermissions.add(userPermission.getPermission());
@@ -50,6 +50,7 @@ public class PermissionService {
     return permissions;
   }
 
+  @Transactional
   public void grantPermission(Long userId, Permission permission) {
     UserPermission userPermission =
         userPermissionRepository
@@ -60,6 +61,7 @@ public class PermissionService {
     userPermissionRepository.save(userPermission);
   }
 
+  @Transactional
   public void revokePermission(Long userId, Permission permission) {
     UserPermission userPermission =
         userPermissionRepository
