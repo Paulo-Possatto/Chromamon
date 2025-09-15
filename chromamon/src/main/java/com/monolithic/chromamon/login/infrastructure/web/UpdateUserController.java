@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -160,7 +161,9 @@ public class UpdateUserController {
       })
   @PutMapping("/users/{id}")
   public ResponseEntity<UpdateUserResponse> updateUser(
-      @PathVariable Long id, @RequestBody UpdateUserRequest user) {
+      @PathVariable Long id,
+      @RequestBody @Valid UpdateUserRequest user
+  ) {
     UpdateUserResponse updatedUser = userService.updateUser(id, user);
     return ResponseEntity.ok(updatedUser);
   }
