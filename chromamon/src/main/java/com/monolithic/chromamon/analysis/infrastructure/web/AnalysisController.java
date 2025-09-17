@@ -8,13 +8,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +25,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ * Controller for the endpoints related to analyses.
+ */
 @RestController
 @RequestMapping("/api/v1/analyses")
 @RequiredArgsConstructor
@@ -39,6 +44,13 @@ public class AnalysisController {
   @PostMapping
   public ResponseEntity<Analysis> create(@Valid @RequestBody CreateAnalysisRequest req) {
     return ResponseEntity.status(HttpStatus.CREATED).body(service.create(req));
+  }
+
+  @Operation(summary = "Read batch analyses")
+  @PostMapping(value = "/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> readBatch(@Valid @RequestBody List<CreateAnalysisRequest> req) {
+     // TODO: Create service method for reading excel (POIJI)
+     return ResponseEntity.ok().build();
   }
 
   @Operation(summary = "List analyses (paged)")
