@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,10 +47,10 @@ public class AnalysisController {
     return ResponseEntity.status(HttpStatus.CREATED).body(service.create(req));
   }
 
-  @Operation(summary = "Read batch analyses")
-  @PostMapping(value = "/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Void> readBatch(@Valid @RequestBody List<CreateAnalysisRequest> req) {
-     // TODO: Create service method for reading excel (POIJI)
+  @Operation(summary = "Read excel analyses file")
+  @PostMapping(value = "/read-excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> readBatch(@RequestParam("file")MultipartFile file) {
+     service.readAnalysesInExcel(file);
      return ResponseEntity.ok().build();
   }
 

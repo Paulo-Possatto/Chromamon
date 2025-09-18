@@ -15,9 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +45,22 @@ public class AnalysisService {
     Analysis saved = analysisRepository.save(a);
     auditService.logAnalysisCreated("Created analysis id=" + saved.getId());
     return saved;
+  }
+
+  @HasPermission(Permission.ANALYSIS_CREATE)
+  public void readAnalysesInExcel(MultipartFile file){
+     log.info("Reading analysis data from file {}", file.getOriginalFilename());
+     auditService.logAnalysisCreated("Adding analyses in excel file");
+     try{
+        if(!isExcelFile(file)) {
+           throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "File must be in .xls or .xlsx format");
+        }
+        // TODO: List<AnalysisExcel> analyses = Poiji.fromExcel(file, AnalysisExcel.class);
+        // TODO: Use spring batch to save all data
+     } catch (Exception e) {
+        auditService.logAnalysisCreated("Error reading excel file");
+        throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+     }
   }
 
   @HasPermission(Permission.ANALYSIS_READ)
@@ -111,4 +131,10 @@ public class AnalysisService {
       return 0L;
     }
   }
+
+   private boolean isExcelFile(MultipartFile file) {
+      String contentType = file.getContentType();
+      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(contentType) ||
+         "application/vnd.ms-excel".equals(contentType);
+   }
 }
