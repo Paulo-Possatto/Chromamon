@@ -48,19 +48,20 @@ public class AnalysisService {
   }
 
   @HasPermission(Permission.ANALYSIS_CREATE)
-  public void readAnalysesInExcel(MultipartFile file){
-     log.info("Reading analysis data from file {}", file.getOriginalFilename());
-     auditService.logAnalysisCreated("Adding analyses in excel file");
-     try{
-        if(!isExcelFile(file)) {
-           throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "File must be in .xls or .xlsx format");
-        }
-        // TODO: List<AnalysisExcel> analyses = Poiji.fromExcel(file, AnalysisExcel.class);
-        // TODO: Use spring batch to save all data
-     } catch (Exception e) {
-        auditService.logAnalysisCreated("Error reading excel file");
-        throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-     }
+  public void readAnalysesInExcel(MultipartFile file) {
+    log.info("Reading analysis data from file {}", file.getOriginalFilename());
+    auditService.logAnalysisCreated("Adding analyses in excel file");
+    try {
+      if (!isExcelFile(file)) {
+        throw new HttpClientErrorException(
+            HttpStatus.BAD_REQUEST, "File must be in .xls or .xlsx format");
+      }
+      // TODO: List<AnalysisExcel> analyses = Poiji.fromExcel(file, AnalysisExcel.class);
+      // TODO: Use spring batch to save all data
+    } catch (Exception e) {
+      auditService.logAnalysisCreated("Error reading excel file");
+      throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
   }
 
   @HasPermission(Permission.ANALYSIS_READ)
@@ -132,9 +133,9 @@ public class AnalysisService {
     }
   }
 
-   private boolean isExcelFile(MultipartFile file) {
-      String contentType = file.getContentType();
-      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(contentType) ||
-         "application/vnd.ms-excel".equals(contentType);
-   }
+  private boolean isExcelFile(MultipartFile file) {
+    String contentType = file.getContentType();
+    return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(contentType)
+        || "application/vnd.ms-excel".equals(contentType);
+  }
 }
