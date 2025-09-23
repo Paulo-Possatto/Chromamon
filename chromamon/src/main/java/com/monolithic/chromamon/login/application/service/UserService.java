@@ -65,7 +65,7 @@ public class UserService {
             .firstName(userRequest.firstName())
             .lastName(userRequest.lastName())
             .role(userRequest.role())
-            .active(userRequest.active())
+            .active(userRequest.isActive())
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .build();
