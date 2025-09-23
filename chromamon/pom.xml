@@ -66,6 +66,7 @@
         <maven-enforcer.version>3.6.1</maven-enforcer.version>
         <spotify-fmt.version>2.27</spotify-fmt.version>
         <surefire-report.version>3.5.3</surefire-report.version>
+        <pitest-plugin.version>1.20.3</pitest-plugin.version>
     </properties>
 
     <!-- Dependencies -->
@@ -376,7 +377,7 @@
                     </execution>
                     <execution>
                         <id>report</id>
-                        <phase>prepare-package</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
