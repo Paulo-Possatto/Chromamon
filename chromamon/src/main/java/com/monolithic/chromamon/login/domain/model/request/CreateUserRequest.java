@@ -19,7 +19,7 @@ import lombok.Builder;
  * @param firstName the new user first name
  * @param lastName the new user last name
  * @param role the role that the user will have
- * @param active the boolean that indicates if the new user is isActive
+ * @param isActive the boolean that indicates if the new user is isActive
  */
 @Builder
 @Schema(
@@ -104,4 +104,4 @@ public record CreateUserRequest(
             implementation = Boolean.class,
             type = SwaggerConstants.BOOLEAN,
             example = "true")
-        Boolean active) {}
+        Boolean isActive) {}

@@ -16,7 +16,7 @@ import lombok.Builder;
  * @param firstName the updated user first name.
  * @param lastName the updated user last name.
  * @param role the updated role for the user.
- * @param active the updated active flag for the user.
+ * @param active the updated isActive flag for the user.
  */
 @Builder
 @Schema(
