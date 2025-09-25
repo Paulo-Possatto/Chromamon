@@ -141,6 +141,9 @@ public class UserService {
     updatedUser.id(existingUser.id());
     updatedUser.uuid(existingUser.uuid());
     updatedUser.idCode(existingUser.idCode());
+    updatedUser.username(existingUser.username());
+    updatedUser.password(existingUser.password());
+    updatedUser.createdAt(existingUser.createdAt());
 
     if (userUpdates.email() != null && !userUpdates.email().equals(existingUser.email())) {
       if (userRepository.existsByEmail(userUpdates.email())) {

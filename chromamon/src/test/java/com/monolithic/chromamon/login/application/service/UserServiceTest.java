@@ -17,17 +17,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 
 import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
 import com.monolithic.chromamon.login.domain.model.response.GetUserResponse;
+import com.monolithic.chromamon.login.domain.model.response.UpdateUserResponse;
 import com.monolithic.chromamon.login.domain.port.AuditLoginService;
 import com.monolithic.chromamon.login.domain.port.PasswordEncoder;
 import com.monolithic.chromamon.login.domain.port.UserRepository;
 import com.monolithic.chromamon.login.infrastructure.persistence.mapper.UserMapper;
 import com.monolithic.chromamon.mother.login.CreateUserRequestMother;
 import com.monolithic.chromamon.mother.login.GetUserResponseMother;
+import com.monolithic.chromamon.mother.login.UpdateUserRequestMother;
+import com.monolithic.chromamon.mother.login.UpdateUserResponseMother;
 import com.monolithic.chromamon.mother.login.UserMother;
 import com.monolithic.chromamon.shared.application.security.PermissionService;
 import java.util.Collections;
@@ -269,5 +274,64 @@ class UserServiceTest {
     assertNotNull(exception);
     assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     assertEquals("User not found: " + ID_CODE, exception.getStatusText());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN an UpdateUserRequest
+      AND an userId
+      WHEN the updateUser method is called
+      AND the user exists
+      AND the email is different same
+      THEN should update the user data
+      """)
+  void givenUserId_whenUpdateUser_thenUpdateUser() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID))
+        .thenReturn(Optional.of(UserMother.userObjectOk()));
+
+    Mockito.when(userRepository.save(any(User.class))).thenReturn(UserMother.updatedSavedUser());
+
+    Mockito.when(userMapper.toUpdateResponse(UserMother.updatedSavedUser()))
+        .thenReturn(UpdateUserResponseMother.updateUserResponse());
+
+    // Act
+    UpdateUserResponse response =
+        userService.updateUser(USER_ID, UpdateUserRequestMother.updateUserRequest());
+
+    // Assert
+    Mockito.verify(auditLoginService, times(2)).logUserUpdate(anyString());
+    Mockito.verify(userRepository).findById(USER_ID);
+    Mockito.verify(userMapper).toUpdateResponse(UserMother.updatedSavedUser());
+    assertNotNull(response);
+    assertEquals(UpdateUserResponseMother.updateUserResponse(), response);
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN an UpdateUserRequest
+      AND an userId
+      WHEN the updateUser method is called
+      AND the user does not exists
+      THEN should throw HttpClientErrorException
+      """)
+  void givenUserId_whenUpdateUserThatDoesNotExists_thenThrowHttpClientErrorException() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
+
+    // Act
+    HttpClientErrorException exception =
+        assertThrowsExactly(
+            HttpClientErrorException.class,
+            () -> userService.updateUser(USER_ID, UpdateUserRequestMother.updateUserRequest()));
+
+    // Assert
+    Mockito.verify(auditLoginService).logUserUpdate(anyString());
+    Mockito.verify(userRepository).findById(USER_ID);
+    assertNotNull(exception);
+    assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    assertEquals("User not found: " + USER_ID, exception.getStatusText());
   }
 }
