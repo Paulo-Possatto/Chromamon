@@ -16,7 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
     tags = {
       @Tag(
           name = SwaggerConstants.TAG_AUTHENTICATION,
-          description = "Endpoints for authentication and user management")
+          description = "Endpoints for authentication and user management"),
+      @Tag(
+          name = SwaggerConstants.TAG_ANALYSIS,
+          description = "Endpoints for any analysis-related operation")
     },
     info =
         @Info(

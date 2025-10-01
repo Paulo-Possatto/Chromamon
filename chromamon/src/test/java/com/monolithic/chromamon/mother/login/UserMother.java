@@ -101,4 +101,43 @@ public class UserMother {
         .updatedAt(NOW)
         .build();
   }
+
+  /**
+   * Stub for the user object when updated and saved in the database partial data.
+   *
+   * @return the updated user object.
+   */
+  public static User updatedSavedUserWithPartialData() {
+    return User.builder()
+        .id(USER_ID)
+        .uuid(USER_UUID)
+        .idCode(ID_CODE)
+        .username(USERNAME)
+        .email(EMAIL)
+        .password(ENCODED_PASSWORD)
+        .firstName(NEW_FIRST_NAME)
+        .lastName(LAST_NAME)
+        .role(ROLE)
+        .active(IS_ACTIVE)
+        .createdAt(NOW)
+        .updatedAt(NOW)
+        .build();
+  }
+
+  public static User updatedSavedUserWithSameFirstName() {
+    return User.builder()
+        .id(USER_ID)
+        .uuid(USER_UUID)
+        .idCode(ID_CODE)
+        .username(USERNAME)
+        .email(EMAIL)
+        .password(ENCODED_PASSWORD)
+        .firstName(FIRST_NAME)
+        .lastName(NEW_LAST_NAME)
+        .role(NEW_ROLE)
+        .active(IS_ACTIVE)
+        .createdAt(NOW)
+        .updatedAt(NOW)
+        .build();
+  }
 }

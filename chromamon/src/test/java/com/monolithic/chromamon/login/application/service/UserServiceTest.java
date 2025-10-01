@@ -8,6 +8,7 @@ import static com.monolithic.chromamon.mother.login.CreateUserRequestMother.PASS
 import static com.monolithic.chromamon.mother.login.CreateUserRequestMother.ROLE;
 import static com.monolithic.chromamon.mother.login.CreateUserRequestMother.USERNAME;
 import static com.monolithic.chromamon.mother.login.GetUserResponseMother.USER_UUID_STRING;
+import static com.monolithic.chromamon.mother.login.UpdateUserRequestMother.DIFFERENT_EMAIL;
 import static com.monolithic.chromamon.mother.login.UserMother.ENCODED_PASSWORD;
 import static com.monolithic.chromamon.mother.login.UserMother.FULL_NAME;
 import static com.monolithic.chromamon.mother.login.UserMother.ID_CODE;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
 import com.monolithic.chromamon.login.domain.model.User;
@@ -333,5 +335,170 @@ class UserServiceTest {
     assertNotNull(exception);
     assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     assertEquals("User not found: " + USER_ID, exception.getStatusText());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN an UpdateUserRequest
+      AND an userId
+      WHEN the updateUser method is called
+      AND only some fields are filled
+      THEN should save changes
+      """)
+  void givenUpdateUserRequestWithPartialData_thenUpdateOnlyAddedFields() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID))
+        .thenReturn(Optional.of(UserMother.userObjectOk()));
+
+    Mockito.when(userRepository.save(any(User.class)))
+        .thenReturn(UserMother.updatedSavedUserWithPartialData());
+
+    Mockito.when(userMapper.toUpdateResponse(UserMother.updatedSavedUserWithPartialData()))
+        .thenReturn(UpdateUserResponseMother.updateUserResponseWithPartialData());
+
+    // Act
+    UpdateUserResponse result =
+        userService.updateUser(USER_ID, UpdateUserRequestMother.updateUserRequestWithPartialData());
+
+    // Assert
+    assertNotNull(result);
+    Mockito.verify(auditLoginService, times(2)).logUserUpdate(anyString());
+    Mockito.verify(userRepository).findById(USER_ID);
+    Mockito.verify(userMapper).toUpdateResponse(UserMother.updatedSavedUserWithPartialData());
+    assertNotNull(result);
+    assertEquals(UpdateUserResponseMother.updateUserResponseWithPartialData(), result);
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN an UpdateUserRequest with a new email
+      AND an userId
+      WHEN the updateUser method is called
+      AND the user exists
+      AND the new email already exists in database
+      THEN should throw HttpClientErrorException with CONFLICT status
+      """)
+  void givenUpdateUserRequestWithNewEmail_whenEmailAlreadyExists_thenThrowConflictException() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID))
+        .thenReturn(Optional.of(UserMother.userObjectOk()));
+
+    Mockito.when(userRepository.existsByEmail(DIFFERENT_EMAIL)).thenReturn(true);
+
+    // Act & Assert
+    HttpClientErrorException exception =
+        assertThrowsExactly(
+            HttpClientErrorException.class,
+            () ->
+                userService.updateUser(
+                    USER_ID, UpdateUserRequestMother.updateUserRequestWithDifferentEmail()));
+
+    Mockito.verify(auditLoginService).logUserUpdate(anyString());
+    Mockito.verify(userRepository).findById(USER_ID);
+    Mockito.verify(userRepository).existsByEmail(DIFFERENT_EMAIL);
+    Mockito.verify(userRepository, never()).save(any(User.class));
+    assertNotNull(exception);
+    assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
+    assertEquals("Email already exists: " + DIFFERENT_EMAIL, exception.getStatusText());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN an UpdateUserRequest with the same email
+      AND an userId
+      WHEN the updateUser method is called
+      AND the user exists
+      THEN should not check if email exists and update other fields
+      """)
+  void givenUpdateUserRequestWithSameEmail_whenUpdateUser_thenDoNotCheckEmailExists() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID))
+        .thenReturn(Optional.of(UserMother.userObjectOk()));
+
+    Mockito.when(userRepository.save(any(User.class))).thenReturn(UserMother.updatedSavedUser());
+
+    Mockito.when(userMapper.toUpdateResponse(any(User.class)))
+        .thenReturn(UpdateUserResponseMother.updateUserResponse());
+
+    // Act
+    UpdateUserResponse response =
+        userService.updateUser(USER_ID, UpdateUserRequestMother.updateUserWithSameEmail());
+
+    // Assert
+    Mockito.verify(auditLoginService, times(2)).logUserUpdate(anyString());
+    Mockito.verify(userRepository).findById(USER_ID);
+    Mockito.verify(userRepository, never()).existsByEmail(anyString());
+    Mockito.verify(userRepository).save(any(User.class));
+    Mockito.verify(userMapper).toUpdateResponse(any(User.class));
+    assertNotNull(response);
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN an UpdateUserRequest with null email
+      AND an userId
+      WHEN the updateUser method is called
+      AND the user exists
+      THEN should keep the existing email and update other fields
+      """)
+  void givenUpdateUserRequestWithNullEmail_whenUpdateUser_thenKeepExistingEmail() {
+    // Arrange
+    User existingUser = UserMother.userObjectOk();
+
+    Mockito.when(userRepository.findById(USER_ID)).thenReturn(Optional.of(existingUser));
+
+    Mockito.when(userRepository.save(any(User.class))).thenReturn(UserMother.updatedSavedUser());
+
+    Mockito.when(userMapper.toUpdateResponse(any(User.class)))
+        .thenReturn(UpdateUserResponseMother.updateUserResponse());
+
+    // Act
+    UpdateUserResponse response =
+        userService.updateUser(
+            USER_ID, UpdateUserRequestMother.updateUserRequestWithNullEmailAndLastName());
+
+    // Assert
+    Mockito.verify(auditLoginService, times(2)).logUserUpdate(anyString());
+    Mockito.verify(userRepository).findById(USER_ID);
+    Mockito.verify(userRepository, never()).existsByEmail(anyString());
+    Mockito.verify(userRepository).save(any(User.class));
+    assertNotNull(response);
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN an UpdateUserRequest with null firstName
+      AND an userId
+      WHEN the updateUser method is called
+      AND the user exists
+      THEN should keep the existing firstName and update other fields
+      """)
+  void givenUpdateUserRequestWithNullFirstName_whenUpdateUser_thenKeepExistingFirstName() {
+    // Arrange
+    User existingUser = UserMother.userObjectOk();
+
+    Mockito.when(userRepository.findById(USER_ID)).thenReturn(Optional.of(existingUser));
+
+    Mockito.when(userRepository.save(any(User.class)))
+        .thenReturn(UserMother.updatedSavedUserWithSameFirstName());
+
+    Mockito.when(userMapper.toUpdateResponse(any(User.class)))
+        .thenReturn(UpdateUserResponseMother.updateUserResponseWithSameFirstName());
+
+    // Act
+    UpdateUserResponse response =
+        userService.updateUser(USER_ID, UpdateUserRequestMother.updateUserWithoutFirstName());
+
+    // Assert
+    assertNotNull(response);
+    Mockito.verify(auditLoginService, times(2)).logUserUpdate(anyString());
+    Mockito.verify(userRepository).findById(USER_ID);
+    Mockito.verify(userMapper).toUpdateResponse(UserMother.updatedSavedUserWithSameFirstName());
+    assertEquals(UpdateUserResponseMother.updateUserResponseWithSameFirstName(), response);
   }
 }

@@ -14,6 +14,6 @@ public class AuditEvent {
   private String id;
   private Instant at;
   private Long userId;
-  private String action; // ex: "analysis.create"
+  private String action; // ex: "analysis.addAnalysis"
   private String details; // livre
 }

@@ -3,18 +3,15 @@ package com.monolithic.chromamon.analysis.infrastructure.web;
 import com.monolithic.chromamon.analysis.application.service.AnalysisService;
 import com.monolithic.chromamon.analysis.domain.model.Analysis;
 import com.monolithic.chromamon.analysis.domain.model.AnalysisStatus;
-import com.monolithic.chromamon.analysis.domain.model.CreateAnalysisRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,12 +34,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class AnalysisController {
 
   private final AnalysisService service;
-
-  @Operation(summary = "Create analysis")
-  @PostMapping
-  public ResponseEntity<Analysis> create(@Valid @RequestBody CreateAnalysisRequest req) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(service.create(req));
-  }
 
   @Operation(summary = "Read excel analyses file")
   @PostMapping(value = "/read-excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

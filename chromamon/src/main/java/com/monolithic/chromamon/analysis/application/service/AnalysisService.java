@@ -2,7 +2,7 @@ package com.monolithic.chromamon.analysis.application.service;
 
 import com.monolithic.chromamon.analysis.domain.model.Analysis;
 import com.monolithic.chromamon.analysis.domain.model.AnalysisStatus;
-import com.monolithic.chromamon.analysis.domain.model.CreateAnalysisRequest;
+import com.monolithic.chromamon.analysis.domain.model.request.CreateAnalysisRequest;
 import com.monolithic.chromamon.analysis.domain.port.AnalysisRepository;
 import com.monolithic.chromamon.analysis.domain.port.AuditService;
 import com.monolithic.chromamon.analysis.domain.port.TransformerService;
@@ -37,8 +37,8 @@ public class AnalysisService {
     if (req == null || !req.toAnalysis().isValidForCreate()) {
       throw new IllegalArgumentException("Invalid request for creating analysis");
     }
-    if (!transformerService.existsById(req.getTransformerId())) {
-      throw new IllegalArgumentException("Transformer not found: " + req.getTransformerId());
+    if (!transformerService.existsById(req.transformerId())) {
+      throw new IllegalArgumentException("Transformer not found: " + req.transformerId());
     }
     Analysis a = req.toAnalysis();
     a.setCreatedBy(currentUserId());

@@ -44,7 +44,7 @@ public class AuditServiceImpl implements AuditService, AuditLoginService {
 
   @Override
   public void logAnalysisCreated(String info) {
-    trace("analysis.create", info);
+    trace("analysis.addAnalysis", info);
   }
 
   @Override
@@ -59,7 +59,7 @@ public class AuditServiceImpl implements AuditService, AuditLoginService {
 
   @Override
   public void logUserCreation(String info) {
-    trace("user.create", info);
+    trace("user.addAnalysis", info);
   }
 
   @Override

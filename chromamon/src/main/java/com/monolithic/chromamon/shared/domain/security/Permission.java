@@ -9,31 +9,31 @@ import lombok.RequiredArgsConstructor;
 public enum Permission {
   // Analysis permissions
   ANALYSIS_READ("analysis:read"),
-  ANALYSIS_CREATE("analysis:create"),
+  ANALYSIS_CREATE("analysis:addAnalysis"),
   ANALYSIS_UPDATE("analysis:update"),
   ANALYSIS_DELETE("analysis:delete"),
 
   // Diagnostic permissions
   DIAGNOSTIC_READ("diagnostic:read"),
-  DIAGNOSTIC_CREATE("diagnostic:create"),
+  DIAGNOSTIC_CREATE("diagnostic:addAnalysis"),
   DIAGNOSTIC_UPDATE("diagnostic:update"),
   DIAGNOSTIC_DELETE("diagnostic:delete"),
 
   // Transformer permissions
   TRANSFORMER_READ("transformer:read"),
-  TRANSFORMER_CREATE("transformer:create"),
+  TRANSFORMER_CREATE("transformer:addAnalysis"),
   TRANSFORMER_UPDATE("transformer:update"),
   TRANSFORMER_DELETE("transformer:delete"),
 
   // Report permissions
   REPORT_READ("report:read"),
-  REPORT_CREATE("report:create"),
+  REPORT_CREATE("report:addAnalysis"),
   REPORT_UPDATE("report:update"),
   REPORT_DELETE("report:delete"),
 
   // User management permissions
   USER_READ("user:read"),
-  USER_CREATE("user:create"),
+  USER_CREATE("user:addAnalysis"),
   USER_UPDATE("user:update"),
   USER_DELETE("user:delete"),
 

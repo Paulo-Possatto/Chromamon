@@ -50,4 +50,7 @@ public class SwaggerConstants {
 
   /** Tag for endpoints related to user operations. */
   public static final String TAG_USER = "User";
+
+  /** Tag for endpoints related to analysis operations. */
+  public static final String TAG_ANALYSIS = "Analysis";
 }

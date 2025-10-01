@@ -39,7 +39,7 @@ import lombok.Builder;
          "email": "john.doe@email.com",
          "fullName": "John Smith Doe",
          "role": "ENGINEER",
-         "permissions": ["analysis:read", "diagnostic:read", "transformer:read", "report:read", "report:create"],
+         "permissions": ["analysis:read", "diagnostic:read", "transformer:read", "report:read", "report:addAnalysis"],
          "issuedAt": "2024-05-01T13:30:10.0",
          "expiresAt": "2024-05-01T15:30:10.0"
       }
@@ -114,7 +114,7 @@ public record LoginResponse(
             description = "The array of permissions the user has",
             type = SwaggerConstants.ARRAY,
             examples =
-                "[\"analysis:read\", \"diagnostic:read\", \"transformer:read\", \"report:read\", \"report:create\"]",
+                "[\"analysis:read\", \"diagnostic:read\", \"transformer:read\", \"report:read\", \"report:addAnalysis\"]",
             implementation = Set.class)
         Set<String> permissions,
     @Schema(
