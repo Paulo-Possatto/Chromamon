@@ -214,11 +214,13 @@ public class UserService {
   public void grantPermission(Long userId, Permission permission) {
     log.info("Grating permission '{}' for user '{}'", permission, userId);
 
-    User user = userRepository.findById(userId).orElse(null);
-
-    if (user == null) {
-      throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + userId);
-    }
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () ->
+                    new HttpClientErrorException(
+                        HttpStatus.NOT_FOUND, "User not found: " + userId));
 
     Set<Permission> permissions = user.role().getPermissions();
     if (permissions.contains(permission)) {
@@ -240,11 +242,13 @@ public class UserService {
   public void revokePermission(Long userId, Permission permission) {
     log.info("Revoking permission {} from user {}", permission, userId);
 
-    User user = userRepository.findById(userId).orElse(null);
-
-    if (user == null) {
-      throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found: " + userId);
-    }
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () ->
+                    new HttpClientErrorException(
+                        HttpStatus.NOT_FOUND, "User not found: " + userId));
 
     Set<Permission> permissions = user.role().getPermissions();
     if (!permissions.contains(permission)) {

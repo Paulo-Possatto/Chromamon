@@ -13,15 +13,19 @@ import static com.monolithic.chromamon.mother.login.UserMother.ENCODED_PASSWORD;
 import static com.monolithic.chromamon.mother.login.UserMother.FULL_NAME;
 import static com.monolithic.chromamon.mother.login.UserMother.ID_CODE;
 import static com.monolithic.chromamon.mother.login.UserMother.USER_ID;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.monolithic.chromamon.login.domain.model.User;
 import com.monolithic.chromamon.login.domain.model.response.CreateUserResponse;
@@ -37,6 +41,7 @@ import com.monolithic.chromamon.mother.login.UpdateUserRequestMother;
 import com.monolithic.chromamon.mother.login.UpdateUserResponseMother;
 import com.monolithic.chromamon.mother.login.UserMother;
 import com.monolithic.chromamon.shared.application.security.PermissionService;
+import com.monolithic.chromamon.shared.domain.security.Permission;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -500,5 +505,215 @@ class UserServiceTest {
     Mockito.verify(userRepository).findById(USER_ID);
     Mockito.verify(userMapper).toUpdateResponse(UserMother.updatedSavedUserWithSameFirstName());
     assertEquals(UpdateUserResponseMother.updateUserResponseWithSameFirstName(), response);
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN a delete request
+      WHEN deleteUser method is called
+      AND no user is found by id
+      THEN should throw client exception
+      """)
+  void givenDeleteUserRequest_whenDeleteUserDoNotFindUser_thenThrowClientException() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    HttpClientErrorException exception =
+        assertThrowsExactly(HttpClientErrorException.class, () -> userService.deleteUser(USER_ID));
+
+    assertNotNull(exception);
+    verify(auditLoginService, times(1)).logUserDelete(anyString());
+    verify(userRepository, never()).deleteById(USER_ID);
+    verify(userRepository, never()).deleteById(anyLong());
+    assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    assertEquals("User not found: " + USER_ID, exception.getStatusText());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      GIVEN a delete request
+      WHEN deleteUser method is called
+      AND a user is returned
+      THEN should call the delete user method
+      """)
+  void givenDeleteUserRequest_whenDeleteUser_thenCallDeleteMethod() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID))
+        .thenReturn(Optional.of(UserMother.userObjectOk()));
+
+    // Act
+    assertDoesNotThrow(() -> userService.deleteUser(USER_ID));
+
+    // Assert
+    verify(auditLoginService, times(2)).logUserDelete(anyString());
+    verify(userRepository, times(1)).deleteById(USER_ID);
+    verify(userRepository, times(1)).deleteById(anyLong());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      Given a grant permission request
+      WHEN grantPermission method is called
+      AND no user is returned for given id
+      THEN should throw client exception
+      """)
+  void givenGrantPermissionRequest_whenGrantPermissionForNoGivenId_thenThrowClientException() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    HttpClientErrorException exception =
+        assertThrowsExactly(
+            HttpClientErrorException.class,
+            () -> userService.grantPermission(USER_ID, any(Permission.class)));
+
+    assertNotNull(exception);
+    verify(userRepository, times(1)).findById(USER_ID);
+    verify(userRepository, times(1)).findById(anyLong());
+    verify(permissionService, never()).grantPermission(anyLong(), any(Permission.class));
+    assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    assertEquals("User not found: " + USER_ID, exception.getStatusText());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      Given a grant permission request
+      WHEN grantPermission method is called
+      AND user has given permission
+      THEN should throw client exception
+      """)
+  void givenGrantPermissionRequest_whenUserHasGivenPermission_thenThrowClientException() {
+    // Arrange
+    User user = UserMother.userObjectOk();
+
+    Mockito.when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+
+    assertTrue(user.role().getPermissions().stream().findFirst().isPresent());
+    Permission existingPermission = user.role().getPermissions().stream().findFirst().get();
+
+    // Act & Assert
+    HttpClientErrorException exception =
+        assertThrowsExactly(
+            HttpClientErrorException.class,
+            () -> userService.grantPermission(USER_ID, existingPermission));
+
+    assertNotNull(exception);
+    verify(userRepository, times(1)).findById(USER_ID);
+    verify(userRepository, times(1)).findById(anyLong());
+    verify(permissionService, never()).grantPermission(anyLong(), any(Permission.class));
+    assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+    assertEquals(
+        "User already have the permission: " + existingPermission, exception.getStatusText());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      Given a grant permission request
+      WHEN grantPermission method is called
+      AND user does not have given permission
+      THEN should call grant method correctly
+      """)
+  void
+      givenGrantPermissionRequest_whenUserDoesNotHaveGivenPermission_thenCallGrantPermissionMethod() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID))
+        .thenReturn(Optional.of(UserMother.userObjectOk()));
+
+    // Act
+    assertDoesNotThrow(() -> userService.grantPermission(USER_ID, Permission.USER_CREATE));
+
+    // Assert
+    verify(userRepository, times(1)).findById(USER_ID);
+    verify(userRepository, times(1)).findById(anyLong());
+    verify(permissionService, times(1)).grantPermission(USER_ID, Permission.USER_CREATE);
+    verify(permissionService, times(1)).grantPermission(anyLong(), any(Permission.class));
+  }
+
+  @Test
+  @DisplayName(
+      """
+      Given a revoke permission request
+      WHEN revokePermission method is called
+      AND no user is returned for given id
+      THEN should throw client exception
+      """)
+  void givenRevokePermissionRequest_whenRevokePermissionForNoGivenId_thenThrowClientException() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    HttpClientErrorException exception =
+        assertThrowsExactly(
+            HttpClientErrorException.class,
+            () -> userService.revokePermission(USER_ID, any(Permission.class)));
+
+    assertNotNull(exception);
+    verify(userRepository, times(1)).findById(USER_ID);
+    verify(userRepository, times(1)).findById(anyLong());
+    verify(permissionService, never()).revokePermission(anyLong(), any(Permission.class));
+    assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    assertEquals("User not found: " + USER_ID, exception.getStatusText());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      Given a revoke permission request
+      WHEN revokePermission method is called
+      AND does not have given permission
+      THEN should throw client exception
+      """)
+  void givenRevokePermissionRequest_whenUserDoesNotHaveGivenPermission_thenThrowClientException() {
+    // Arrange
+    Mockito.when(userRepository.findById(USER_ID))
+        .thenReturn(Optional.of(UserMother.userObjectOk()));
+
+    // Act & Assert
+    HttpClientErrorException exception =
+        assertThrowsExactly(
+            HttpClientErrorException.class,
+            () -> userService.revokePermission(USER_ID, Permission.ANALYSIS_UPDATE));
+
+    assertNotNull(exception);
+    verify(userRepository, times(1)).findById(USER_ID);
+    verify(userRepository, times(1)).findById(anyLong());
+    verify(permissionService, never()).revokePermission(anyLong(), any(Permission.class));
+    assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+    assertEquals(
+        "User already doesn't have the permission: " + Permission.ANALYSIS_UPDATE,
+        exception.getStatusText());
+  }
+
+  @Test
+  @DisplayName(
+      """
+      Given a revoke permission request
+      WHEN revokePermission method is called
+      AND user has given permission
+      THEN should call revoke method correctly
+      """)
+  void givenRevokePermissionRequest_whenUserHasGivenPermission_thenCallRevokePermissionMethod() {
+    // Arrange
+    User user = UserMother.userObjectOk();
+
+    Mockito.when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+
+    assertTrue(user.role().getPermissions().stream().findFirst().isPresent());
+    Permission permission = user.role().getPermissions().stream().findFirst().get();
+
+    // Act
+    assertDoesNotThrow(() -> userService.revokePermission(USER_ID, permission));
+
+    // Assert
+    verify(userRepository, times(1)).findById(USER_ID);
+    verify(userRepository, times(1)).findById(anyLong());
+    verify(permissionService, times(1)).revokePermission(USER_ID, permission);
+    verify(permissionService, times(1)).revokePermission(anyLong(), any(Permission.class));
   }
 }
